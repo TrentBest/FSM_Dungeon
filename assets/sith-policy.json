@@ -1,0 +1,17 @@
+{
+  "repository": "TrentBest/FSM_Dungeon",
+  "policy": "exactly-master-and-development",
+  "required_branches": [
+    "development",
+    "master"
+  ],
+  "actual_branches": [
+    "development",
+    "master"
+  ],
+  "branch_count": 2,
+  "status": "COMPLIANT",
+  "evaluated_at": "2026-11-05T04:33:40Z",
+  "workflow_run": "https://github.com/TrentBest/FSM_Dungeon/actions/runs/41968543385",
+  "triggering_commit": "43744491de0d0ea2cf5ed9b0043759c8135f35e7"
+}
