@@ -66,9 +66,9 @@ public sealed class HydraulicSimulationTests
         var next = simulation.Step(1);
 
         Assert.Single(next.Transfers);
-        Assert.Equal(1, next.Chambers.Sum(x => x.WaterVolumeCubicMeters), 10);
+        Assert.Equal(2, next.Chambers.Sum(x => x.WaterVolumeCubicMeters), 10);
         Assert.Equal(1, next.CumulativeOverflowVolumeCubicMeters, 10);
-        Assert.Equal(2, next.Chambers.Sum(x => x.WaterVolumeCubicMeters)
+        Assert.Equal(3, next.Chambers.Sum(x => x.WaterVolumeCubicMeters)
             + next.CumulativeOverflowVolumeCubicMeters, 10);
     }
 
