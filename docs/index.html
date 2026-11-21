@@ -53,7 +53,7 @@
     <div class="eyebrow">A Workshop world-simulation proof</div>
     <h1>A dungeon with a reason to exist.</h1>
     <p class="lead">Not a random stack of rooms and monsters. A place shaped by its origin, history, purpose, inhabitants, and the things that have happened there.</p>
-    <p><span class="status"><span class="dot"></span> Foundation in progress · deterministic proof is next</span></p>
+    <p><span class="status"><span class="dot"></span> Deterministic world generation · first causal simulation slice</span></p>
   </header>
 
   <section class="panel">
@@ -86,6 +86,13 @@
     </div>
     <p class="world-meta" id="world-meta"></p>
     <p>The map and inspector are generated from the C# library's serialized world output—not a separate browser-side dungeon generator.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Hydraulic evolution</h2>
+    <p id="hydraulic-status">Loading deterministic sewer simulation snapshots…</p>
+    <div id="hydraulic-details" class="world"></div>
+    <p>This first-order proof tracks head-driven flow, blocked capacity, inflow, and overflow across six ten-second steps. It is a causal state demonstration, not a calibrated flood forecast.</p>
   </section>
 
   <section class="panel">
@@ -122,6 +129,8 @@
   const history = document.getElementById("chamber-history");
   const inhabitants = document.getElementById("inhabitants");
   const meta = document.getElementById("world-meta");
+  const hydraulicStatus = document.getElementById("hydraulic-status");
+  const hydraulicDetails = document.getElementById("hydraulic-details");
   const ns = "http://www.w3.org/2000/svg";
 
   function element(tag, attributes, parent) {
@@ -208,9 +217,14 @@
   }
 
   try {
-    const response = await fetch("data/worlds.json", { cache: "no-store" });
-    if (!response.ok) throw new Error("Generated world data is not available yet.");
-    const worlds = await response.json();
+    const [worldResponse, hydraulicResponse] = await Promise.all([
+      fetch("data/worlds.json", { cache: "no-store" }),
+      fetch("data/hydraulic.json", { cache: "no-store" })
+    ]);
+    if (!worldResponse.ok) throw new Error("Generated world data is not available yet.");
+    if (!hydraulicResponse.ok) throw new Error("Hydraulic simulation data is not available yet.");
+    const worlds = await worldResponse.json();
+    const hydraulicSnapshots = await hydraulicResponse.json();
     if (!Array.isArray(worlds) || worlds.length === 0) throw new Error("No generated worlds were found.");
     worlds.forEach((world, index) => {
       const option = document.createElement("option");
@@ -220,6 +234,18 @@
     });
     selector.addEventListener("change", () => render(worlds[Number(selector.value)]));
     render(worlds[0]);
+
+    const finalHydraulic = hydraulicSnapshots[hydraulicSnapshots.length - 1];
+    hydraulicStatus.textContent = "Tick " + finalHydraulic.tick + " · " + finalHydraulic.elapsedSeconds + " simulated seconds · cumulative overflow " + finalHydraulic.cumulativeOverflowVolumeCubicMeters.toFixed(3) + " m³";
+    finalHydraulic.chambers.forEach(chamber => {
+      const item = document.createElement("article");
+      const title = document.createElement("strong");
+      title.textContent = "Chamber " + chamber.chamberIndex;
+      const volume = document.createElement("span");
+      volume.textContent = chamber.waterVolumeCubicMeters.toFixed(3) + " m³ stored · surface " + chamber.waterSurfaceElevationMeters.toFixed(3) + " m";
+      item.append(title, volume);
+      hydraulicDetails.appendChild(item);
+    });
   } catch (error) {
     status.textContent = error.message;
     name.textContent = "Proof data unavailable";
