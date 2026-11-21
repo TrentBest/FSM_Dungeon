@@ -95,6 +95,19 @@ public sealed class HydraulicNetworkDefinition
             throw new ArgumentException("A hydraulic chamber pair may have only one hydraulic passage.", nameof(passages));
     }
 
+    /// <summary>Creates a hydraulic network whose edges must correspond to actual dungeon passages.</summary>
+    public HydraulicNetworkDefinition(DungeonWorld world, IEnumerable<HydraulicChamber> chambers,
+        IEnumerable<HydraulicPassage> passages)
+        : this(chambers, passages)
+    {
+        ArgumentNullException.ThrowIfNull(world);
+        var worldEdges = world.Passages.Select(x => x.FromChamberIndex < x.ToChamberIndex
+            ? (x.FromChamberIndex, x.ToChamberIndex) : (x.ToChamberIndex, x.FromChamberIndex)).ToHashSet();
+        if (Passages.Any(x => !worldEdges.Contains(x.FromChamberIndex < x.ToChamberIndex
+                ? (x.FromChamberIndex, x.ToChamberIndex) : (x.ToChamberIndex, x.FromChamberIndex))))
+            throw new ArgumentException("Every hydraulic connection must map to an existing dungeon passage.", nameof(passages));
+    }
+
     public IReadOnlyList<HydraulicChamber> Chambers { get; }
     public IReadOnlyList<HydraulicPassage> Passages { get; }
 }
