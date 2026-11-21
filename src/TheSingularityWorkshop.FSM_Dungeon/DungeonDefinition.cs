@@ -15,7 +15,8 @@ public sealed class DungeonDefinition
         ulong seed,
         DungeonOrigin origin,
         int chamberCount,
-        IEnumerable<InhabitantGroupDefinition>? inhabitantGroups = null)
+        IEnumerable<InhabitantGroupDefinition>? inhabitantGroups = null,
+        int? additionalPassageCount = null)
     {
         Id = Required(id, nameof(id));
         Name = Required(name, nameof(name));
@@ -23,6 +24,12 @@ public sealed class DungeonDefinition
         if (chamberCount is < 2 or > MaximumChambers)
             throw new ArgumentOutOfRangeException(nameof(chamberCount), $"Chamber count must be between 2 and {MaximumChambers}.");
         ChamberCount = chamberCount;
+
+        var maximumAdditionalPassages = chamberCount * (chamberCount - 1) / 2 - (chamberCount - 1);
+        var selectedAdditionalPassageCount = additionalPassageCount ?? chamberCount / 3;
+        if (selectedAdditionalPassageCount < 0 || selectedAdditionalPassageCount > maximumAdditionalPassages)
+            throw new ArgumentOutOfRangeException(nameof(additionalPassageCount), $"Additional passage count must be between 0 and {maximumAdditionalPassages}.");
+        AdditionalPassageCount = selectedAdditionalPassageCount;
 
         var groups = (inhabitantGroups ?? []).ToArray();
         if (groups.Any(group => group is null))
@@ -41,6 +48,8 @@ public sealed class DungeonDefinition
     public ulong Seed { get; }
     public DungeonOrigin Origin { get; }
     public int ChamberCount { get; }
+    /// <summary>Exact number of non-spanning passages to add after the connected backbone.</summary>
+    public int AdditionalPassageCount { get; }
     public IReadOnlyList<InhabitantGroupDefinition> InhabitantGroups { get; }
 
     private static string Required(string value, string parameterName)
