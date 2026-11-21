@@ -6,6 +6,12 @@ A dungeon is a continuous, persistent place—not a numbered sequence of floors.
 
 The domain must support anything from a municipal sewer to an ancient burial complex, a dwarven city, a goblin warrens network, an orcish frontier, a biological nest, or an impossible ruin. These are not generator modes. They emerge from authored causes, available content, spatial structure, and simulation.
 
+## Domain scope
+
+The word *dungeon* is the domain umbrella for places below the surface, not a requirement that a place be artificial or maze-like. Natural caves and caverns, fissures, burrows, root systems, mines, tunnels, excavations, catacombs, sewers, foundations, constructed undercities, and unfamiliar subterranean environments all belong. Their origin and material history distinguish them; they do not require separate engine modes.
+
+The underground also needs a distinct observation and rendering regime: enclosed spaces, local light sources, strong occlusion, dynamic shadows, and close-range material detail. The domain should preserve the facts that make those representations truthful without becoming a graphics engine. See [Underground Worlds and Rendering](UNDERGROUND_RENDERING.md) for the lighting, shadow, material, perception, and staged proof requirements.
+
 ## 1. One world, many elevations
 
 Do not make "level" the primary spatial unit. A level or floor is a useful way to partition, stream, summarize, or present a world, but it is not the world itself.
