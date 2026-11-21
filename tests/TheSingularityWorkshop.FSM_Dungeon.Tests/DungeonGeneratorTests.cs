@@ -67,6 +67,40 @@ public sealed class DungeonGeneratorTests
     }
 
     [Fact]
+    public void Topology_density_is_an_explicit_exact_deterministic_input()
+    {
+        var sparseDefinition = new DungeonDefinition(
+            "sparse", "Sparse", 42,
+            new DungeonOrigin("natural", "A natural fracture.", "A slow process.", "Old."),
+            12, additionalPassageCount: 0);
+        var denseDefinition = new DungeonDefinition(
+            "dense", "Dense", 42,
+            new DungeonOrigin("natural", "A natural fracture.", "A slow process.", "Old."),
+            12, additionalPassageCount: 20);
+
+        var sparse = DungeonGenerator.Generate(sparseDefinition);
+        var dense = DungeonGenerator.Generate(denseDefinition);
+        var denseAgain = DungeonGenerator.Generate(denseDefinition);
+
+        Assert.Equal(11, sparse.Passages.Count);
+        Assert.Equal(31, dense.Passages.Count);
+        Assert.Equal(dense.Passages, denseAgain.Passages);
+        Assert.True(sparse.IsConnected());
+        Assert.True(dense.IsConnected());
+        Assert.Empty(sparse.Validate());
+        Assert.Empty(dense.Validate());
+    }
+
+    [Fact]
+    public void Topology_rejects_more_passages_than_the_chamber_graph_can_hold()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => new DungeonDefinition(
+            "impossible", "Impossible", 42,
+            new DungeonOrigin("natural", "A natural fracture.", "A slow process.", "Old."),
+            4, additionalPassageCount: 7));
+    }
+
+    [Fact]
     public void Inhabitant_groups_have_explicit_motivations_activities_and_territory()
     {
         var world = DungeonGenerator.Generate(CreateDefinition());
