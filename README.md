@@ -53,11 +53,13 @@ The first deterministic domain slice now generates two contrasting places throug
 - **The Catacombs Beneath the First Lantern:** older constructed excavation, a sealed spring route, burial strata, later occupation, and evidence of recent disturbance.
 - extensible origin, host-world anchor, and environmental condition records—no closed sewer/catacomb type enum;
 - seeded, connected chamber and passage generation with exact authored additional-passage density;
+- a first deterministic hydraulic solver: head-driven transfers, passage capacity, blockage, inflow, and explicit overflow accounting;
+- a six-tick sewer hydraulic proof serialized as `hydraulic.json` alongside the generated worlds;
 - chamber formation, history, and purpose provenance;
 - structural validation and automated tests;
 - a console proof that serializes both generated worlds for the browser.
 
-The Pages inspector now has a world selector and displays chamber provenance, inhabitant motivations/activities, and environmental conditions from C#-generated data. These conditions are authored inputs today; a live hydraulic, ecological, or structural solver is a later simulation milestone. Pages deployment still needs the `github-pages` environment to allow `development` (see [issue #3](https://github.com/TrentBest/FSM_Dungeon/issues/3)).
+The Pages inspector now has a world selector and displays chamber provenance, inhabitant motivations/activities, and environmental conditions from C#-generated data. Environmental condition records remain authored inputs; the hydraulic solver is a separate evolving state model in this first slice. It is a deliberately simple, first-order model—not a calibrated fluid-dynamics or flood-prediction system. Pages deployment still needs the `github-pages` environment to allow `development` (see [issue #3](https://github.com/TrentBest/FSM_Dungeon/issues/3)).
 
 ## 5. Project status
 
