@@ -6,6 +6,7 @@ on:
     paths:
       - "src/**"
       - "tests/**"
+      - "samples/**"
       - "FSM_Dungeon.sln"
       - ".github/workflows/build.yml"
   pull_request:
