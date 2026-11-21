@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <IsPackable>true</IsPackable>
+    <PackageId>TheSingularityWorkshop.FSM_Dungeon</PackageId>
+    <Version>0.1.0-alpha.1</Version>
+    <Authors>Trent Best</Authors>
+    <Company>The Singularity Workshop</Company>
+    <Description>Engine-independent deterministic dungeon worlds, causal generation, and inhabitant simulation.</Description>
+    <PackageTags>Dungeon;ProceduralGeneration;Simulation;RPG;TheSingularityWorkshop</PackageTags>
+    <PackageProjectUrl>https://github.com/TrentBest/FSM_Dungeon</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/TrentBest/FSM_Dungeon</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+</Project>
