@@ -57,7 +57,7 @@ Track the reboot in [issue #2](https://github.com/TrentBest/FSM_Dungeon/issues/2
 
 ## 5. Project status
 
-<badge>Restarting</badge> The repository currently contains its Workshop documentation and policy foundation. The new domain implementation has not yet been established.
+**Status: Restarting.** The repository currently contains its Workshop documentation and policy foundation. The new domain implementation has not yet been established.
 
 The active development branch is `development`; `master` remains the release-aligned branch. Keep the repository to those two branches.
 
