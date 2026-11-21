@@ -32,7 +32,7 @@ public sealed class DungeonWorld
         IEnumerable<DungeonPassage> passages,
         IEnumerable<DungeonInhabitantGroup> inhabitantGroups)
     {
-        Definition = definition;
+        Definition = definition ?? throw new ArgumentNullException(nameof(definition));
         Chambers = new ReadOnlyCollection<DungeonChamber>(chambers.ToArray());
         Passages = new ReadOnlyCollection<DungeonPassage>(passages.ToArray());
         InhabitantGroups = new ReadOnlyCollection<DungeonInhabitantGroup>(inhabitantGroups.ToArray());
@@ -71,7 +71,7 @@ public sealed class DungeonWorld
         return visited.Count == Chambers.Count;
     }
 
-    /// <summary>Checks structural and provenance invariants for a generated world.</summary>
+    /// <summary>Checks identity, topology, provenance, and inhabitant-reference invariants.</summary>
     public IReadOnlyList<string> Validate()
     {
         var errors = new List<string>();
@@ -79,20 +79,41 @@ public sealed class DungeonWorld
 
         if (Chambers.Count != Definition.ChamberCount)
             errors.Add("Generated chamber count does not match the definition.");
-        if (Chambers.Any(chamber => string.IsNullOrWhiteSpace(chamber.FormationReason)
+        if (chamberIds.Count != Chambers.Count)
+            errors.Add("Chamber indices must be unique.");
+        if (!Enumerable.Range(0, Chambers.Count).All(chamberIds.Contains))
+            errors.Add("Chamber indices must be contiguous and start at zero.");
+        if (Chambers.Any(chamber => string.IsNullOrWhiteSpace(chamber.Name)
+                                    || string.IsNullOrWhiteSpace(chamber.FormationReason)
                                     || string.IsNullOrWhiteSpace(chamber.HistoricalUse)
                                     || string.IsNullOrWhiteSpace(chamber.CurrentPurpose)))
-            errors.Add("Every chamber must retain formation, history, and purpose provenance.");
+            errors.Add("Every chamber must retain a name, formation, history, and purpose provenance.");
+
         if (Passages.Any(passage => !chamberIds.Contains(passage.FromChamberIndex)
                                     || !chamberIds.Contains(passage.ToChamberIndex)
                                     || passage.FromChamberIndex == passage.ToChamberIndex))
             errors.Add("Every passage must connect two distinct chambers in this dungeon.");
+        var normalizedEdges = Passages
+            .Select(passage => passage.FromChamberIndex < passage.ToChamberIndex
+                ? (passage.FromChamberIndex, passage.ToChamberIndex)
+                : (passage.ToChamberIndex, passage.FromChamberIndex))
+            .ToArray();
+        if (normalizedEdges.Distinct().Count() != normalizedEdges.Length)
+            errors.Add("A chamber pair may have only one passage.");
+        if (Passages.Any(passage => string.IsNullOrWhiteSpace(passage.FormationReason)))
+            errors.Add("Every passage must retain its formation reason.");
         if (!IsConnected())
             errors.Add("Every chamber must be reachable from the entrance.");
-        if (InhabitantGroups.Any(group => !chamberIds.Contains(group.HomeChamberIndex)
+
+        if (InhabitantGroups.Select(group => group.Id).Distinct(StringComparer.Ordinal).Count()
+            != InhabitantGroups.Count)
+            errors.Add("Inhabitant group identifiers must be unique.");
+        if (InhabitantGroups.Any(group => string.IsNullOrWhiteSpace(group.Id)
+                                          || string.IsNullOrWhiteSpace(group.Name)
+                                          || !chamberIds.Contains(group.HomeChamberIndex)
                                           || string.IsNullOrWhiteSpace(group.Motivation)
                                           || string.IsNullOrWhiteSpace(group.CurrentActivity)))
-            errors.Add("Every inhabitant group must have valid territory, motivation, and activity.");
+            errors.Add("Every inhabitant group must have a valid identity, territory, motivation, and activity.");
 
         return errors.AsReadOnly();
     }
