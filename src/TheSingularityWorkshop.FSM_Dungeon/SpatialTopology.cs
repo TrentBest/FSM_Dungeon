@@ -43,7 +43,7 @@ public sealed record SpatialFeature(
     public bool IsValid => !string.IsNullOrWhiteSpace(Id)
         && !string.IsNullOrWhiteSpace(Kind)
         && !string.IsNullOrWhiteSpace(Name)
-        && !string.IsNullOrWhiteSpace(RegionId) || RegionId is null
+        && (RegionId is null || !string.IsNullOrWhiteSpace(RegionId))
         && !string.IsNullOrWhiteSpace(FormationReason);
 }
 
