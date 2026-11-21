@@ -16,7 +16,9 @@ public sealed class DungeonDefinition
         DungeonOrigin origin,
         int chamberCount,
         IEnumerable<InhabitantGroupDefinition>? inhabitantGroups = null,
-        int? additionalPassageCount = null)
+        int? additionalPassageCount = null,
+        DungeonSiteReference? site = null,
+        IEnumerable<DungeonCondition>? conditions = null)
     {
         Id = Required(id, nameof(id));
         Name = Required(name, nameof(name));
@@ -39,7 +41,15 @@ public sealed class DungeonDefinition
         if (groups.Any(group => group.HomeChamberIndex >= chamberCount))
             throw new ArgumentException("Every inhabitant group must have a home chamber within this dungeon.", nameof(inhabitantGroups));
 
+        var authoredConditions = (conditions ?? []).ToArray();
+        if (authoredConditions.Any(condition => condition is null))
+            throw new ArgumentException("Conditions cannot contain null values.", nameof(conditions));
+        if (authoredConditions.Select(condition => condition.Id).Distinct(StringComparer.Ordinal).Count() != authoredConditions.Length)
+            throw new ArgumentException("Condition identifiers must be unique.", nameof(conditions));
+
         InhabitantGroups = new ReadOnlyCollection<InhabitantGroupDefinition>(groups);
+        Conditions = new ReadOnlyCollection<DungeonCondition>(authoredConditions);
+        Site = site;
         Seed = seed;
     }
 
@@ -51,6 +61,10 @@ public sealed class DungeonDefinition
     /// <summary>Exact number of non-spanning passages to add after the connected backbone.</summary>
     public int AdditionalPassageCount { get; }
     public IReadOnlyList<InhabitantGroupDefinition> InhabitantGroups { get; }
+    /// <summary>Optional host-world anchor; the referenced host need not be loaded by this domain.</summary>
+    public DungeonSiteReference? Site { get; }
+    /// <summary>Open-ended authored facts describing environmental and historical conditions.</summary>
+    public IReadOnlyList<DungeonCondition> Conditions { get; }
 
     private static string Required(string value, string parameterName)
     {
