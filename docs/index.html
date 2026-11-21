@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131a">
+  <title>FSM_Dungeon — A Living Dungeon Proof</title>
+  <style>
+    :root { color-scheme: dark; --bg:#10131a; --panel:#191f2a; --ink:#edf0f5; --muted:#aab3c2; --line:#343d4d; --accent:#c69b63; --green:#8fb99b; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:radial-gradient(ellipse at 50% -20%,#333044 0,var(--bg) 55%); color:var(--ink); font:16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif; }
+    main { width:min(1080px,calc(100% - 36px)); margin:0 auto; padding:42px 0 72px; }
+    header { text-align:center; padding:24px 0 34px; }
+    header img { width:min(680px,90%); height:auto; }
+    .eyebrow { color:var(--accent); text-transform:uppercase; letter-spacing:.18em; font-size:.78rem; font-weight:700; }
+    h1 { font-size:clamp(2.2rem,6vw,4.8rem); line-height:1.04; margin:.4em 0; letter-spacing:-.045em; }
+    h2 { line-height:1.2; margin:0 0 12px; }
+    p { color:var(--muted); }
+    .lead { max-width:760px; margin:0 auto; font-size:1.18rem; }
+    .panel { background:linear-gradient(145deg,rgba(31,39,52,.96),rgba(22,27,37,.96)); border:1px solid var(--line); border-radius:18px; padding:24px; margin:18px 0; box-shadow:0 18px 50px #0003; }
+    .status { display:inline-flex; align-items:center; gap:9px; border:1px solid #786044; color:#e8c99e; border-radius:999px; padding:6px 12px; font-size:.84rem; }
+    .dot { width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 12px var(--accent); }
+    .world { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:22px; }
+    .world article { border:1px solid var(--line); border-radius:12px; padding:18px; background:#111720; min-height:150px; }
+    .world strong { color:var(--ink); display:block; margin-bottom:6px; }
+    .world span { color:var(--muted); font-size:.93rem; }
+    .steps { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:0; list-style:none; counter-reset:step; }
+    .steps li { counter-increment:step; border:1px solid var(--line); border-radius:12px; padding:14px 16px 14px 48px; position:relative; color:var(--muted); }
+    .steps li:before { content:counter(step); position:absolute; left:14px; top:14px; width:22px; height:22px; border-radius:50%; background:#3a3027; color:#f1d0a3; text-align:center; font-size:.82rem; line-height:22px; }
+    a { color:#e6bd88; text-decoration:none; } a:hover { text-decoration:underline; }
+    footer { border-top:1px solid var(--line); margin-top:34px; padding-top:20px; text-align:center; color:var(--muted); font-size:.9rem; }
+    @media(max-width:700px) { .world,.steps { grid-template-columns:1fr; } main { width:min(100% - 24px,1080px); padding-top:18px; } .panel { padding:18px; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg" alt="The Singularity Workshop animated moniker">
+    <div class="eyebrow">A Workshop world-simulation proof</div>
+    <h1>A dungeon with a reason to exist.</h1>
+    <p class="lead">Not a random stack of rooms and monsters. A place shaped by its origin, history, purpose, inhabitants, and the things that have happened there.</p>
+    <p><span class="status"><span class="dot"></span> Foundation in progress · deterministic proof is next</span></p>
+  </header>
+
+  <section class="panel">
+    <h2>One world. Multiple ways to experience it.</h2>
+    <p>FSM_Dungeon is being built as a reusable .NET domain and simulation library. This site will become its public proof surface: inspect generated spaces, follow their provenance, understand inhabitants, and eventually explore the world through an original isometric action-RPG experience.</p>
+    <div class="world">
+      <article><strong>Cause</strong><span>Why the place formed: natural, constructed, biological, industrial, ancient, or something not yet understood.</span></article>
+      <article><strong>Life</strong><span>Why inhabitants are here: territory, orders, shelter, hunting, work, worship, maintenance, or survival.</span></article>
+      <article><strong>Observation</strong><span>How much of the world needs to be computed and shown for this observer, intent, and budget.</span></article>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>The first playable proof</h2>
+    <ol class="steps">
+      <li>A small sanctuary with a discoverable descent.</li>
+      <li>A seeded, connected dungeon whose rooms retain causal provenance.</li>
+      <li>Distinct inhabitant groups with goals and meaningful territory.</li>
+      <li>Exploration, real-time combat, danger, and a return loop.</li>
+      <li>Original loot and persistent character growth.</li>
+      <li>An inspectable world model and automated invariants.</li>
+    </ol>
+  </section>
+
+  <section class="panel">
+    <h2>Built with Workshop boundaries</h2>
+    <p><strong>ProtocolAi</strong> gives domain meaning deterministic identities. <strong>GrammarAi</strong> describes valid structures. <strong>CommandAi</strong> will carry proposals through host validation. <strong>Renderer</strong> selects computational detail for an observer and budget. <strong>Visualization</strong> turns selected representations into richer visuals. WebApp and ServerApp can host the same domain without owning it.</p>
+    <p>The domain remains useful without an AI model, renderer, browser, server, or game engine.</p>
+  </section>
+
+  <footer>
+    <p><a href="https://github.com/TrentBest/FSM_Dungeon">Source repository</a> · <a href="https://github.com/TrentBest/FSM_Dungeon/blob/development/docs/ARCHITECTURE.md">Architecture</a> · <a href="https://github.com/TrentBest/FSM_Dungeon/issues">Development issues</a></p>
+    <p>Original Workshop implementation. Inspired by the genre and gameplay loop of classic isometric action RPGs; no original Diablo assets or code are used.</p>
+  </footer>
+</main>
+</body>
+</html>
