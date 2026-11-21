@@ -207,3 +207,14 @@ The creator supplies an allowed catalogue of content—creatures, populations, t
 Simulation fidelity must scale with observer proximity and significance: detailed local actors, regional group movement, and event-driven distant populations should remain parts of one authoritative world. Meaningful changes should be recorded as causal events so the system can explain sightings, travel, ownership, territory changes, route closures, and consequences.
 
 The detailed design and staged proof sequence are in [Living Subterranean Worlds](WORLD_SIMULATION.md). This is a design target, not a claim that continuous 3D topology, autonomous populations, creator catalogues, or trap/treasure placement are already implemented.
+
+
+## Subterranean observation and rendering
+
+FSM_Dungeon treats the underground as a distinct world-rendering regime, not an outdoor scene with its daylight reduced. Natural caves, caverns, burrows, mines, tunnels, excavations, catacombs, sewers, foundations, and subterranean settlements all fit beneath the domain umbrella. The defining conditions are enclosure, local illumination, occlusion, and close-range material detail.
+
+Underground illumination may come from flames, carried lamps, machinery, bioluminescence, unusual emitters, or daylight admitted and redirected through shafts, cracks, vents, and reflective surfaces. There is no assumed global daylight contribution. Relevant local light sources must contribute to the illumination and shadowing of the space; flickering flames must produce coherent time-varying light and shadows, not unrelated random brightness changes.
+
+Material detail is evidence of formation and use: geological strata, roots, fractures, erosion, excavation scars, machining patterns, masonry, irregular bricks, mortar, repairs, soot, deposits, and wear should agree with the place's history and construction. A natural cave, hand-dug mine, machine-bored tunnel, and finished brick sewer should have visibly distinct surface character.
+
+Keep illumination, geometric visibility, observer perception, and rendering separate. FSM_Dungeon owns semantic material, formation, and light-source facts; Renderer owns observer-aware representation and budget; Visualization and host adapters produce pixels. This is a target architecture, not a claim that dynamic multi-light shadowing or high-detail subterranean rendering is implemented. See [Underground Worlds and Rendering](UNDERGROUND_RENDERING.md) for the detailed design and staged proof.
