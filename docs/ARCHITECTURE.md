@@ -194,3 +194,16 @@ The hydraulic model is deliberately separate from authored `DungeonCondition` me
 Water exceeding a chamber's declared capacity is counted as cumulative overflow rather than silently discarded. Snapshots expose per-chamber water volume and surface elevation, per-step transfers, elapsed time, tick, and cumulative overflow.
 
 This is an intentionally transparent first-order model for validating causal state evolution and conservation accounting. It is not yet a calibrated fluid solver: it does not model momentum, pressure transients, turbulence, pipe cross-sections, rainfall fields, or structural failure. Those require additional domain inputs and validation before the model is suitable for prediction. The Pages sample runs six ten-second ticks over a small sewer network and writes `docs/data/hydraulic.json`.
+
+
+## Living subterranean worlds
+
+The next domain direction is a continuous spatial world rather than a stack of numbered floors. Floors are useful presentation and streaming partitions, but the authoritative model must account for elevation, spatial extent, and many forms of traversal: stairs, shafts, lifts, bridges, chasms, drops, crawlspaces, hidden routes, and passages that can become blocked or destroyed. Spatial adjacency, traversal capability, and perception are separate concepts. A chasm is a real spatial feature; a bridge or other crossing is a distinct feature whose state can change.
+
+Inhabitants must become populations with homes, territory, needs, capabilities, resources, relationships, and intentions. They travel to forage, hunt, scout, patrol, trade, raid, migrate, reinforce, and return. The player can encounter scouts and expeditions far from a population's stronghold, then discover a much larger society in its territory. Dwarven cities, goblin warrens, orcish strongholds, and other subterranean ecologies should emerge from the same extensible settlement and population capabilities, not from hard-coded species or dungeon modes.
+
+The creator supplies an allowed catalogue of content—creatures, populations, traps, treasure, mechanisms, props, resources, architectural elements, and other original assets. The world generator determines contextual placement and relationships from the authored origin, history, purpose, spatial structure, and population behavior. Placement should be explainable: who owns an item, who placed a trap, what it protects, and why a cache is where it is. This replaces arbitrary room-by-room scattering with causal composition.
+
+Simulation fidelity must scale with observer proximity and significance: detailed local actors, regional group movement, and event-driven distant populations should remain parts of one authoritative world. Meaningful changes should be recorded as causal events so the system can explain sightings, travel, ownership, territory changes, route closures, and consequences.
+
+The detailed design and staged proof sequence are in [Living Subterranean Worlds](WORLD_SIMULATION.md). This is a design target, not a claim that continuous 3D topology, autonomous populations, creator catalogues, or trap/treasure placement are already implemented.
