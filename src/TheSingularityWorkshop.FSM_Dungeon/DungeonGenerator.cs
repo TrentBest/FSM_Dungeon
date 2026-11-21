@@ -12,7 +12,7 @@ public static class DungeonGenerator
 
         var random = new DeterministicRandom(definition.Seed);
         var chambers = new List<DungeonChamber>(definition.ChamberCount);
-        var passages = new List<DungeonPassage>(definition.ChamberCount * 2);
+        var passages = new List<DungeonPassage>(definition.ChamberCount - 1 + definition.AdditionalPassageCount);
 
         for (var index = 0; index < definition.ChamberCount; index++)
         {
@@ -32,7 +32,7 @@ public static class DungeonGenerator
                 definition.Origin.Purpose));
         }
 
-        // A spanning chain guarantees connectivity before optional cross-passages are added.
+        // The chain is only a connected backbone; the requested topology is generated separately.
         for (var index = 1; index < definition.ChamberCount; index++)
         {
             passages.Add(new DungeonPassage(
@@ -41,22 +41,27 @@ public static class DungeonGenerator
                 $"The passage follows the same formation history: {definition.Origin.Description}"));
         }
 
-        // Add a small number of deterministic loops to avoid a purely linear dungeon.
-        var extraPassages = definition.ChamberCount / 3;
-        var existing = new HashSet<(int, int)>(passages.Select(p => (p.FromChamberIndex, p.ToChamberIndex)));
-        for (var attempt = 0; attempt < extraPassages * 4 && extraPassages > 0; attempt++)
+        // Seeded Fisher-Yates selection creates exactly the requested number of unique extra edges.
+        var candidates = new List<(int Left, int Right)>();
+        for (var left = 0; left < definition.ChamberCount; left++)
+        for (var right = left + 1; right < definition.ChamberCount; right++)
         {
-            var left = random.Next(definition.ChamberCount);
-            var right = random.Next(definition.ChamberCount);
-            if (left == right) continue;
-            var edge = left < right ? (left, right) : (right, left);
-            if (Math.Abs(left - right) < 2 || !existing.Add(edge)) continue;
+            if (right == left + 1) continue;
+            candidates.Add((left, right));
+        }
 
+        for (var index = candidates.Count - 1; index > 0; index--)
+        {
+            var swapIndex = random.Next(index + 1);
+            (candidates[index], candidates[swapIndex]) = (candidates[swapIndex], candidates[index]);
+        }
+
+        foreach (var edge in candidates.Take(definition.AdditionalPassageCount))
+        {
             passages.Add(new DungeonPassage(
-                edge.Item1,
-                edge.Item2,
+                edge.Left,
+                edge.Right,
                 $"A later route was opened through the existing formation: {definition.Origin.History}"));
-            extraPassages--;
         }
 
         var groups = definition.InhabitantGroups.Select(group =>
