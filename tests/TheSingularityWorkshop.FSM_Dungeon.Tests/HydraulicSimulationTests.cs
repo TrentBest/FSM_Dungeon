@@ -55,6 +55,45 @@ public sealed class HydraulicSimulationTests
         Assert.Empty(next.Transfers);
     }
 
+    [Fact]
+    public void Transfers_into_a_full_chamber_are_recorded_as_overflow()
+    {
+        var network = new HydraulicNetworkDefinition(
+            [new HydraulicChamber(0, 0, 1, 2, 2), new HydraulicChamber(1, 0, 1, 1, 1)],
+            [new HydraulicPassage(0, 1, -1, 1, 1)]);
+        var simulation = new HydraulicSimulation(network);
+
+        var next = simulation.Step(1);
+
+        Assert.Single(next.Transfers);
+        Assert.Equal(1, next.Chambers.Sum(x => x.WaterVolumeCubicMeters), 10);
+        Assert.Equal(1, next.CumulativeOverflowVolumeCubicMeters, 10);
+        Assert.Equal(2, next.Chambers.Sum(x => x.WaterVolumeCubicMeters)
+            + next.CumulativeOverflowVolumeCubicMeters, 10);
+    }
+
+    [Fact]
+    public void Multiple_outlets_cannot_withdraw_more_than_the_source_contains()
+    {
+        var network = new HydraulicNetworkDefinition(
+            [
+                new HydraulicChamber(0, 0, 1, 0, 2),
+                new HydraulicChamber(1, 1, 1, 1, 2),
+                new HydraulicChamber(2, 0, 1, 0, 2)
+            ],
+            [
+                new HydraulicPassage(1, 0, -1, 1, 1),
+                new HydraulicPassage(1, 2, -1, 1, 1)
+            ]);
+        var simulation = new HydraulicSimulation(network);
+
+        var next = simulation.Step(1);
+
+        Assert.Equal(2, next.Transfers.Count);
+        Assert.All(next.Chambers, chamber => Assert.True(chamber.WaterVolumeCubicMeters >= 0));
+        Assert.Equal(1, next.Chambers.Sum(x => x.WaterVolumeCubicMeters), 10);
+    }
+
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
