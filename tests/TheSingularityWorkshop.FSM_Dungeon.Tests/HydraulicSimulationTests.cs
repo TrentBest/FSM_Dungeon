@@ -26,6 +26,21 @@ public sealed class HydraulicSimulationTests
     }
 
     [Fact]
+    public void Flow_cannot_drain_a_chamber_below_the_passage_invert()
+    {
+        var network = new HydraulicNetworkDefinition(
+            [new HydraulicChamber(0, 0, 1, 1, 2), new HydraulicChamber(1, 0, 1, 0, 2)],
+            [new HydraulicPassage(0, 1, 0.8, 10, 10)]);
+        var simulation = new HydraulicSimulation(network);
+
+        var next = simulation.Step(10);
+
+        Assert.Equal(0.8, next.Chambers[0].WaterVolumeCubicMeters, 10);
+        Assert.Equal(0.2, next.Chambers[1].WaterVolumeCubicMeters, 10);
+        Assert.Equal(1, next.Chambers.Sum(x => x.WaterVolumeCubicMeters), 10);
+    }
+
+    [Fact]
     public void Full_blockage_prevents_transfer()
     {
         var network = new HydraulicNetworkDefinition(
