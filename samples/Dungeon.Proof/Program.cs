@@ -2,7 +2,11 @@ using System.Text.Json;
 using TheSingularityWorkshop.FSM_Dungeon;
 
 var outputPath = args.Length > 0 ? args[0] : "docs/data/dungeon.json";
-var definition = new DungeonDefinition(
+var outputDirectory = Path.GetDirectoryName(Path.GetFullPath(outputPath))!;
+Directory.CreateDirectory(outputDirectory);
+var jsonOptions = new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
+var catacombs = DungeonGenerator.Generate(new DungeonDefinition(
     "beneath-the-first-lantern",
     "The Catacombs Beneath the First Lantern",
     20261121,
@@ -14,33 +18,76 @@ var definition = new DungeonDefinition(
     18,
     [
         new InhabitantGroupDefinition(
-            "lantern-wardens",
-            "Lantern Wardens",
+            "lantern-wardens", "Lantern Wardens",
             "They guard the sealed spring route under an old order that has never been formally revoked.",
-            "Patrolling the threshold and inspecting the old seals.",
-            3),
+            "Patrolling the threshold and inspecting the old seals.", 3),
         new InhabitantGroupDefinition(
-            "mossbound-scavengers",
-            "Mossbound Scavengers",
+            "mossbound-scavengers", "Mossbound Scavengers",
             "They shelter in the damp upper chambers and salvage metal left by the excavation crews.",
-            "Sorting salvage and tending a sheltered sleeping place.",
-            11),
+            "Sorting salvage and tending a sheltered sleeping place.", 11),
         new InhabitantGroupDefinition(
-            "deep-burrowers",
-            "Deep Burrowers",
+            "deep-burrowers", "Deep Burrowers",
             "They follow the spring's mineral deposits and avoid the wardens' lit territory.",
-            "Foraging near the damp lower passages.",
-            16)
-    ]);
+            "Foraging near the damp lower passages.", 16)
+    ],
+    additionalPassageCount: 3,
+    site: new DungeonSiteReference("singularity-city", "city", "first-lantern"),
+    conditions:
+    [
+        new DungeonCondition("spring-seal", "water-control", "sealed", "", "An old stone gate protects the buried spring route."),
+        new DungeonCondition("burial-layers", "historical-strata", "4", "layers", "Successive burial and occupation layers remain visible."),
+        new DungeonCondition("disturbance", "recent-disturbance", "localized", "", "Fresh marks appear near a passage that was sealed for generations.")
+    ]));
 
-var world = DungeonGenerator.Generate(definition);
-var fullPath = Path.GetFullPath(outputPath);
-Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
-var json = JsonSerializer.Serialize(world, new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
-await File.WriteAllTextAsync(fullPath, json);
+var sewer = DungeonGenerator.Generate(new DungeonDefinition(
+    "singularity-city-underworks",
+    "The Underworks of Singularity City",
+    20261122,
+    new DungeonOrigin(
+        "municipal-infrastructure",
+        "A stormwater and service network was excavated as the city expanded across the basin.",
+        "Carry runoff toward the outfall, provide inspection access, and keep essential city services reachable.",
+        "The oldest culverts were built first; later districts added branches, reinforced junctions, and bypasses."),
+    22,
+    [
+        new InhabitantGroupDefinition(
+            "maintenance-crew-seven", "Maintenance Crew Seven",
+            "They keep the flood gates and inspection routes functioning to protect the districts above.",
+            "Inspecting a pressure gate and clearing debris from a service channel.", 2),
+        new InhabitantGroupDefinition(
+            "culvert-dwellers", "Culvert Dwellers",
+            "They seek dry shelter and food scraps while avoiding the lit maintenance routes.",
+            "Gathering salvage above the normal waterline.", 10),
+        new InhabitantGroupDefinition(
+            "outfall-hunters", "Outfall Hunters",
+            "They follow fish and other food sources toward the outfall, defending access to the deeper channels.",
+            "Watching the current and guarding a submerged crossing.", 19)
+    ],
+    additionalPassageCount: 24,
+    site: new DungeonSiteReference("singularity-city", "city", "stormwater-district"),
+    conditions:
+    [
+        new DungeonCondition("main-flow", "hydraulic-flow-rate", "2.4", "m3/s", "Runoff moves east through the main collector toward the outfall."),
+        new DungeonCondition("water-level", "water-level", "0.8", "m", "The ordinary waterline leaves narrow maintenance ledges exposed."),
+        new DungeonCondition("gate-12", "flow-control", "partially-blocked", "", "Debris has reduced the capacity of a downstream gate."),
+        new DungeonCondition("air-quality", "atmospheric-condition", "poor", "", "Stagnant pockets require maintenance crews to use protective equipment."),
+        new DungeonCondition("service-access", "maintenance-access", "limited", "", "Two inspection ladders are damaged and one route is flooded.")
+    ]));
 
-Console.WriteLine($"Generated {world.Definition.Name}");
-Console.WriteLine($"Seed: {world.Definition.Seed}");
-Console.WriteLine($"Chambers: {world.Chambers.Count}; passages: {world.Passages.Count}; inhabitant groups: {world.InhabitantGroups.Count}");
-Console.WriteLine($"Connected: {world.IsConnected()}; validation errors: {world.Validate().Count}");
-Console.WriteLine($"Wrote: {fullPath}");
+var worlds = new[] { catacombs, sewer };
+await File.WriteAllTextAsync(Path.Combine(outputDirectory, "dungeon.json"),
+    JsonSerializer.Serialize(catacombs, jsonOptions));
+await File.WriteAllTextAsync(Path.Combine(outputDirectory, "sewer.json"),
+    JsonSerializer.Serialize(sewer, jsonOptions));
+await File.WriteAllTextAsync(Path.Combine(outputDirectory, "worlds.json"),
+    JsonSerializer.Serialize(worlds, jsonOptions));
+
+foreach (var world in worlds)
+{
+    Console.WriteLine($"Generated {world.Definition.Name}");
+    Console.WriteLine($"Seed: {world.Definition.Seed}");
+    Console.WriteLine($"Chambers: {world.Chambers.Count}; passages: {world.Passages.Count}; inhabitant groups: {world.InhabitantGroups.Count}; conditions: {world.Conditions.Count}");
+    Console.WriteLine($"Host anchor: {world.Site?.HostId}/{world.Site?.AnchorId}");
+    Console.WriteLine($"Connected: {world.IsConnected()}; validation errors: {world.Validate().Count}");
+}
+Console.WriteLine($"Wrote proof data to: {outputDirectory}");
