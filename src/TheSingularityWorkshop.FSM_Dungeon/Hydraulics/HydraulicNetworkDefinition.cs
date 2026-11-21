@@ -12,7 +12,10 @@ public sealed record HydraulicChamber
         RequireFiniteNonNegative(maximumWaterDepthMeters, nameof(maximumWaterDepthMeters), allowZero: false);
         RequireFiniteNonNegative(inflowCubicMetersPerSecond, nameof(inflowCubicMetersPerSecond));
         if (!double.IsFinite(floorElevationMeters)) throw new ArgumentOutOfRangeException(nameof(floorElevationMeters));
-        if (initialWaterVolumeCubicMeters > floorAreaSquareMeters * maximumWaterDepthMeters)
+        var capacity = floorAreaSquareMeters * maximumWaterDepthMeters;
+        if (!double.IsFinite(capacity) || !double.IsFinite(floorElevationMeters + maximumWaterDepthMeters))
+            throw new ArgumentOutOfRangeException(nameof(maximumWaterDepthMeters), "Chamber capacity and surface elevations must remain finite.");
+        if (initialWaterVolumeCubicMeters > capacity)
             throw new ArgumentException("Initial water volume exceeds chamber capacity.", nameof(initialWaterVolumeCubicMeters));
 
         ChamberIndex = chamberIndex;
