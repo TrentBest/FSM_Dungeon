@@ -36,12 +36,16 @@ public sealed class DungeonWorld
         Chambers = new ReadOnlyCollection<DungeonChamber>(chambers.ToArray());
         Passages = new ReadOnlyCollection<DungeonPassage>(passages.ToArray());
         InhabitantGroups = new ReadOnlyCollection<DungeonInhabitantGroup>(inhabitantGroups.ToArray());
+        Conditions = definition.Conditions;
+        Site = definition.Site;
     }
 
     public DungeonDefinition Definition { get; }
     public IReadOnlyList<DungeonChamber> Chambers { get; }
     public IReadOnlyList<DungeonPassage> Passages { get; }
     public IReadOnlyList<DungeonInhabitantGroup> InhabitantGroups { get; }
+    public DungeonSiteReference? Site { get; }
+    public IReadOnlyList<DungeonCondition> Conditions { get; }
 
     /// <summary>Returns true when every chamber can be reached from chamber zero.</summary>
     public bool IsConnected()
@@ -114,6 +118,15 @@ public sealed class DungeonWorld
                                           || string.IsNullOrWhiteSpace(group.Motivation)
                                           || string.IsNullOrWhiteSpace(group.CurrentActivity)))
             errors.Add("Every inhabitant group must have a valid identity, territory, motivation, and activity.");
+
+        if (Conditions.Select(condition => condition.Id).Distinct(StringComparer.Ordinal).Count()
+            != Conditions.Count)
+            errors.Add("Condition identifiers must be unique.");
+        if (Conditions.Any(condition => string.IsNullOrWhiteSpace(condition.Id)
+                                         || string.IsNullOrWhiteSpace(condition.Kind)
+                                         || string.IsNullOrWhiteSpace(condition.Value)
+                                         || string.IsNullOrWhiteSpace(condition.Description)))
+            errors.Add("Every condition must retain an identity, kind, value, and description.");
 
         return errors.AsReadOnly();
     }
