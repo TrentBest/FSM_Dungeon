@@ -32,7 +32,6 @@ public static class DungeonGenerator
                 definition.Origin.Purpose));
         }
 
-        // The chain is only a connected backbone; the requested topology is generated separately.
         for (var index = 1; index < definition.ChamberCount; index++)
         {
             passages.Add(new DungeonPassage(
@@ -41,7 +40,6 @@ public static class DungeonGenerator
                 $"The passage follows the same formation history: {definition.Origin.Description}"));
         }
 
-        // Seeded Fisher-Yates selection creates exactly the requested number of unique extra edges.
         var candidates = new List<(int Left, int Right)>();
         for (var left = 0; left < definition.ChamberCount; left++)
         for (var right = left + 1; right < definition.ChamberCount; right++)
