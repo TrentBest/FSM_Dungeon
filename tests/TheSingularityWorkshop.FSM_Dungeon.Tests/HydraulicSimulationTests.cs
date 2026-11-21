@@ -1,0 +1,68 @@
+using TheSingularityWorkshop.FSM_Dungeon;
+using Xunit;
+
+namespace TheSingularityWorkshop.FSM_Dungeon.Tests;
+
+public sealed class HydraulicSimulationTests
+{
+    [Fact]
+    public void Water_moves_down_head_gradient_and_is_conserved_without_inflow()
+    {
+        var network = new HydraulicNetworkDefinition(
+            [
+                new HydraulicChamber(0, 0, 2, 2, 5),
+                new HydraulicChamber(1, 0, 2, 0, 5)
+            ],
+            [new HydraulicPassage(0, 1, -1, 1, 0.5)]);
+        var simulation = new HydraulicSimulation(network);
+
+        var next = simulation.Step(1);
+
+        Assert.Single(next.Transfers);
+        Assert.Equal(1, next.Transfers[0].FromChamberIndex);
+        Assert.Equal(0, next.Transfers[0].ToChamberIndex);
+        Assert.Equal(2, next.Chambers.Sum(x => x.WaterVolumeCubicMeters), 10);
+        Assert.Equal(1, next.Tick);
+    }
+
+    [Fact]
+    public void Full_blockage_prevents_transfer()
+    {
+        var network = new HydraulicNetworkDefinition(
+            [new HydraulicChamber(0, 0, 1, 1, 3), new HydraulicChamber(1, 0, 1, 0, 3)],
+            [new HydraulicPassage(0, 1, -1, 1, 1, blockageFraction: 1)]);
+        var simulation = new HydraulicSimulation(network);
+
+        var next = simulation.Step(1);
+
+        Assert.Empty(next.Transfers);
+        Assert.Equal(1, next.Chambers[0].WaterVolumeCubicMeters, 10);
+        Assert.Equal(0, next.Chambers[1].WaterVolumeCubicMeters, 10);
+    }
+
+    [Fact]
+    public void Inflow_is_applied_before_flow_and_is_bounded_by_capacity()
+    {
+        var network = new HydraulicNetworkDefinition(
+            [new HydraulicChamber(0, 0, 1, 0, 1, inflowCubicMetersPerSecond: 2)],
+            []);
+        var simulation = new HydraulicSimulation(network);
+
+        var next = simulation.Step(1);
+
+        Assert.Equal(1, next.Chambers[0].WaterVolumeCubicMeters, 10);
+        Assert.Empty(next.Transfers);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    [InlineData(double.NaN)]
+    [InlineData(double.PositiveInfinity)]
+    public void Step_rejects_invalid_duration(double duration)
+    {
+        var network = new HydraulicNetworkDefinition([new HydraulicChamber(0, 0, 1, 0, 1)], []);
+        var simulation = new HydraulicSimulation(network);
+        Assert.Throws<ArgumentOutOfRangeException>(() => simulation.Step(duration));
+    }
+}
