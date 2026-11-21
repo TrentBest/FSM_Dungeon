@@ -74,7 +74,7 @@ var sewer = DungeonGenerator.Generate(new DungeonDefinition(
         new DungeonCondition("service-access", "maintenance-access", "limited", "", "Two inspection ladders are damaged and one route is flooded.")
     ]));
 
-var hydraulicSimulation = new HydraulicSimulation(new HydraulicNetworkDefinition(
+var hydraulicSimulation = new HydraulicSimulation(new HydraulicNetworkDefinition(sewer,
     [
         new HydraulicChamber(0, 3.0, 2.0, 2.0, 4.0),
         new HydraulicChamber(1, 2.0, 2.0, 0.2, 3.0),
