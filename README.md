@@ -47,16 +47,17 @@ The Diablo reference is a gameplay/systems benchmark only. All Workshop code, ch
 
 ## 4. Development
 
-The first deterministic domain slice is implemented:
+The first deterministic domain slice now generates two contrasting places through the same API:
 
-- extensible dungeon origin and causal description;
-- validated generation definitions and purposeful inhabitant groups;
-- seeded, connected chamber and passage generation;
+- **The Underworks of Singularity City:** dense municipal service topology, stormwater flow, water level, partially blocked gates, air quality, maintenance access, and groups with distinct reasons to occupy the network.
+- **The Catacombs Beneath the First Lantern:** older constructed excavation, a sealed spring route, burial strata, later occupation, and evidence of recent disturbance.
+- extensible origin, host-world anchor, and environmental condition records—no closed sewer/catacomb type enum;
+- seeded, connected chamber and passage generation with exact authored additional-passage density;
 - chamber formation, history, and purpose provenance;
 - structural validation and automated tests;
-- a console proof that serializes a generated world for the browser.
+- a console proof that serializes both generated worlds for the browser.
 
-The Pages site is being upgraded to inspect the actual C#-generated world, rather than maintaining a second JavaScript generator. The build and test workflow runs on the development branch. Pages deployment currently needs the github-pages environment to allow development (see [issue #3](https://github.com/TrentBest/FSM_Dungeon/issues/3)).
+The Pages inspector now has a world selector and displays chamber provenance, inhabitant motivations/activities, and environmental conditions from C#-generated data. These conditions are authored inputs today; a live hydraulic, ecological, or structural solver is a later simulation milestone. Pages deployment still needs the `github-pages` environment to allow `development` (see [issue #3](https://github.com/TrentBest/FSM_Dungeon/issues/3)).
 
 ## 5. Project status
 
