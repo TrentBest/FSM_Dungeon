@@ -96,3 +96,15 @@ Each stage should have a deterministic or reproducible proof and measurable rend
 - No random surface noise that contradicts formation or construction history.
 - No graphics API dependency in the dungeon domain.
 - No claim that the current Pages inspector implements this rendering system; this document defines the target and staged proof.
+
+## Observer adaptation at environmental thresholds
+
+The camera represents an observer, not an omniscient window into the world. Moving between bright exterior space and a dark subterranean environment changes the observer's adaptation state over time.
+
+- **Dark adaptation:** entering darkness should initially reduce the observer's ability to resolve low-light detail. Sensitivity and useful contrast recover progressively as the observer adapts.
+- **Light adaptation:** emerging into bright daylight or entering a strongly illuminated chamber can initially produce glare or temporary loss of detail, followed by recovery.
+- **World truth remains independent:** adaptation changes the observer's perception and rendered exposure/response, not source illumination, material properties, or the actual shadows in the environment.
+- **Separate concerns:** world illumination is a property of the environment; geometric visibility describes what is unobstructed; observer perception includes adaptation and acuity; Renderer and Visualization decide how those facts become pixels.
+- **Transition is temporal:** crossing a threshold should not instantly swap between two unrelated rendering presets. The observer carries an adaptation state that evolves with elapsed time and encountered luminance.
+
+This is an observer/perception contract for Renderer and Visualization to consume. FSM_Dungeon should provide relevant environmental and light facts, not implement camera exposure, eye physiology, tone mapping, or graphics APIs. The implementation should eventually support different observers with different adaptation states in the same unchanged world.
