@@ -94,6 +94,24 @@ public sealed class HydraulicSimulationTests
         Assert.Equal(1, next.Chambers.Sum(x => x.WaterVolumeCubicMeters), 10);
     }
 
+    [Fact]
+    public void Hydraulic_edges_must_exist_in_the_dungeon_topology()
+    {
+        var world = DungeonGenerator.Generate(new DungeonDefinition(
+            "hydraulic-topology", "Hydraulic Topology", 17,
+            new DungeonOrigin("constructed", "Built chambers.", "Drain water.", "Built in sequence."),
+            3, additionalPassageCount: 0));
+        var chambers = new[]
+        {
+            new HydraulicChamber(0, 0, 1, 1, 2),
+            new HydraulicChamber(1, 0, 1, 0, 2),
+            new HydraulicChamber(2, 0, 1, 0, 2)
+        };
+        var passages = new[] { new HydraulicPassage(0, 2, -1, 1, 1) };
+
+        Assert.Throws<ArgumentException>(() => new HydraulicNetworkDefinition(world, chambers, passages));
+    }
+
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
