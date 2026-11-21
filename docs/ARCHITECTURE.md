@@ -185,3 +185,12 @@ A dungeon may be registered beneath, within, or adjacent to a larger host world 
 These records are authored world inputs at this stage, not yet a live fluid or ecology solver. The next simulation layer must define which conditions evolve, what causes those changes, and which events or commands are permitted to alter them.
 
 The proof sample now generates two contrasting worlds from the same API: the city's connected underworks and the older catacombs beneath the First Lantern. Both retain host anchors, provenance, environmental conditions, topology, and purposeful inhabitant groups. Their differences are authored as causes and state, not as hard-coded `Sewer` or `Catacomb` generator modes.
+
+
+## First causal simulation slice: hydraulics
+
+The hydraulic model is deliberately separate from authored `DungeonCondition` metadata. A `HydraulicNetworkDefinition` declares chamber geometry and initial water, plus hydraulic properties for selected existing passage pairs. The deterministic `HydraulicSimulation.Step(durationSeconds)` applies inflow, computes water-surface head, proposes flow down the head gradient, limits transfer by passage capacity and blockage, and scales simultaneous outflows to prevent a chamber from sending more water than it contains.
+
+Water exceeding a chamber's declared capacity is counted as cumulative overflow rather than silently discarded. Snapshots expose per-chamber water volume and surface elevation, per-step transfers, elapsed time, tick, and cumulative overflow.
+
+This is an intentionally transparent first-order model for validating causal state evolution and conservation accounting. It is not yet a calibrated fluid solver: it does not model momentum, pressure transients, turbulence, pipe cross-sections, rainfall fields, or structural failure. Those require additional domain inputs and validation before the model is suitable for prediction. The Pages sample runs six ten-second ticks over a small sewer network and writes `docs/data/hydraulic.json`.
