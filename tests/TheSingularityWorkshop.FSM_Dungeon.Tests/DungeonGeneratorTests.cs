@@ -101,6 +101,31 @@ public sealed class DungeonGeneratorTests
     }
 
     [Fact]
+    public void Host_anchor_and_open_ended_conditions_survive_generation()
+    {
+        var definition = new DungeonDefinition(
+            "city-underworks", "City Underworks", 77,
+            new DungeonOrigin("municipal-infrastructure", "A stormwater network was excavated beneath the city.",
+                "Carry runoff and provide maintenance access.", "Expanded across several generations of city growth."),
+            8,
+            site: new DungeonSiteReference("singularity-city", "city", "district-04"),
+            conditions:
+            [
+                new DungeonCondition("flow", "hydraulic-flow-rate", "2.4", "m3/s", "Runoff moves toward the eastern outfall."),
+                new DungeonCondition("access", "maintenance-access", "restricted", "", "A collapsed ladder blocks routine access.")
+            ]);
+
+        var world = DungeonGenerator.Generate(definition);
+
+        Assert.Equal("singularity-city", world.Site!.HostId);
+        Assert.Equal("district-04", world.Site.AnchorId);
+        Assert.Equal(2, world.Conditions.Count);
+        Assert.Contains(world.Conditions, condition => condition.Kind == "hydraulic-flow-rate");
+        Assert.Contains(world.Conditions, condition => condition.Kind == "maintenance-access");
+        Assert.Empty(world.Validate());
+    }
+
+    [Fact]
     public void Inhabitant_groups_have_explicit_motivations_activities_and_territory()
     {
         var world = DungeonGenerator.Generate(CreateDefinition());
