@@ -27,6 +27,20 @@
     .steps { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:0; list-style:none; counter-reset:step; }
     .steps li { counter-increment:step; border:1px solid var(--line); border-radius:12px; padding:14px 16px 14px 48px; position:relative; color:var(--muted); }
     .steps li:before { content:counter(step); position:absolute; left:14px; top:14px; width:22px; height:22px; border-radius:50%; background:#3a3027; color:#f1d0a3; text-align:center; font-size:.82rem; line-height:22px; }
+    .world-view { display:grid; grid-template-columns:minmax(0,1.7fr) minmax(240px,1fr); gap:16px; align-items:start; }
+    #dungeon-map { width:100%; height:auto; min-height:340px; background:#0d131c; border:1px solid var(--line); border-radius:12px; }
+    .map-edge { stroke:#806c53; stroke-width:5; opacity:.72; }
+    .map-node { cursor:pointer; outline:none; }
+    .map-node rect { fill:#303947; stroke:#9d8a70; stroke-width:2; rx:9; }
+    .map-node.entry rect { fill:#51402c; stroke:#e2b77e; }
+    .map-node.selected rect { stroke:#f3d7a9; stroke-width:4; filter:drop-shadow(0 0 8px #d9ae70); }
+    .map-node text { fill:#f4eee5; font:12px system-ui,sans-serif; pointer-events:none; text-anchor:middle; }
+    .inspector { border:1px solid var(--line); background:#111720; border-radius:12px; padding:16px; min-height:260px; }
+    .inspector h3 { margin:0 0 10px; color:var(--ink); }
+    .inspector p { font-size:.9rem; margin:8px 0 14px; }
+    .inhabitant { border-top:1px solid var(--line); padding:10px 0; font-size:.88rem; }
+    .inhabitant strong { display:block; color:var(--ink); }
+    .world-meta { font-variant-numeric:tabular-nums; font-size:.88rem; }
     a { color:#e6bd88; text-decoration:none; } a:hover { text-decoration:underline; }
     footer { border-top:1px solid var(--line); margin-top:34px; padding-top:20px; text-align:center; color:var(--muted); font-size:.9rem; }
     @media(max-width:700px) { .world,.steps { grid-template-columns:1fr; } main { width:min(100% - 24px,1080px); padding-top:18px; } .panel { padding:18px; } }
@@ -53,6 +67,26 @@
   </section>
 
   <section class="panel">
+    <h2>Inspect a generated dungeon</h2>
+    <p id="dungeon-status">Generating a world from the C# domain model…</p>
+    <div class="world-view">
+      <svg id="dungeon-map" viewBox="0 0 980 520" role="img" aria-label="Generated dungeon map. Select a chamber to inspect its provenance."></svg>
+      <aside class="inspector">
+        <h3 id="chamber-name">World inspector</h3>
+        <p id="chamber-purpose">Select a chamber to inspect why it exists.</p>
+        <h3>Formation</h3>
+        <p id="chamber-formation">Waiting for generated world data.</p>
+        <h3>History</h3>
+        <p id="chamber-history">Waiting for generated world data.</p>
+        <h3>Inhabitants</h3>
+        <div id="inhabitants"></div>
+      </aside>
+    </div>
+    <p class="world-meta" id="world-meta"></p>
+    <p>The map and inspector are generated from the C# library's serialized world output—not a separate browser-side dungeon generator.</p>
+  </section>
+
+  <section class="panel">
     <h2>The first playable proof</h2>
     <ol class="steps">
       <li>A small sanctuary with a discoverable descent.</li>
@@ -75,5 +109,93 @@
     <p>Original Workshop implementation. Inspired by the genre and gameplay loop of classic isometric action RPGs; no original Diablo assets or code are used.</p>
   </footer>
 </main>
+<script>
+(async function () {
+  const status = document.getElementById("dungeon-status");
+  const map = document.getElementById("dungeon-map");
+  const name = document.getElementById("chamber-name");
+  const purpose = document.getElementById("chamber-purpose");
+  const formation = document.getElementById("chamber-formation");
+  const history = document.getElementById("chamber-history");
+  const inhabitants = document.getElementById("inhabitants");
+  const meta = document.getElementById("world-meta");
+  const ns = "http://www.w3.org/2000/svg";
+
+  function element(tag, attributes, parent) {
+    const node = document.createElementNS(ns, tag);
+    for (const [key, value] of Object.entries(attributes || {})) node.setAttribute(key, value);
+    if (parent) parent.appendChild(node);
+    return node;
+  }
+
+  function inspect(chamber, group) {
+    document.querySelectorAll(".map-node").forEach(node => node.classList.remove("selected"));
+    group.classList.add("selected");
+    name.textContent = chamber.name;
+    purpose.textContent = chamber.currentPurpose;
+    formation.textContent = chamber.formationReason;
+    history.textContent = chamber.historicalUse;
+  }
+
+  try {
+    const response = await fetch("data/dungeon.json", { cache: "no-store" });
+    if (!response.ok) throw new Error("The generated world data is not available yet.");
+    const world = await response.json();
+    const chambers = world.chambers || [];
+    const passages = world.passages || [];
+    const groups = world.inhabitantGroups || [];
+    const positions = new Map();
+
+    chambers.forEach(chamber => {
+      const column = chamber.index % 6;
+      const row = Math.floor(chamber.index / 6);
+      positions.set(chamber.index, { x: 78 + column * 154, y: 55 + row * 150, cx: 133 + column * 154, cy: 87 + row * 150 });
+    });
+
+    passages.forEach(passage => {
+      const from = positions.get(passage.fromChamberIndex);
+      const to = positions.get(passage.toChamberIndex);
+      if (from && to) element("line", { x1:from.cx, y1:from.cy, x2:to.cx, y2:to.cy, class:"map-edge" }, map);
+    });
+
+    let firstNode = null;
+    chambers.forEach(chamber => {
+      const position = positions.get(chamber.index);
+      const group = element("g", { class:"map-node" + (chamber.index === 0 ? " entry" : ""), tabindex:"0", role:"button", "aria-label":"Inspect " + chamber.name }, map);
+      element("rect", { x:position.x, y:position.y, width:110, height:64 }, group);
+      const label = element("text", { x:position.cx, y:position.y + 27 }, group);
+      label.textContent = chamber.index === 0 ? "ENTRANCE" : "CHAMBER " + String(chamber.index).padStart(2,"0");
+      const sub = element("text", { x:position.cx, y:position.y + 45 });
+      sub.textContent = chamber.index === 0 ? "The Descent" : "Inspect";
+      group.appendChild(sub);
+      group.addEventListener("click", () => inspect(chamber, group));
+      group.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") { event.preventDefault(); inspect(chamber, group); }
+      });
+      if (!firstNode) firstNode = { chamber, group };
+    });
+
+    groups.forEach(group => {
+      const item = document.createElement("div");
+      item.className = "inhabitant";
+      const title = document.createElement("strong");
+      title.textContent = group.name + " · chamber " + group.homeChamberIndex;
+      const motivation = document.createElement("p");
+      motivation.textContent = group.motivation;
+      const activity = document.createElement("p");
+      activity.textContent = "Currently: " + group.currentActivity;
+      item.append(title, motivation, activity);
+      inhabitants.appendChild(item);
+    });
+
+    status.textContent = "Generated from the deterministic C# domain model.";
+    meta.textContent = "Seed " + world.definition.seed + " · " + chambers.length + " chambers · " + passages.length + " passages · " + groups.length + " inhabitant groups · " + (passages.length >= chambers.length - 1 ? "connected route graph" : "route graph");
+    if (firstNode) inspect(firstNode.chamber, firstNode.group);
+  } catch (error) {
+    status.textContent = error.message;
+    name.textContent = "Proof data unavailable";
+  }
+})();
+</script>
 </body>
 </html>
