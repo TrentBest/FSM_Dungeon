@@ -58,6 +58,8 @@ public sealed class HydraulicSimulation
         {
             var capacity = chamber.FloorAreaSquareMeters * chamber.MaximumWaterDepthMeters;
             var supplied = working[chamber.ChamberIndex] + chamber.InflowCubicMetersPerSecond * durationSeconds;
+            if (!double.IsFinite(supplied))
+                throw new ArgumentOutOfRangeException(nameof(durationSeconds), "The step exceeds the numeric range of the hydraulic state.");
             overflowThisStep += Math.Max(0, supplied - capacity);
             working[chamber.ChamberIndex] = Math.Min(capacity, supplied);
         }
@@ -104,6 +106,10 @@ public sealed class HydraulicSimulation
             overflowThisStep += Math.Max(0, working[chamber.ChamberIndex] - capacity);
             working[chamber.ChamberIndex] = Math.Min(working[chamber.ChamberIndex], capacity);
         }
+        if (!double.IsFinite(overflowThisStep) || !double.IsFinite(_cumulativeOverflowVolume + overflowThisStep)
+            || !double.IsFinite(_elapsedSeconds + durationSeconds))
+            throw new ArgumentOutOfRangeException(nameof(durationSeconds), "The step exceeds the numeric range of the hydraulic simulation.");
+
         _cumulativeOverflowVolume += overflowThisStep;
 
         _volumes.Clear();
