@@ -68,7 +68,9 @@
 
   <section class="panel">
     <h2>Inspect a generated dungeon</h2>
-    <p id="dungeon-status">Generating a world from the C# domain model…</p>
+    <p id="dungeon-status">Generating worlds from the C# domain model…</p>
+    <label for="world-select">Choose a place to inspect</label>
+    <select id="world-select" style="display:block;margin:8px 0 18px;padding:10px 14px;background:#111720;color:var(--ink);border:1px solid var(--line);border-radius:8px;max-width:100%;width:360px"></select>
     <div class="world-view">
       <svg id="dungeon-map" viewBox="0 0 980 520" role="img" aria-label="Generated dungeon map. Select a chamber to inspect its provenance."></svg>
       <aside class="inspector">
@@ -113,6 +115,7 @@
 (async function () {
   const status = document.getElementById("dungeon-status");
   const map = document.getElementById("dungeon-map");
+  const selector = document.getElementById("world-select");
   const name = document.getElementById("chamber-name");
   const purpose = document.getElementById("chamber-purpose");
   const formation = document.getElementById("chamber-formation");
@@ -129,7 +132,7 @@
   }
 
   function inspect(chamber, group) {
-    document.querySelectorAll(".map-node").forEach(node => node.classList.remove("selected"));
+    map.querySelectorAll(".map-node").forEach(node => node.classList.remove("selected"));
     group.classList.add("selected");
     name.textContent = chamber.name;
     purpose.textContent = chamber.currentPurpose;
@@ -137,10 +140,9 @@
     history.textContent = chamber.historicalUse;
   }
 
-  try {
-    const response = await fetch("data/dungeon.json", { cache: "no-store" });
-    if (!response.ok) throw new Error("The generated world data is not available yet.");
-    const world = await response.json();
+  function render(world) {
+    map.replaceChildren();
+    inhabitants.replaceChildren();
     const chambers = world.chambers || [];
     const passages = world.passages || [];
     const groups = world.inhabitantGroups || [];
@@ -149,7 +151,7 @@
     chambers.forEach(chamber => {
       const column = chamber.index % 6;
       const row = Math.floor(chamber.index / 6);
-      positions.set(chamber.index, { x: 78 + column * 154, y: 55 + row * 150, cx: 133 + column * 154, cy: 87 + row * 150 });
+      positions.set(chamber.index, { x:78 + column * 154, y:55 + row * 150, cx:133 + column * 154, cy:87 + row * 150 });
     });
 
     passages.forEach(passage => {
@@ -165,12 +167,12 @@
       element("rect", { x:position.x, y:position.y, width:110, height:64 }, group);
       const label = element("text", { x:position.cx, y:position.y + 27 }, group);
       label.textContent = chamber.index === 0 ? "ENTRANCE" : "CHAMBER " + String(chamber.index).padStart(2,"0");
-      const sub = element("text", { x:position.cx, y:position.y + 45 });
+      const sub = element("text", { x:position.cx, y:position.y + 45 }, group);
       sub.textContent = chamber.index === 0 ? "The Descent" : "Inspect";
-      group.appendChild(sub);
-      group.addEventListener("click", () => inspect(chamber, group));
+      const select = () => inspect(chamber, group);
+      group.addEventListener("click", select);
       group.addEventListener("keydown", event => {
-        if (event.key === "Enter" || event.key === " ") { event.preventDefault(); inspect(chamber, group); }
+        if (event.key === "Enter" || event.key === " ") { event.preventDefault(); select(); }
       });
       if (!firstNode) firstNode = { chamber, group };
     });
@@ -188,9 +190,36 @@
       inhabitants.appendChild(item);
     });
 
-    status.textContent = "Generated from the deterministic C# domain model.";
-    meta.textContent = "Seed " + world.definition.seed + " · " + chambers.length + " chambers · " + passages.length + " passages · " + groups.length + " inhabitant groups · " + (passages.length >= chambers.length - 1 ? "connected route graph" : "route graph");
+    const conditions = world.conditions || [];
+    conditions.forEach(condition => {
+      const item = document.createElement("div");
+      item.className = "inhabitant";
+      const title = document.createElement("strong");
+      title.textContent = condition.kind + (condition.unit ? " · " + condition.unit : "");
+      const value = document.createElement("p");
+      value.textContent = condition.value + " — " + condition.description;
+      item.append(title, value);
+      inhabitants.appendChild(item);
+    });
+
+    status.textContent = "Generated from the deterministic C# domain model · " + world.definition.name;
+    meta.textContent = "Seed " + world.definition.seed + " · " + chambers.length + " chambers · " + passages.length + " passages · " + groups.length + " inhabitant groups · " + conditions.length + " environmental conditions · " + (world.site ? "host anchor " + world.site.hostId + "/" + world.site.anchorId : "no host anchor");
     if (firstNode) inspect(firstNode.chamber, firstNode.group);
+  }
+
+  try {
+    const response = await fetch("data/worlds.json", { cache: "no-store" });
+    if (!response.ok) throw new Error("Generated world data is not available yet.");
+    const worlds = await response.json();
+    if (!Array.isArray(worlds) || worlds.length === 0) throw new Error("No generated worlds were found.");
+    worlds.forEach((world, index) => {
+      const option = document.createElement("option");
+      option.value = String(index);
+      option.textContent = world.definition.name;
+      selector.appendChild(option);
+    });
+    selector.addEventListener("change", () => render(worlds[Number(selector.value)]));
+    render(worlds[0]);
   } catch (error) {
     status.textContent = error.message;
     name.textContent = "Proof data unavailable";
