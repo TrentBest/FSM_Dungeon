@@ -11,17 +11,19 @@ public sealed record HydraulicTransfer(int FromChamberIndex, int ToChamberIndex,
 public sealed class HydraulicSnapshot
 {
     internal HydraulicSnapshot(long tick, double elapsedSeconds, IEnumerable<HydraulicChamberState> chambers,
-        IEnumerable<HydraulicTransfer> transfers)
+        IEnumerable<HydraulicTransfer> transfers, double cumulativeOverflowVolumeCubicMeters)
     {
         Tick = tick;
         ElapsedSeconds = elapsedSeconds;
         Chambers = new ReadOnlyCollection<HydraulicChamberState>(chambers.ToArray());
         Transfers = new ReadOnlyCollection<HydraulicTransfer>(transfers.ToArray());
+        CumulativeOverflowVolumeCubicMeters = cumulativeOverflowVolumeCubicMeters;
     }
     public long Tick { get; }
     public double ElapsedSeconds { get; }
     public IReadOnlyList<HydraulicChamberState> Chambers { get; }
     public IReadOnlyList<HydraulicTransfer> Transfers { get; }
+    public double CumulativeOverflowVolumeCubicMeters { get; }
 }
 
 /// <summary>
@@ -34,6 +36,7 @@ public sealed class HydraulicSimulation
     private readonly Dictionary<int, double> _volumes;
     private long _tick;
     private double _elapsedSeconds;
+    private double _cumulativeOverflowVolume;
 
     public HydraulicSimulation(HydraulicNetworkDefinition definition)
     {
@@ -50,11 +53,13 @@ public sealed class HydraulicSimulation
 
         var chambers = _definition.Chambers.ToDictionary(x => x.ChamberIndex);
         var working = new Dictionary<int, double>(_volumes);
+        var overflowThisStep = 0d;
         foreach (var chamber in _definition.Chambers)
         {
             var capacity = chamber.FloorAreaSquareMeters * chamber.MaximumWaterDepthMeters;
-            working[chamber.ChamberIndex] = Math.Min(capacity,
-                working[chamber.ChamberIndex] + chamber.InflowCubicMetersPerSecond * durationSeconds);
+            var supplied = working[chamber.ChamberIndex] + chamber.InflowCubicMetersPerSecond * durationSeconds;
+            overflowThisStep += Math.Max(0, supplied - capacity);
+            working[chamber.ChamberIndex] = Math.Min(capacity, supplied);
         }
 
         var proposals = new List<(int From, int To, double Volume)>();
@@ -94,8 +99,12 @@ public sealed class HydraulicSimulation
         }
 
         foreach (var chamber in _definition.Chambers)
-            working[chamber.ChamberIndex] = Math.Min(working[chamber.ChamberIndex],
-                chamber.FloorAreaSquareMeters * chamber.MaximumWaterDepthMeters);
+        {
+            var capacity = chamber.FloorAreaSquareMeters * chamber.MaximumWaterDepthMeters;
+            overflowThisStep += Math.Max(0, working[chamber.ChamberIndex] - capacity);
+            working[chamber.ChamberIndex] = Math.Min(working[chamber.ChamberIndex], capacity);
+        }
+        _cumulativeOverflowVolume += overflowThisStep;
 
         _volumes.Clear();
         foreach (var pair in working) _volumes.Add(pair.Key, pair.Value);
@@ -113,6 +122,6 @@ public sealed class HydraulicSimulation
                 chamber.FloorElevationMeters + volume / chamber.FloorAreaSquareMeters,
                 chamber.InflowCubicMetersPerSecond);
         });
-        return new HydraulicSnapshot(_tick, _elapsedSeconds, states, transfers);
+        return new HydraulicSnapshot(_tick, _elapsedSeconds, states, transfers, _cumulativeOverflowVolume);
     }
 }
