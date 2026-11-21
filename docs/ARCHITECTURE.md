@@ -1,0 +1,177 @@
+# FSM_Dungeon Architecture
+
+## Purpose
+
+FSM_Dungeon is an engine-independent, deterministic world and dungeon simulation library. It is also the foundation for an original isometric action-RPG proof inspired by the *kind* of experience established by the original Diablo: sanctuary, descent, exploration, real-time danger, rewards, growth, and return.
+
+This is a systems and gameplay benchmark, not a content remake. All code, worldbuilding, characters, maps, art, audio, names, and writing created for the Workshop must be original.
+
+The defining Workshop difference is causality: a dungeon is not a bag of rooms populated with arbitrary monsters. It is a place that exists for reasons. Its formation, history, purpose, inhabitants, resources, hazards, and current activity should explain one another.
+
+## Product boundaries
+
+### NuGet library: the reusable engine
+
+The NuGet package is the stable, host-independent domain and simulation surface. It owns:
+
+- dungeon identity and discoverability;
+- extensible origin and formation descriptions;
+- spatial topology and generated structures;
+- history, provenance, and causal explanations;
+- inhabitants, groups, needs, goals, territory, and activities;
+- world state, deterministic simulation, and encounters;
+- queries and commands that let hosts inspect and change the world.
+
+The core must not require Unity, a graphics API, a browser, WebApp, ServerApp, or FSM_COS to exist.
+
+The first target should favor broad .NET compatibility and a small dependency surface. Runtime-specific or Workshop-specific adapters can be separate packages when their concrete contracts are understood.
+
+### MicroBundle: the composed experience
+
+NuGet distributes reusable code. A MicroBundle composes capabilities and content into an installable experience.
+
+A future dungeon experience bundle may declare:
+
+- the dungeon domain package/version;
+- world and generation definitions;
+- optional AI vocabularies and grammars;
+- optional Renderer and Visualization capabilities;
+- host-specific adapters;
+- assets and experience metadata.
+
+The MicroBundle is not a replacement for NuGet, and the NuGet package is not itself the whole experience. Keep the manifest format aligned with the Workshop's existing composition rules rather than inventing a competing bundle system here.
+
+### Hosts
+
+The same domain should be usable from several hosts:
+
+| Host | Responsibility |
+| --- | --- |
+| Local test/console harness | deterministic simulation, automated tests, fast iteration |
+| GitHub Pages | public, low-friction proof and interactive inspection |
+| WebApp | browser-based interactive experience |
+| ServerApp | authoritative persistent worlds, multiplayer/session services |
+| Desktop/VR host | richer input, audio, and presentation |
+
+Hosts adapt input, persistence, networking, and presentation. They do not own dungeon rules.
+
+## Core model: causes before templates
+
+A generated place should retain enough provenance to answer:
+
+- Why does this dungeon exist?
+- What formed each region, chamber, passage, or barrier?
+- What was the place used for?
+- What changed it over time?
+- Why are these inhabitants here?
+- What do they want, protect, fear, consume, maintain, or travel toward?
+- Why is a hazard or resource present?
+
+Origins and formation mechanisms must be extensible. Natural caves, excavations, constructed facilities, biological structures, machine-bored passages, ruins, alien structures, and speculative/time-displaced formations are examples—not a closed enum.
+
+Generation should be deterministic for a supplied seed and definition. A generated result should retain its inputs and causal records so it can be reproduced, inspected, compared, and explained.
+
+## Simulation and state
+
+The domain exposes explicit operations such as generation, inspection, command application, and advancing simulation. It must not require a renderer to keep the world meaningful.
+
+FSM_API is the Workshop's state-machine substrate. Dungeon should reuse it where state-machine behavior is genuinely useful rather than implementing a competing FSM. At the same time, the public domain model should not leak FSM handles or require a particular host update loop. Integration should be isolated behind a focused adapter or internal orchestration boundary once the API usage is proven.
+
+Simulation should support multiple levels of fidelity:
+
+- immediate: detailed actor and encounter behavior;
+- local: nearby groups and tactical activity;
+- regional: coarse activity, movement, and resource changes;
+- distant: summarized or event-driven world state.
+
+The simulation policy and the rendering policy are related but not identical. A place may be rendered simply while remaining semantically important.
+
+## AI: understanding and authoring through contracts
+
+AI is an adapter and participant, not the owner of world truth.
+
+The intended Workshop chain is:
+
+- **ProtocolAi — WHAT:** application-owned identities for dungeon entities, concepts, observations, and commands.
+- **GrammarAi — HOW:** valid structures and relationships for expressing queries, explanations, plans, and proposals.
+- **CommandAi — DO:** typed command proposals that a host validates and applies under its own authority rules.
+
+This creates two complementary flows:
+
+1. **Understand:** expose bounded observations and provenance; encode known identities; structure the explanation; let an AI reason over that representation.
+2. **Author:** let an AI propose a world definition or change; validate references, structure, constraints, and cost; preview the result; then let the host decide whether to apply it.
+
+No model output directly mutates authoritative state. Unknown values remain explicit proposals for the host to resolve. Permission, validation, cost limits, and approval stay outside the model.
+
+AI-generated worlds must pass the same deterministic validation and invariant checks as procedurally generated worlds.
+
+## Renderer and Visualization
+
+Renderer owns observer-aware computational representation: what needs to be evaluated, at what fidelity, update rate, and semantic depth for a particular observer and budget.
+
+Dungeon should provide structured world facts and observation queries; it should not duplicate Renderer scheduling or Event Horizon policy.
+
+Visualization turns selected representation into pixels and richer sensory output. It is a downstream presentation capability, not a dependency of the dungeon domain.
+
+The intended pipeline is:
+
+```text
+Dungeon world + provenance
+          |
+          v
+Observer / intent / budget
+          |
+          v
+Renderer representation policy
+          |
+          v
+Selected world representation
+          |
+          v
+Visualization / host adapter
+          |
+          v
+Browser, desktop, VR, or other display
+```
+
+A low-cost representation might show room outlines, labels, faction presence, and routes. A higher-cost representation can add geometry, materials, lighting, animation, and effects. The world remains the same; only the observer's representation budget changes.
+
+## First playable proof
+
+The initial vertical slice should prove the whole causal loop without attempting the entire game:
+
+1. A small original sanctuary/town with a discoverable entrance.
+2. A deterministic multi-room dungeon generated from a recorded origin, purpose, history, and seed.
+3. At least two inhabitant groups with distinct motivations and meaningful territory or orders.
+4. A controllable player with exploration, real-time combat, health, and a death/return loop.
+5. Original loot and persistent character progression.
+6. A complete descent, encounter, reward, and return cycle.
+7. Tests for determinism, connectivity, provenance, inhabitant purpose, command validation, and simulation invariants.
+8. A Pages proof that can inspect the generated world and explain why its parts exist.
+
+The first proof may use a simple 2D/isometric presentation. It must not block the domain on the eventual high-definition renderer.
+
+## Delivery sequence
+
+1. Establish domain vocabulary, invariants, and deterministic generation.
+2. Build the smallest runnable simulation and test harness.
+3. Publish an inspectable Pages proof using real generated data.
+4. Add explicit query/command contracts and AI vocabulary/grammar.
+5. Add Renderer observation-budget integration.
+6. Add Visualization and a richer browser presentation.
+7. Add WebApp and ServerApp adapters when the local proof demonstrates the required contracts.
+8. Package and validate the NuGet library; compose the MicroBundle experience separately.
+
+## Non-goals and guardrails
+
+- No copied Diablo code, art, audio, maps, dialogue, characters, or other protected expression.
+- No mandatory game engine or graphics API in the domain package.
+- No mandatory WebApp or ServerApp dependency.
+- No model output directly applying privileged commands.
+- No duplicate FSM runtime, rendering scheduler, or MicroBundle host.
+- No claim of production rendering or multiplayer before those capabilities are implemented and tested.
+- No package publication, release, merge, or deployment to a production host without the required explicit authorization.
+
+## Proof principle
+
+**The dungeon should make sense when the player is not looking.** Its inhabitants have reasons to be there, its spaces have histories, and its visible state is an affordable representation of a deeper world.
