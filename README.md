@@ -8,58 +8,66 @@
 # ✳️ FSM_Dungeon
 
 [![Sith Policy](assets/sith-policy.svg)](https://github.com/TrentBest/FSM_Dungeon/actions/workflows/sith-policy.yml)
+[![Build](https://img.shields.io/github/actions/workflow/status/TrentBest/FSM_Dungeon/build.yml?branch=development&style=flat-square&logo=github)](https://github.com/TrentBest/FSM_Dungeon/actions/workflows/build.yml)
+[![Pages](https://img.shields.io/github/actions/workflow/status/TrentBest/FSM_Dungeon/pages.yml?branch=development&style=flat-square&logo=github)](https://github.com/TrentBest/FSM_Dungeon/actions/workflows/pages.yml)
 
-**An engine-independent domain for defining, composing, exploring, and simulating living worlds.**
+**An engine-independent domain and simulation for places that have a reason to exist.**
 
-FSM_Dungeon is being restarted from a clean foundation. Its former Unity-facing direction is not part of the new architecture. The repository will describe and implement the Dungeon domain itself; it will not be an engine plugin, a scene wrapper, or a second general-purpose workflow runtime.
+FSM_Dungeon is the Workshop's reusable dungeon/world engine and the foundation for an original isometric action-RPG proof. The gameplay benchmark is the classic sanctuary → descent → exploration → danger → reward → return loop. The Workshop's defining difference is a living causal world: spaces have origins and histories; inhabitants have motivations, activities, territory, and relationships.
 
 ## 1. Purpose
 
-A dungeon is a structured, stateful world: places connect, entities inhabit those places, conditions change, and encounters emerge from the relationships and rules in that world.
+A dungeon is not a random collection of rooms and monsters. It is a place shaped by formation, use, change, and life.
 
-FSM_Dungeon will provide the domain model and simulation foundations for creating those worlds. The first goal is not a renderer or a full game. It is a small, deterministic, testable world model that can later be presented through different experiences.
+The domain should be able to explain why a chamber exists, why a passage connects it, why a group occupies it, what that group is doing, and how the place changes over time. Natural caves, excavations, constructed facilities, biological structures, machine-bored passages, ruins, and unknown origins are extensible examples—not a closed list.
+
+The NuGet package is the reusable .NET library. It is not the whole game application.
 
 ## 2. Architecture
 
-The implementation is data-first and engine-agnostic.
+- **Domain and simulation:** deterministic generation, spatial topology, provenance, inhabitants, activities, encounters, and world state.
+- **FSM_API:** the Workshop state-machine substrate; reuse it where state-machine behavior is useful rather than duplicating its runtime.
+- **AI understanding and authorship:** ProtocolAi supplies semantic identity, GrammarAi supplies structure, and CommandAi carries proposals for host-side validation and authorization.
+- **Renderer:** observer-aware selection of computational detail and update fidelity under an explicit budget.
+- **Visualization:** transforms selected representations into images and progressively richer visual output.
+- **MicroBundles:** compose the dungeon package and optional capabilities into an experience; NuGet remains the code-distribution model.
+- **Hosts:** GitHub Pages proves the domain; WebApp can provide browser interaction; ServerApp can later host authoritative persistent worlds.
 
-- **Domain:** worlds, regions, rooms, passages, entities, and encounters.
-- **State and behavior:** use [FSM_API](https://github.com/TrentBest/FSM_API) for state-machine primitives; do not duplicate its runtime.
-- **Simulation:** domain behavior remains independently executable and testable.
-- **Presentation:** visualization and interaction are adapters, not prerequisites.
-- **Composition:** preserve clean boundaries for future integration with Physics, Ontology, Experiences, and FSM_COS. Add a dependency only when a concrete contract and use case justify it.
-
-Unity is not a target dependency. No Unity editor, scene, assembly, package, or runtime assumption belongs in the new design.
+See [the architecture document](docs/ARCHITECTURE.md) for ownership boundaries and the staged plan.
 
 ## 3. Boundaries
 
-FSM_Dungeon owns dungeon/world domain concepts and their simulation.
+FSM_Dungeon owns dungeon/world meaning and its simulation. It does not require Unity, a graphics API, a browser, WebApp, ServerApp, FSM_COS, or an AI model to run.
 
-Foundry owns general Hub workflow execution. A Foundry integration, if one proves useful, must be a thin adapter around a real Hub-managed experience—not a requirement for Dungeon to run.
+Renderer and Visualization are downstream capabilities. Hosts adapt input, persistence, networking, and presentation. AI can inspect and propose changes, but model output never directly mutates authoritative world state.
 
-GUI is optional. The domain must remain usable without a GUI, renderer, game engine, or Foundry host.
+NuGet and MicroBundles are complementary: NuGet distributes the reusable library; a MicroBundle composes it with content and optional Workshop capabilities into an experience.
 
-Cross-repository integrations must be explicit. Work in this repository does not authorize direct modifications to another repository.
+The Diablo reference is a gameplay/systems benchmark only. All Workshop code, characters, worldbuilding, maps, writing, art, and audio are original.
 
 ## 4. Development
 
-The first vertical slice will establish:
+The first deterministic domain slice is implemented:
 
-1. A precise domain vocabulary and core invariants.
-2. A minimal world representation with connected locations and entities.
-3. Deterministic state transitions and simulation rules.
-4. Automated tests that run without Unity or rendering infrastructure.
-5. A small demonstration of the domain model before adding presentation.
+- extensible dungeon origin and causal description;
+- validated generation definitions and purposeful inhabitant groups;
+- seeded, connected chamber and passage generation;
+- chamber formation, history, and purpose provenance;
+- structural validation and automated tests;
+- a console proof that serializes a generated world for the browser.
 
-Implementation decisions will be recorded as they become necessary. The design should earn complexity through working examples rather than speculate about every future feature.
-
-Track the reboot in [issue #2](https://github.com/TrentBest/FSM_Dungeon/issues/2).
+The Pages site is being upgraded to inspect the actual C#-generated world, rather than maintaining a second JavaScript generator. The build and test workflow runs on the development branch. Pages deployment currently needs the github-pages environment to allow development (see [issue #3](https://github.com/TrentBest/FSM_Dungeon/issues/3)).
 
 ## 5. Project status
 
-**Status: Restarting.** The repository currently contains its Workshop documentation and policy foundation. The new domain implementation has not yet been established.
+**Status: Initial domain foundation implemented; first playable loop not yet complete.** The current generator proves deterministic structure and causal metadata, not yet autonomous inhabitant simulation, combat, loot, or high-definition rendering.
 
-The active development branch is `development`; `master` remains the release-aligned branch. Keep the repository to those two branches.
+- [GitHub Pages proof](https://trentbest.github.io/FSM_Dungeon/) — deployment is pending the environment rule noted above.
+- [Architecture and integration plan](docs/ARCHITECTURE.md)
+- [Open development issues](https://github.com/TrentBest/FSM_Dungeon/issues)
+- [Build workflow](https://github.com/TrentBest/FSM_Dungeon/actions/workflows/build.yml)
+
+The active development branch is development; master remains the release-aligned branch. Keep exactly those two branches.
 
 ---
 
