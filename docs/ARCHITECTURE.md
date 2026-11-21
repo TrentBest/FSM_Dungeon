@@ -175,3 +175,13 @@ The first proof may use a simple 2D/isometric presentation. It must not block th
 ## Proof principle
 
 **The dungeon should make sense when the player is not looking.** Its inhabitants have reasons to be there, its spaces have histories, and its visible state is an affordable representation of a deeper world.
+
+## Host placement and environmental conditions
+
+A dungeon may be registered beneath, within, or adjacent to a larger host world without taking a dependency on that world. `DungeonSiteReference` carries opaque host identity, host kind, and anchor identity. For example, a sewer network can refer to a district in Singularity City; the city decides whether that anchor exists, who can discover it, and how an entrance is exposed. FSM_Dungeon remains responsible for the dungeon's own structure and simulation.
+
+`DungeonCondition` records extensible environmental facts as an open kind, value, optional unit, and explanation. This is deliberately not a closed list of dungeon themes or condition enums. A sewer definition can describe hydraulic flow, water level, gate obstruction, air quality, and maintenance access. A catacomb can describe burial strata, sealed routes, spring controls, and recent disturbance. A future biological, mechanical, or alien place can introduce its own condition kinds without changing the domain assembly.
+
+These records are authored world inputs at this stage, not yet a live fluid or ecology solver. The next simulation layer must define which conditions evolve, what causes those changes, and which events or commands are permitted to alter them.
+
+The proof sample now generates two contrasting worlds from the same API: the city's connected underworks and the older catacombs beneath the First Lantern. Both retain host anchors, provenance, environmental conditions, topology, and purposeful inhabitant groups. Their differences are authored as causes and state, not as hard-coded `Sewer` or `Catacomb` generator modes.
