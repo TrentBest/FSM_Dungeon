@@ -189,7 +189,7 @@ The proof sample now generates two contrasting worlds from the same API: the cit
 
 ## First causal simulation slice: hydraulics
 
-The hydraulic model is deliberately separate from authored `DungeonCondition` metadata. A `HydraulicNetworkDefinition` declares chamber geometry and initial water, plus hydraulic properties for selected existing passage pairs. The deterministic `HydraulicSimulation.Step(durationSeconds)` applies inflow, computes water-surface head, proposes flow down the head gradient, limits transfer by passage capacity and blockage, and scales simultaneous outflows to prevent a chamber from sending more water than it contains.
+The hydraulic model is deliberately separate from authored `DungeonCondition` metadata. A `HydraulicNetworkDefinition` declares chamber geometry and initial water, plus hydraulic properties for selected existing passage pairs. The deterministic `HydraulicSimulation.Step(durationSeconds)` applies inflow, computes water-surface head, proposes flow down the head gradient, limits transfer by passage capacity and blockage, preserves water below each passage invert, and scales simultaneous outflows to prevent a chamber from sending more water than it contains. The world-bound constructor rejects hydraulic edges that do not exist in the dungeon's passage graph.
 
 Water exceeding a chamber's declared capacity is counted as cumulative overflow rather than silently discarded. Snapshots expose per-chamber water volume and surface elevation, per-step transfers, elapsed time, tick, and cumulative overflow.
 
