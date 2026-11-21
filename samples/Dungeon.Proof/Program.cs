@@ -36,7 +36,7 @@ var definition = new DungeonDefinition(
 var world = DungeonGenerator.Generate(definition);
 var fullPath = Path.GetFullPath(outputPath);
 Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
-var json = JsonSerializer.Serialize(world, new JsonSerializerOptions { WriteIndented = true });
+var json = JsonSerializer.Serialize(world, new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 await File.WriteAllTextAsync(fullPath, json);
 
 Console.WriteLine($"Generated {world.Definition.Name}");
