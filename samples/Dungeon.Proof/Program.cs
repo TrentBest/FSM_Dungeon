@@ -74,6 +74,20 @@ var sewer = DungeonGenerator.Generate(new DungeonDefinition(
         new DungeonCondition("service-access", "maintenance-access", "limited", "", "Two inspection ladders are damaged and one route is flooded.")
     ]));
 
+var hydraulicSimulation = new HydraulicSimulation(new HydraulicNetworkDefinition(
+    [
+        new HydraulicChamber(0, 3.0, 2.0, 2.0, 4.0),
+        new HydraulicChamber(1, 2.0, 2.0, 0.2, 3.0),
+        new HydraulicChamber(2, 0.5, 2.0, 0.1, 2.0, inflowCubicMetersPerSecond: 0.15)
+    ],
+    [
+        new HydraulicPassage(0, 1, 0.0, 0.4, 0.2),
+        new HydraulicPassage(1, 2, 0.0, 0.25, 0.15, blockageFraction: 0.35)
+    ]));
+var hydraulicSnapshots = Enumerable.Range(0, 6)
+    .Select(_ => hydraulicSimulation.Step(10))
+    .ToArray();
+
 var worlds = new[] { catacombs, sewer };
 await File.WriteAllTextAsync(Path.Combine(outputDirectory, "dungeon.json"),
     JsonSerializer.Serialize(catacombs, jsonOptions));
@@ -81,6 +95,8 @@ await File.WriteAllTextAsync(Path.Combine(outputDirectory, "sewer.json"),
     JsonSerializer.Serialize(sewer, jsonOptions));
 await File.WriteAllTextAsync(Path.Combine(outputDirectory, "worlds.json"),
     JsonSerializer.Serialize(worlds, jsonOptions));
+await File.WriteAllTextAsync(Path.Combine(outputDirectory, "hydraulic.json"),
+    JsonSerializer.Serialize(hydraulicSnapshots, jsonOptions));
 
 foreach (var world in worlds)
 {
@@ -90,4 +106,5 @@ foreach (var world in worlds)
     Console.WriteLine($"Host anchor: {world.Site?.HostId}/{world.Site?.AnchorId}");
     Console.WriteLine($"Connected: {world.IsConnected()}; validation errors: {world.Validate().Count}");
 }
+Console.WriteLine($"Hydraulic proof: {hydraulicSnapshots.Length} ticks; final stored water: {hydraulicSnapshots[^1].Chambers.Sum(chamber => chamber.WaterVolumeCubicMeters):F3} m3; overflow: {hydraulicSnapshots[^1].CumulativeOverflowVolumeCubicMeters:F3} m3");
 Console.WriteLine($"Wrote proof data to: {outputDirectory}");
