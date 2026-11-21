@@ -83,7 +83,9 @@ public sealed class HydraulicSimulation
             var effectiveCapacity = passage.MaximumFlowCubicMetersPerSecond * (1 - passage.BlockageFraction);
             var rate = Math.Min(effectiveCapacity,
                 passage.ConductanceCubicMetersPerSecondPerMeter * (sourceSurface - destinationSurface));
-            var volume = Math.Min(rate * durationSeconds, working[source.ChamberIndex]);
+            var availableAboveInvert = Math.Min(working[source.ChamberIndex],
+                Math.Max(0, (sourceSurface - passage.InvertElevationMeters) * source.FloorAreaSquareMeters));
+            var volume = Math.Min(rate * durationSeconds, availableAboveInvert);
             if (volume > 0) proposals.Add((source.ChamberIndex, destination.ChamberIndex, volume));
         }
 
