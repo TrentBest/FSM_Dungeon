@@ -69,7 +69,7 @@ A generated place should retain enough provenance to answer:
 
 Origins and formation mechanisms must be extensible. Natural caves, excavations, constructed facilities, biological structures, machine-bored passages, ruins, alien structures, and speculative/time-displaced formations are examples—not a closed enum.
 
-Generation should be deterministic for a supplied seed and definition. A generated result should retain its inputs and causal records so it can be reproduced, inspected, compared, and explained.
+Generation should be deterministic for a supplied seed and definition. A generated result should retain its inputs and causal records so it can be reproduced, inspected, compared, and explained. Connectivity is guaranteed by a minimal spanning backbone, while `AdditionalPassageCount` explicitly controls how many extra routes are generated. This separates the invariant (all chambers are reachable) from the authored topology (sparse, dense, or anything between) without encoding sewer, catacomb, or other themes as closed types.
 
 ## Simulation and state
 
