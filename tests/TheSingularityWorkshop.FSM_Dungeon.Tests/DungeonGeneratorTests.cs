@@ -1,3 +1,4 @@
+using Xunit;
 using TheSingularityWorkshop.FSM_Dungeon;
 
 namespace TheSingularityWorkshop.FSM_Dungeon.Tests;
