@@ -120,6 +120,75 @@ public sealed class GeologicalWorldTests
     }
 
     [Fact]
+    public void Observer_knowledge_is_private_and_does_not_change_authoritative_geology()
+    {
+        var topology = new SpatialTopology(
+        [
+            new SpatialRegion("cavern", "Cavern", new(0, 0, 0), new(20, 10, 10), 0,
+                "Natural dissolution.")
+        ]);
+        var profile = new GeologicalProfile("profile", "cavern", "m", "datum",
+        [
+            new GeologicalLayer("host", "Host", new MaterialReference("materials", "rock/limestone"),
+                10, 0, "sedimentation", "older")
+        ]);
+        var occurrence = new MaterialOccurrence("vein", "Quartz Vein", "vein", "cavern",
+            new MaterialReference("materials", "mineral/quartz"),
+            new SpatialBounds3(new(2, 2, 2), new(8, 6, 6)), "Hydrothermal deposition.");
+        var formation = new GeologicalEvent("formed", "cavern", 10, "formation",
+            "Quartz precipitated.", ["vein"]);
+        var discovery = new GeologicalEvent("discovered", "cavern", 90, "discovery",
+            "The exposed vein was found.", ["vein"]);
+        var survey = new GeologicalEvent("surveyed", "cavern", 110, "survey",
+            "The vein was measured.", ["vein"]);
+        var world = new GeologicalWorld(topology, [profile], [occurrence], [formation, discovery, survey]);
+
+        var explorer = new GeologicalObserverKnowledge(world, "explorer-1",
+        [
+            new GeologicalKnowledgeRecord("discovered", 2, 0.9, "Visible quartz at the ledge."),
+            new GeologicalKnowledgeRecord("surveyed", 3, 1, "Measured the exposed vein.")
+        ]);
+        var secondExplorer = new GeologicalObserverKnowledge(world, "explorer-2");
+
+        Assert.True(explorer.KnowsEvent("discovered"));
+        Assert.False(explorer.KnowsEvent("formed"));
+        Assert.True(explorer.KnowsOccurrence("vein"));
+        Assert.False(secondExplorer.KnowsOccurrence("vein"));
+        Assert.False(secondExplorer.KnowsEvent("discovered"));
+        Assert.Equal(["discovered", "surveyed"], explorer.FindKnownEvents().Select(item => item.Id));
+        Assert.Equal(0.9, explorer.FindRecord("discovered")!.Confidence);
+        Assert.Equal(3, world.Events.Count);
+        Assert.Single(world.Occurrences);
+    }
+
+    [Fact]
+    public void Observer_knowledge_rejects_unknown_or_duplicate_events()
+    {
+        var topology = new SpatialTopology(
+        [
+            new SpatialRegion("cavern", "Cavern", new(0, 0, 0), new(10, 10, 10), 0,
+                "Natural dissolution.")
+        ]);
+        var profile = new GeologicalProfile("profile", "cavern", "m", "datum",
+        [
+            new GeologicalLayer("host", "Host", new MaterialReference("materials", "rock/limestone"),
+                10, 0, "sedimentation", "older")
+        ]);
+        var world = new GeologicalWorld(topology, [profile],
+            events: [new GeologicalEvent("event", "cavern", 1, "discovery", "An observation.")]);
+
+        Assert.Throws<ArgumentException>(() =>
+            new GeologicalObserverKnowledge(world, "observer",
+                [new GeologicalKnowledgeRecord("missing", 1)]));
+        Assert.Throws<ArgumentException>(() =>
+            new GeologicalObserverKnowledge(world, "observer",
+            [
+                new GeologicalKnowledgeRecord("event", 1),
+                new GeologicalKnowledgeRecord("event", 2)
+            ]));
+    }
+
+    [Fact]
     public void Geological_history_rejects_unknown_regions_and_occurrences()
     {
         var topology = new SpatialTopology(
