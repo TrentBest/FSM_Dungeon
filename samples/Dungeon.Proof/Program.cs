@@ -100,6 +100,42 @@ var cavernConnections = new[]
 };
 var intactCavern = new SpatialTopology(cavernRegions, cavernFeatures, cavernConnections);
 var collapsedCavern = intactCavern.WithFeatureOperationalState("rope-bridge", false);
+
+var limestone = new MaterialReference("materials", "rock/limestone");
+var quartz = new MaterialReference("materials", "mineral/quartz");
+var hematite = new MaterialReference("materials", "mineral/hematite");
+var geology = new GeologicalWorld(intactCavern,
+[
+    new GeologicalProfile("west-ledge-profile", "west-ledge", "m", "local cavern datum",
+    [
+        new GeologicalLayer("west-limestone", "Limestone host", limestone, 12, 0, "carbonate sedimentation and lithification", "older"),
+        new GeologicalLayer("west-fracture-zone", "Fractured zone", new MaterialReference("materials", "rock/breccia"), 0, -4, "tectonic fracturing and brecciation", "younger")
+    ]),
+    new GeologicalProfile("east-ledge-profile", "east-ledge", "m", "local cavern datum",
+    [
+        new GeologicalLayer("east-limestone", "Limestone host", limestone, 12, 0, "carbonate sedimentation and lithification", "older")
+    ]),
+    new GeologicalProfile("upper-gallery-profile", "upper-gallery", "m", "local cavern datum",
+    [
+        new GeologicalLayer("upper-limestone", "Limestone host", limestone, 17, 7, "carbonate sedimentation and lithification", "older")
+    ])
+],
+[
+    new MaterialOccurrence("west-quartz-vein", "West Quartz Vein", "vein", "west-ledge",
+        quartz, new SpatialBounds3(new(3, 1, 2), new(12, 4, 5)),
+        "Silica-bearing fluids filled a fracture after the host limestone formed.",
+        [new MaterialGradeObservation(86, "%", "volume", "visual mapping estimate", 0.55)],
+        [new MaterialQuantityEstimate(18, "m3", "bounded geometry estimate", 0.7)]),
+    new MaterialOccurrence("west-hematite-pocket", "Hematite Pocket", "pocket", "west-ledge",
+        hematite, new SpatialBounds3(new(13, 2, 1), new(16, 5, 4)),
+        "Iron oxide accumulated in a secondary cavity along the fractured zone.",
+        [new MaterialGradeObservation(31, "%", "mass", "field sample assay", 0.82)],
+        [new MaterialQuantityEstimate(6.5, "tonnes", "sample and volume estimate", 0.6)]),
+    new MaterialOccurrence("east-quartz-seam", "East Quartz Seam", "seam", "east-ledge",
+        quartz, new SpatialBounds3(new(37, 0, 3), new(46, 3, 6)),
+        "A separate silica-bearing fracture was mineralized during later fluid circulation.")
+]);
+
 var cavernProof = new
 {
     name = "The Great Fissure",
@@ -151,6 +187,8 @@ await File.WriteAllTextAsync(Path.Combine(outputDirectory, "hydraulic.json"),
     JsonSerializer.Serialize(hydraulicSnapshots, jsonOptions));
 await File.WriteAllTextAsync(Path.Combine(outputDirectory, "spatial.json"),
     JsonSerializer.Serialize(cavernProof, jsonOptions));
+await File.WriteAllTextAsync(Path.Combine(outputDirectory, "geology.json"),
+    JsonSerializer.Serialize(geology, jsonOptions));
 
 foreach (var world in worlds)
 {
@@ -160,5 +198,6 @@ foreach (var world in worlds)
     Console.WriteLine($"Host anchor: {world.Site?.HostId}/{world.Site?.AnchorId}");
     Console.WriteLine($"Connected: {world.IsConnected()}; validation errors: {world.Validate().Count}");
 }
+Console.WriteLine($"Geology proof: {geology.Topology.Regions.Count} regions; {geology.Profiles.Count} profiles; {geology.Occurrences.Count} material occurrences");
 Console.WriteLine($"Hydraulic proof: {hydraulicSnapshots.Length} ticks; final stored water: {hydraulicSnapshots[^1].Chambers.Sum(chamber => chamber.WaterVolumeCubicMeters):F3} m3; overflow: {hydraulicSnapshots[^1].CumulativeOverflowVolumeCubicMeters:F3} m3");
 Console.WriteLine($"Wrote proof data to: {outputDirectory}");
