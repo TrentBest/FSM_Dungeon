@@ -180,8 +180,10 @@
     geologyDetails.replaceChildren();
     const profiles = world.profiles || [];
     const occurrences = world.occurrences || [];
+    const events = world.events || [];
     geologyStatus.textContent = profiles.length + " geological profiles · " + occurrences.length +
-      " bounded material occurrences · " + (world.topology?.regions?.length || 0) + " spatial regions";
+      " bounded material occurrences · " + events.length + " geological/history events · " +
+      (world.topology?.regions?.length || 0) + " spatial regions";
     occurrences.forEach(occurrence => {
       const item = document.createElement("article");
       const title = document.createElement("strong");
@@ -205,6 +207,21 @@
         quantity.textContent = "Estimated quantity: " + estimate.value + " " + estimate.unit + " (" +
           estimate.method + "; confidence " + Math.round(estimate.confidence * 100) + "%)";
         item.appendChild(quantity);
+      });
+      const timelineTitle = document.createElement("strong");
+      timelineTitle.textContent = "History";
+      item.appendChild(timelineTitle);
+      const occurrenceEvents = events.filter(event => (event.occurrenceIds || []).includes(occurrence.id));
+      if (occurrenceEvents.length === 0) {
+        const empty = document.createElement("p");
+        empty.textContent = "No recorded formation, exposure, discovery, or survey events.";
+        item.appendChild(empty);
+      }
+      occurrenceEvents.forEach(event => {
+        const entry = document.createElement("p");
+        entry.textContent = "Sequence " + event.sequence + " · " + event.kind + ": " + event.description +
+          (event.evidence ? " Evidence: " + event.evidence : "");
+        item.appendChild(entry);
       });
       geologyDetails.appendChild(item);
     });
