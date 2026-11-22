@@ -88,6 +88,11 @@ public sealed class GeologicalWorldTests
             new SpatialRegion("cavern", "Cavern", new(0, 0, 0), new(20, 10, 10), 0,
                 "Natural dissolution.")
         ]);
+        var profile = new GeologicalProfile("cavern-profile", "cavern", "m", "datum",
+        [
+            new GeologicalLayer("host", "Host Rock", new MaterialReference("materials", "rock/limestone"),
+                10, 0, "sedimentation", "older")
+        ]);
         var occurrence = new MaterialOccurrence(
             "quartz-vein", "Quartz Vein", "vein", "cavern",
             new MaterialReference("materials", "mineral/quartz"),
@@ -103,7 +108,7 @@ public sealed class GeologicalWorldTests
             "vein-surveyed", "cavern", 110, "survey",
             "The vein was measured.", ["quartz-vein"], "Measured bounds");
 
-        var world = new GeologicalWorld(topology, [], [occurrence], [survey, discovery, formation]);
+        var world = new GeologicalWorld(topology, [profile], [occurrence], [survey, discovery, formation]);
 
         Assert.Equal(
             ["formation", "discovery", "survey"],
@@ -122,12 +127,17 @@ public sealed class GeologicalWorldTests
             new SpatialRegion("cavern", "Cavern", new(0, 0, 0), new(10, 10, 10), 0,
                 "Natural formation.")
         ]);
+        var profile = new GeologicalProfile("cavern-profile", "cavern", "m", "datum",
+        [
+            new GeologicalLayer("host", "Host Rock", new MaterialReference("materials", "rock/limestone"),
+                10, 0, "sedimentation", "older")
+        ]);
         var occurrence = new MaterialOccurrence(
             "deposit", "Deposit", "lens", "cavern",
             new MaterialReference("materials", "mineral/calcite"),
             new SpatialBounds3(new(1, 1, 1), new(3, 3, 3)), "Mineral precipitation.");
 
-        Assert.Throws<ArgumentException>(() => new GeologicalWorld(topology, [], [occurrence],
+        Assert.Throws<ArgumentException>(() => new GeologicalWorld(topology, [profile], [occurrence],
         [
             new GeologicalEvent("bad-region", "missing", 1, "discovery", "Unknown region.")
         ]));
