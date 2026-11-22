@@ -74,6 +74,58 @@ var sewer = DungeonGenerator.Generate(new DungeonDefinition(
         new DungeonCondition("service-access", "maintenance-access", "limited", "", "Two inspection ladders are damaged and one route is flooded.")
     ]));
 
+
+var cavernRegions = new[]
+{
+    new SpatialRegion("west-ledge", "West Ledge", new SpatialPoint3(0, 0, 0),
+        new SpatialExtent3(18, 7, 12), 0, "A limestone shelf exposed by a deep erosional fissure."),
+    new SpatialRegion("east-ledge", "East Ledge", new SpatialPoint3(34, -2, 0),
+        new SpatialExtent3(16, 9, 12), -2, "A fractured shelf separated from the west ledge by the fissure."),
+    new SpatialRegion("upper-gallery", "Upper Gallery", new SpatialPoint3(4, 18, 7),
+        new SpatialExtent3(12, 8, 10), 18, "A higher passage reached by a narrow vertical shaft.")
+};
+var cavernFeatures = new[]
+{
+    new SpatialFeature("great-fissure", "chasm", "The Great Fissure", null, true,
+        "A deep geological fracture split the original limestone shelf."),
+    new SpatialFeature("rope-bridge", "bridge", "The Suspended Rope Bridge", null, true,
+        "Explorers installed a temporary crossing between the separated ledges."),
+    new SpatialFeature("west-shaft-ladder", "ladder", "The West Shaft Ladder", "west-ledge", true,
+        "A fixed ladder descends from the upper gallery to the west ledge.")
+};
+var cavernConnections = new[]
+{
+    new SpatialConnection("ledge-crossing", "west-ledge", "east-ledge", "walk", "rope-bridge"),
+    new SpatialConnection("shaft-access", "west-ledge", "upper-gallery", "climb", "west-shaft-ladder")
+};
+var intactCavern = new SpatialTopology(cavernRegions, cavernFeatures, cavernConnections);
+var collapsedCavern = intactCavern.WithFeatureOperationalState("rope-bridge", false);
+var cavernProof = new
+{
+    name = "The Great Fissure",
+    description = "Two natural ledges are divided by a deep chasm. A suspended bridge provides a mutable crossing; a ladder reaches an upper gallery.",
+    regions = intactCavern.Regions,
+    features = intactCavern.Features,
+    connections = intactCavern.Connections,
+    states = new[]
+    {
+        new
+        {
+            id = "bridge-intact",
+            name = "Before the bridge is destroyed",
+            bridgeOperational = intactCavern.Features.Single(feature => feature.Id == "rope-bridge").IsOperational,
+            traversableConnections = intactCavern.Connections.Where(connection => intactCavern.CanTraverse(connection.Id)).Select(connection => connection.Id).ToArray()
+        },
+        new
+        {
+            id = "bridge-destroyed",
+            name = "After the bridge is destroyed",
+            bridgeOperational = collapsedCavern.Features.Single(feature => feature.Id == "rope-bridge").IsOperational,
+            traversableConnections = collapsedCavern.Connections.Where(connection => collapsedCavern.CanTraverse(connection.Id)).Select(connection => connection.Id).ToArray()
+        }
+    }
+};
+
 var hydraulicSimulation = new HydraulicSimulation(new HydraulicNetworkDefinition(sewer,
     [
         new HydraulicChamber(0, 3.0, 2.0, 2.0, 4.0),
