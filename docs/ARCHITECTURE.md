@@ -218,3 +218,13 @@ Underground illumination may come from flames, carried lamps, machinery, biolumi
 Material detail is evidence of formation and use: geological strata, roots, fractures, erosion, excavation scars, machining patterns, masonry, irregular bricks, mortar, repairs, soot, deposits, and wear should agree with the place's history and construction. A natural cave, hand-dug mine, machine-bored tunnel, and finished brick sewer should have visibly distinct surface character.
 
 Keep illumination, geometric visibility, observer perception, and rendering separate. FSM_Dungeon owns semantic material, formation, and light-source facts; Renderer owns observer-aware representation and budget; Visualization and host adapters produce pixels. This is a target architecture, not a claim that dynamic multi-light shadowing or high-detail subterranean rendering is implemented. See [Underground Worlds and Rendering](UNDERGROUND_RENDERING.md) for the detailed design and staged proof.
+
+
+## Continuous spatial topology proof
+
+The new engine-independent spatial primitives represent a region with a 3D origin, extent, floor elevation, and formation reason. Spatial features remain extensible semantic records (for example, a chasm, bridge, ladder, gate, or collapse), while connections separately declare adjacency and a traversal mode. A connection may depend on an operational crossing feature.
+
+`SpatialTopology.WithFeatureOperationalState` creates a new snapshot rather than mutating the prior one. The initial tests prove that destroying a bridge removes traversal across the fissure but does not remove either ledge, the chasm, or the original snapshot's bridge state. A vertical ladder connection remains independently usable.
+
+The console proof serializes a cavern with two separated natural ledges, a deep fissure, a suspended bridge, and an upper gallery reached by ladder. GitHub Pages presents the before/after states interactively. This is an initial standalone spatial-topology slice: the legacy generated chamber/passage graph has not yet been replaced or automatically projected into these 3D regions. Integration with world generation and richer geometry is a subsequent step.
+
