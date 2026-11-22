@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <IsPackable>true</IsPackable>
+    <PackageId>TheSingularityWorkshop.FSM_Dungeon.MicroBundle</PackageId>
+    <Version>0.1.0-alpha.1</Version>
+    <Authors>Trent Best</Authors>
+    <Company>The Singularity Workshop</Company>
+    <Description>MicroBundle entry point for the FSM_Dungeon underground-environment capability.</Description>
+    <PackageTags>MicroBundle;Dungeon;Underground;Environment;TheSingularityWorkshop</PackageTags>
+    <PackageProjectUrl>https://github.com/TrentBest/FSM_Dungeon</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/TrentBest/FSM_Dungeon</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\\TheSingularityWorkshop.FSM_Dungeon\\TheSingularityWorkshop.FSM_Dungeon.csproj" />
+    <PackageReference Include="TheSingularityWorkshop.MicroBundleDomain" Version="1.0.0" />
+  </ItemGroup>
+</Project>
