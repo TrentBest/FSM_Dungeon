@@ -20,6 +20,25 @@ public sealed record SpatialBounds3
     public SpatialPoint3 Minimum { get; }
     public SpatialPoint3 Maximum { get; }
 
+    /// <summary>Returns whether a point lies inside or on this occurrence's bounds.</summary>
+    public bool Contains(SpatialPoint3 point)
+    {
+        if (!point.IsFinite)
+            throw new ArgumentOutOfRangeException(nameof(point), "Query coordinates must be finite.");
+        return point.X >= Minimum.X && point.X <= Maximum.X
+            && point.Y >= Minimum.Y && point.Y <= Maximum.Y
+            && point.Z >= Minimum.Z && point.Z <= Maximum.Z;
+    }
+
+    /// <summary>Returns whether two bounds overlap or touch on all three axes.</summary>
+    public bool Intersects(SpatialBounds3 other)
+    {
+        ArgumentNullException.ThrowIfNull(other);
+        return Minimum.X <= other.Maximum.X && Maximum.X >= other.Minimum.X
+            && Minimum.Y <= other.Maximum.Y && Maximum.Y >= other.Minimum.Y
+            && Minimum.Z <= other.Maximum.Z && Maximum.Z >= other.Minimum.Z;
+    }
+
     public bool IsContainedBy(SpatialRegion region)
     {
         ArgumentNullException.ThrowIfNull(region);
