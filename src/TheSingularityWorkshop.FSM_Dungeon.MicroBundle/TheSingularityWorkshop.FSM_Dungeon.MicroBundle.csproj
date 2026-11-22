@@ -18,7 +18,7 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\\TheSingularityWorkshop.FSM_Dungeon\\TheSingularityWorkshop.FSM_Dungeon.csproj" />
+    <ProjectReference Include="../TheSingularityWorkshop.FSM_Dungeon/TheSingularityWorkshop.FSM_Dungeon.csproj" />
     <PackageReference Include="TheSingularityWorkshop.MicroBundleDomain" Version="1.0.1" />
   </ItemGroup>
 </Project>
