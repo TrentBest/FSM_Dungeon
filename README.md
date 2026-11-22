@@ -65,6 +65,10 @@ The first deterministic domain slice now generates two contrasting places throug
 
 The Pages inspector now has a world selector and displays chamber provenance, provisional legacy inhabitant group descriptions, and environmental conditions from C#-generated data. Those group motivation/activity fields are transitional fixture data; SURPS is the target owner of inhabitant ontology and behavior. A separate cavern proof now visualizes 3D region facts and lets the viewer destroy/restore a bridge to see traversal change without erasing spatial adjacency. Environmental condition records remain authored inputs; the hydraulic solver is a separate evolving state model in this first slice. It is a deliberately simple, first-order model—not a calibrated fluid-dynamics or flood-prediction system. Pages deployment still needs the `github-pages` environment to allow `development` (see [issue #3](https://github.com/TrentBest/FSM_Dungeon/issues/3)).
 
+### Mountain fortress integration target
+
+The [Dwarven Mountain Fortress scenario](docs/DWARVEN_MOUNTAIN_FORTRESS.md) is the first large-scale cross-domain proving world. Physics owns the exterior terrain and future 3D solid mountain volume; FSM_Dungeon owns the underground voids, constructed spaces, environmental topology, and history; SURPS owns dwarven entities and society. The existing Physics height field can provide exterior relief but cannot represent internal caves or a complete mountain cutaway. The scenario document defines the handoff, districts, Pages exploration stages, and evidence gates without claiming the fortress is already generated.
+
 ## 5. Project status
 
 **Status: Initial domain foundation implemented; first playable loop not yet complete.** The current generator proves deterministic structure and causal metadata, not yet autonomous inhabitant simulation, combat, loot, or high-definition rendering.
