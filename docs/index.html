@@ -156,6 +156,8 @@
   const spatialState = document.getElementById("spatial-state");
   const hydraulicStatus = document.getElementById("hydraulic-status");
   const hydraulicDetails = document.getElementById("hydraulic-details");
+  const geologyStatus = document.getElementById("geology-status");
+  const geologyDetails = document.getElementById("geology-details");
   const ns = "http://www.w3.org/2000/svg";
 
   function element(tag, attributes, parent) {
@@ -165,6 +167,41 @@
     return node;
   }
 
+
+
+  function renderGeology(world) {
+    geologyDetails.replaceChildren();
+    const profiles = world.profiles || [];
+    const occurrences = world.occurrences || [];
+    geologyStatus.textContent = profiles.length + " geological profiles · " + occurrences.length +
+      " bounded material occurrences · " + (world.topology?.regions?.length || 0) + " spatial regions";
+    occurrences.forEach(occurrence => {
+      const item = document.createElement("article");
+      const title = document.createElement("strong");
+      title.textContent = occurrence.name + " · " + occurrence.occurrenceType;
+      const identity = document.createElement("span");
+      identity.textContent = occurrence.material.domain + "/" + occurrence.material.id + " · region " + occurrence.regionId;
+      const context = document.createElement("p");
+      context.textContent = occurrence.formationContext;
+      const bounds = document.createElement("p");
+      bounds.textContent = "Bounds: (" + [occurrence.bounds.minimum.x, occurrence.bounds.minimum.y, occurrence.bounds.minimum.z].join(", ") +
+        ") → (" + [occurrence.bounds.maximum.x, occurrence.bounds.maximum.y, occurrence.bounds.maximum.z].join(", ") + ")";
+      item.append(title, identity, context, bounds);
+      (occurrence.gradeObservations || []).forEach(observation => {
+        const grade = document.createElement("p");
+        grade.textContent = "Grade: " + observation.value + " " + observation.unit + " (" + observation.basis +
+          "; " + observation.method + "; confidence " + Math.round(observation.confidence * 100) + "%)";
+        item.appendChild(grade);
+      });
+      (occurrence.quantityEstimates || []).forEach(estimate => {
+        const quantity = document.createElement("p");
+        quantity.textContent = "Estimated quantity: " + estimate.value + " " + estimate.unit + " (" +
+          estimate.method + "; confidence " + Math.round(estimate.confidence * 100) + "%)";
+        item.appendChild(quantity);
+      });
+      geologyDetails.appendChild(item);
+    });
+  }
 
   function renderSpatial(proof, stateIndex) {
     const state = proof.states[stateIndex];
@@ -275,17 +312,20 @@
   }
 
   try {
-    const [worldResponse, hydraulicResponse, spatialResponse] = await Promise.all([
+    const [worldResponse, hydraulicResponse, spatialResponse, geologyResponse] = await Promise.all([
       fetch("data/worlds.json", { cache: "no-store" }),
       fetch("data/hydraulic.json", { cache: "no-store" }),
-      fetch("data/spatial.json", { cache: "no-store" })
+      fetch("data/spatial.json", { cache: "no-store" }),
+      fetch("data/geology.json", { cache: "no-store" })
     ]);
     if (!worldResponse.ok) throw new Error("Generated world data is not available yet.");
     if (!hydraulicResponse.ok) throw new Error("Hydraulic simulation data is not available yet.");
     if (!spatialResponse.ok) throw new Error("Spatial topology data is not available yet.");
+    if (!geologyResponse.ok) throw new Error("Geological occurrence data is not available yet.");
     const worlds = await worldResponse.json();
     const hydraulicSnapshots = await hydraulicResponse.json();
     const spatialProof = await spatialResponse.json();
+    const geologyWorld = await geologyResponse.json();
     if (!Array.isArray(worlds) || worlds.length === 0) throw new Error("No generated worlds were found.");
     worlds.forEach((world, index) => {
       const option = document.createElement("option");
@@ -295,6 +335,7 @@
     });
     selector.addEventListener("change", () => render(worlds[Number(selector.value)]));
     render(worlds[0]);
+    renderGeology(geologyWorld);
     let spatialIndex = 0;
     renderSpatial(spatialProof, spatialIndex);
     bridgeToggle.addEventListener("click", () => {
