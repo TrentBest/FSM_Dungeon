@@ -135,6 +135,26 @@ var geology = new GeologicalWorld(intactCavern,
     new MaterialOccurrence("east-quartz-seam", "East Quartz Seam", "seam", "east-ledge",
         quartz, new SpatialBounds3(new(37, 0, 3), new(46, 3, 6)),
         "A separate silica-bearing fracture was mineralized during later fluid circulation.")
+],
+[
+    new GeologicalEvent("west-quartz-formation", "west-ledge", 10, "formation",
+        "Silica-bearing fluids filled the west fracture after the limestone host formed.",
+        ["west-quartz-vein"], "Cross-cutting mineralized fracture"),
+    new GeologicalEvent("west-hematite-formation", "west-ledge", 18, "secondary-mineralization",
+        "Iron oxide accumulated in a secondary cavity.",
+        ["west-hematite-pocket"], "Oxide coating and cavity fill"),
+    new GeologicalEvent("east-quartz-formation", "east-ledge", 25, "formation",
+        "A separate fracture was mineralized during a later fluid circulation event.",
+        ["east-quartz-seam"], "Mineralized seam texture"),
+    new GeologicalEvent("west-quartz-exposure", "west-ledge", 70, "exposure",
+        "Erosion exposed part of the quartz vein at the ledge face.",
+        ["west-quartz-vein"], "Freshly exposed vein surface"),
+    new GeologicalEvent("west-quartz-discovery", "west-ledge", 90, "discovery",
+        "An explorer first recorded the exposed quartz vein.",
+        ["west-quartz-vein"], "Initial field observation"),
+    new GeologicalEvent("west-quartz-survey", "west-ledge", 110, "survey",
+        "The exposed vein was mapped and bounded in three dimensions.",
+        ["west-quartz-vein"], "Measured occurrence bounds")
 ]);
 
 var cavernProof = new
