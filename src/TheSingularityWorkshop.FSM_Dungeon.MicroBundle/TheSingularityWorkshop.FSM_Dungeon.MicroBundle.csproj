@@ -19,6 +19,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\\TheSingularityWorkshop.FSM_Dungeon\\TheSingularityWorkshop.FSM_Dungeon.csproj" />
-    <PackageReference Include="TheSingularityWorkshop.MicroBundleDomain" Version="1.0.0" />
+    <PackageReference Include="TheSingularityWorkshop.MicroBundleDomain" Version="1.0.1" />
   </ItemGroup>
 </Project>
