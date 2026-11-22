@@ -9,7 +9,8 @@ public sealed class GeologicalWorld
     public GeologicalWorld(
         SpatialTopology topology,
         IEnumerable<GeologicalProfile> profiles,
-        IEnumerable<MaterialOccurrence>? occurrences = null)
+        IEnumerable<MaterialOccurrence>? occurrences = null,
+        IEnumerable<GeologicalEvent>? events = null)
     {
         Topology = topology ?? throw new ArgumentNullException(nameof(topology));
         ArgumentNullException.ThrowIfNull(profiles);
@@ -52,13 +53,65 @@ public sealed class GeologicalWorld
                     nameof(occurrences));
         }
 
+        var history = (events ?? []).ToArray();
+        if (history.Any(item => item is null))
+            throw new ArgumentException("A geological world cannot contain null history events.", nameof(events));
+        if (history.Select(item => item.Id).Distinct(StringComparer.Ordinal).Count() != history.Length)
+            throw new ArgumentException("Geological event identifiers must be unique.", nameof(events));
+
+        var occurrenceIds = materialOccurrences.Select(item => item.Id).ToHashSet(StringComparer.Ordinal);
+        foreach (var item in history)
+        {
+            if (!regionById.ContainsKey(item.RegionId))
+                throw new ArgumentException(
+                    $"Geological event '{item.Id}' references unknown region '{item.RegionId}'.", nameof(events));
+            var missingOccurrences = item.OccurrenceIds.Where(id => !occurrenceIds.Contains(id)).ToArray();
+            if (missingOccurrences.Length > 0)
+                throw new ArgumentException(
+                    $"Geological event '{item.Id}' references unknown material occurrences: {string.Join(", ", missingOccurrences)}.",
+                    nameof(events));
+            if (materialOccurrences.Any(occurrence =>
+                item.OccurrenceIds.Contains(occurrence.Id, StringComparer.Ordinal)
+                && !string.Equals(occurrence.RegionId, item.RegionId, StringComparison.Ordinal)))
+                throw new ArgumentException(
+                    $"Geological event '{item.Id}' references an occurrence outside region '{item.RegionId}'.",
+                    nameof(events));
+        }
+
         Profiles = Array.AsReadOnly(materialized);
         Occurrences = Array.AsReadOnly(materialOccurrences);
+        Events = Array.AsReadOnly(history.OrderBy(item => item.Sequence).ToArray());
     }
 
     public SpatialTopology Topology { get; }
     public IReadOnlyList<GeologicalProfile> Profiles { get; }
     public IReadOnlyList<MaterialOccurrence> Occurrences { get; }
+    /// <summary>Chronological geological and human-history facts, ordered by sequence.</summary>
+    public IReadOnlyList<GeologicalEvent> Events { get; }
+
+    /// <summary>Returns history events for a region in sequence order.</summary>
+    public IReadOnlyList<GeologicalEvent> FindEvents(string regionId)
+    {
+        if (string.IsNullOrWhiteSpace(regionId))
+            throw new ArgumentException("A region identifier is required.", nameof(regionId));
+        if (!Topology.Regions.Any(region => string.Equals(region.Id, regionId, StringComparison.Ordinal)))
+            throw new KeyNotFoundException($"Unknown spatial region '{regionId}'.");
+        return Array.AsReadOnly(Events
+            .Where(item => string.Equals(item.RegionId, regionId, StringComparison.Ordinal))
+            .ToArray());
+    }
+
+    /// <summary>Returns history events explicitly associated with a material occurrence.</summary>
+    public IReadOnlyList<GeologicalEvent> FindEventsForOccurrence(string occurrenceId)
+    {
+        if (string.IsNullOrWhiteSpace(occurrenceId))
+            throw new ArgumentException("An occurrence identifier is required.", nameof(occurrenceId));
+        if (!Occurrences.Any(item => string.Equals(item.Id, occurrenceId, StringComparison.Ordinal)))
+            throw new KeyNotFoundException($"Unknown material occurrence '{occurrenceId}'.");
+        return Array.AsReadOnly(Events
+            .Where(item => item.OccurrenceIds.Contains(occurrenceId, StringComparer.Ordinal))
+            .ToArray());
+    }
 
     /// <summary>Returns the geological profile attached to a region, or null if that region is uncharacterized.</summary>
     public GeologicalProfile? GetProfile(string regionId)
