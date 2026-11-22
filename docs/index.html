@@ -41,6 +41,15 @@
     .inhabitant { border-top:1px solid var(--line); padding:10px 0; font-size:.88rem; }
     .inhabitant strong { display:block; color:var(--ink); }
     .world-meta { font-variant-numeric:tabular-nums; font-size:.88rem; }
+    .spatial-view { width:100%; height:auto; min-height:300px; background:#0d131c; border:1px solid var(--line); border-radius:12px; }
+    .spatial-region { fill:#303947; stroke:#9d8a70; stroke-width:2; }
+    .spatial-chasm { fill:#070a10; stroke:#8c7761; stroke-width:2; }
+    .spatial-label { fill:#f4eee5; font:14px system-ui,sans-serif; text-anchor:middle; }
+    .spatial-sub { fill:#aab3c2; font:11px system-ui,sans-serif; text-anchor:middle; }
+    .spatial-bridge { stroke:#d7b27d; stroke-width:8; stroke-linecap:round; }
+    .spatial-bridge.down { stroke:#9c5b52; stroke-dasharray:5 9; opacity:.8; }
+    .spatial-controls { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin:12px 0; }
+    .spatial-controls button { background:#3a3027; color:#f1d0a3; border:1px solid #786044; border-radius:8px; padding:10px 14px; cursor:pointer; }
     a { color:#e6bd88; text-decoration:none; } a:hover { text-decoration:underline; }
     footer { border-top:1px solid var(--line); margin-top:34px; padding-top:20px; text-align:center; color:var(--muted); font-size:.9rem; }
     @media(max-width:700px) { .world,.steps { grid-template-columns:1fr; } main { width:min(100% - 24px,1080px); padding-top:18px; } .panel { padding:18px; } }
@@ -88,6 +97,18 @@
     <p>The map and inspector are generated from the C# library's serialized world output—not a separate browser-side dungeon generator.</p>
   </section>
 
+
+  <section class="panel">
+    <h2>One continuous space. A changing route.</h2>
+    <p id="spatial-status">Loading the cavern topology proof…</p>
+    <svg id="spatial-map" class="spatial-view" viewBox="0 0 900 360" role="img" aria-label="Two ledges separated by a deep chasm, with a bridge and a vertical shaft route."></svg>
+    <div class="spatial-controls">
+      <button id="bridge-toggle" type="button">Destroy the bridge</button>
+      <span id="spatial-state" class="world-meta"></span>
+    </div>
+    <p>The chasm and both ledges remain part of the same world when the bridge is destroyed. Only that crossing becomes unavailable; the ladder to the upper gallery remains traversable. This is topology and traversal data from the C# domain model, not a floor-based map.</p>
+  </section>
+
   <section class="panel">
     <h2>Hydraulic evolution</h2>
     <p id="hydraulic-status">Loading deterministic sewer simulation snapshots…</p>
@@ -129,6 +150,10 @@
   const history = document.getElementById("chamber-history");
   const inhabitants = document.getElementById("inhabitants");
   const meta = document.getElementById("world-meta");
+  const spatialStatus = document.getElementById("spatial-status");
+  const spatialMap = document.getElementById("spatial-map");
+  const bridgeToggle = document.getElementById("bridge-toggle");
+  const spatialState = document.getElementById("spatial-state");
   const hydraulicStatus = document.getElementById("hydraulic-status");
   const hydraulicDetails = document.getElementById("hydraulic-details");
   const ns = "http://www.w3.org/2000/svg";
@@ -138,6 +163,39 @@
     for (const [key, value] of Object.entries(attributes || {})) node.setAttribute(key, value);
     if (parent) parent.appendChild(node);
     return node;
+  }
+
+
+  function renderSpatial(proof, stateIndex) {
+    const state = proof.states[stateIndex];
+    spatialMap.replaceChildren();
+    element("path", { d:"M 30 70 L 300 70 L 300 285 L 30 285 Z", class:"spatial-region" }, spatialMap);
+    element("path", { d:"M 600 70 L 865 70 L 865 285 L 600 285 Z", class:"spatial-region" }, spatialMap);
+    element("path", { d:"M 300 70 L 600 70 L 600 285 L 300 285 Z", class:"spatial-chasm" }, spatialMap);
+    element("path", { d:"M 120 70 L 120 20 L 330 20", fill:"none", stroke:"#8fb99b", "stroke-width":"4", "stroke-dasharray":"7 6" }, spatialMap);
+    const bridge = element("line", {
+      x1:300, y1:178, x2:600, y2:178,
+      class:"spatial-bridge" + (state.bridgeOperational ? "" : " down")
+    }, spatialMap);
+    const labels = [
+      [165,155,"WEST LEDGE","Natural limestone shelf"],
+      [450,145,"THE GREAT FISSURE","Deep geological chasm"],
+      [730,155,"EAST LEDGE","Fractured limestone shelf"],
+      [225,45,"UPPER GALLERY","Reached by ladder"]
+    ];
+    labels.forEach(([x,y,title,sub]) => {
+      const t = element("text", { x,y,class:"spatial-label" }, spatialMap); t.textContent = title;
+      const s = element("text", { x,y:y+18,class:"spatial-sub" }, spatialMap); s.textContent = sub;
+    });
+    if (!state.bridgeOperational) {
+      element("line", { x1:420,y1:158,x2:480,y2:198,stroke:"#d17b70","stroke-width":"5" }, spatialMap);
+      element("line", { x1:480,y1:158,x2:420,y2:198,stroke:"#d17b70","stroke-width":"5" }, spatialMap);
+    }
+    spatialStatus.textContent = proof.description;
+    spatialState.textContent = state.name + " · bridge " + (state.bridgeOperational ? "operational" : "destroyed") +
+      " · traversable connections: " + state.traversableConnections.join(", ");
+    bridgeToggle.textContent = state.bridgeOperational ? "Destroy the bridge" : "Restore the bridge";
+    bridgeToggle.setAttribute("aria-pressed", state.bridgeOperational ? "false" : "true");
   }
 
   function inspect(chamber, group) {
@@ -217,14 +275,17 @@
   }
 
   try {
-    const [worldResponse, hydraulicResponse] = await Promise.all([
+    const [worldResponse, hydraulicResponse, spatialResponse] = await Promise.all([
       fetch("data/worlds.json", { cache: "no-store" }),
-      fetch("data/hydraulic.json", { cache: "no-store" })
+      fetch("data/hydraulic.json", { cache: "no-store" }),
+      fetch("data/spatial.json", { cache: "no-store" })
     ]);
     if (!worldResponse.ok) throw new Error("Generated world data is not available yet.");
     if (!hydraulicResponse.ok) throw new Error("Hydraulic simulation data is not available yet.");
+    if (!spatialResponse.ok) throw new Error("Spatial topology data is not available yet.");
     const worlds = await worldResponse.json();
     const hydraulicSnapshots = await hydraulicResponse.json();
+    const spatialProof = await spatialResponse.json();
     if (!Array.isArray(worlds) || worlds.length === 0) throw new Error("No generated worlds were found.");
     worlds.forEach((world, index) => {
       const option = document.createElement("option");
@@ -234,6 +295,12 @@
     });
     selector.addEventListener("change", () => render(worlds[Number(selector.value)]));
     render(worlds[0]);
+    let spatialIndex = 0;
+    renderSpatial(spatialProof, spatialIndex);
+    bridgeToggle.addEventListener("click", () => {
+      spatialIndex = spatialIndex === 0 ? 1 : 0;
+      renderSpatial(spatialProof, spatialIndex);
+    });
 
     const finalHydraulic = hydraulicSnapshots[hydraulicSnapshots.length - 1];
     hydraulicStatus.textContent = "Tick " + finalHydraulic.tick + " · " + finalHydraulic.elapsedSeconds + " simulated seconds · cumulative overflow " + finalHydraulic.cumulativeOverflowVolumeCubicMeters.toFixed(3) + " m³";
