@@ -31,6 +31,7 @@ The NuGet package is the reusable .NET library. It is not the whole game applica
 - **AI understanding and authorship:** ProtocolAi supplies semantic identity, GrammarAi supplies structure, and CommandAi carries proposals for host-side validation and authorization.
 - **Renderer:** observer-aware selection of computational detail and update fidelity under an explicit budget.
 - **Visualization:** transforms selected representations into images and progressively richer visual output.
+- **Dungeon MicroBundle:** `TheSingularityWorkshop.FSM_Dungeon.MicroBundle` exposes the underground-environment capability through the neutral MicroBundle contract; SURPS can compose it without taking ownership of Dungeon implementation.
 - **MicroBundles:** compose the dungeon package and optional capabilities into an experience; NuGet remains the code-distribution model.
 - **Hosts:** GitHub Pages proves the domain; WebApp can provide browser interaction; ServerApp can later host authoritative persistent worlds.
 
