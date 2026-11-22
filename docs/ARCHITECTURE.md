@@ -6,23 +6,25 @@ FSM_Dungeon is an engine-independent, deterministic world and dungeon simulation
 
 This is a systems and gameplay benchmark, not a content remake. All code, worldbuilding, characters, maps, art, audio, names, and writing created for the Workshop must be original.
 
-The defining Workshop difference is causality: a dungeon is not a bag of rooms populated with arbitrary monsters. It is a place that exists for reasons. Its formation, history, purpose, inhabitants, resources, hazards, and current activity should explain one another.
+The defining Workshop difference is environmental causality: an underground place is not a bag of rooms. Its formation, history, spatial structure, materials, resources, and hazards should explain one another. The entities that inhabit it receive their ontology and behavioral model from SURPS; FSM_Dungeon describes the environment they inhabit and the consequences of their presence and actions.
 
 ## Product boundaries
 
 ### NuGet library: the reusable engine
 
-The NuGet package is the stable, host-independent domain and simulation surface. It owns:
+The NuGet package is the stable, host-independent underground-environment domain and simulation surface. FSM_Dungeon owns:
 
-- dungeon identity and discoverability;
-- extensible origin and formation descriptions;
-- spatial topology and generated structures;
-- history, provenance, and causal explanations;
-- inhabitants, groups, needs, goals, territory, and activities;
-- world state, deterministic simulation, and encounters;
-- queries and commands that let hosts inspect and change the world.
+- underground place identity, registration references, and environmental discoverability facts;
+- extensible origin, formation, geological, and constructed-history descriptions;
+- three-dimensional spatial topology, regions, passages, barriers, and traversability facts;
+- underground materials-in-context, deposits, environmental conditions, and causal provenance;
+- environmental state and underground processes that are explicitly part of this domain;
+- the spatial presence and location facts needed to situate external entities in the environment;
+- queries and validated environment commands.
 
-The core must not require Unity, a graphics API, a browser, WebApp, ServerApp, or FSM_COS to exist.
+FSM_Dungeon does **not** define the universal ontology of inhabitants, their roles, minds, motivations, social structures, goals, or general behavior. Those belong to **SingularityUniversalRolePlayingSystem (SURPS)**. Dungeon may record that an entity occupies a location, is present in a region, or has caused an environmental change; it does not define what that entity is or why it chose to act.
+
+The core must not require Unity, a graphics API, a browser, WebApp, ServerApp, FSM_COS, or SURPS to exist. SURPS integration is an external composition boundary, not a reason to make the underground environment depend on a particular role-playing implementation.
 
 The first target should favor broad .NET compatibility and a small dependency surface. Runtime-specific or Workshop-specific adapters can be separate packages when their concrete contracts are understood.
 
@@ -77,14 +79,14 @@ The domain exposes explicit operations such as generation, inspection, command a
 
 FSM_API is the Workshop's state-machine substrate. Dungeon should reuse it where state-machine behavior is genuinely useful rather than implementing a competing FSM. At the same time, the public domain model should not leak FSM handles or require a particular host update loop. Integration should be isolated behind a focused adapter or internal orchestration boundary once the API usage is proven.
 
-Simulation should support multiple levels of fidelity:
+Environmental simulation should support multiple levels of fidelity:
 
-- immediate: detailed actor and encounter behavior;
-- local: nearby groups and tactical activity;
-- regional: coarse activity, movement, and resource changes;
-- distant: summarized or event-driven world state.
+- immediate: detailed local environmental interactions;
+- local: nearby environmental state and route consequences;
+- regional: coarse environmental processes and resource changes;
+- distant: summarized or event-driven environmental state.
 
-The simulation policy and the rendering policy are related but not identical. A place may be rendered simply while remaining semantically important.
+Actor cognition, roles, social organization, intentions, decision-making, and behavioral fidelity are SURPS responsibilities. Movement execution, perception, communication, and physical interaction may be supplied by other capabilities. FSM_Dungeon exposes the environmental facts and validated effects those systems need; it does not silently implement their behavior. Environmental simulation policy and rendering policy are related but not identical.
 
 ## AI: understanding and authoring through contracts
 
@@ -92,6 +94,7 @@ AI is an adapter and participant, not the owner of world truth.
 
 The intended Workshop chain is:
 
+- **SURPS — ontology and behavior:** defines what inhabitants are, their roles, relationships, capabilities, motivations, social structures, and behavioral rules.
 - **ProtocolAi — WHAT:** application-owned identities for dungeon entities, concepts, observations, and commands.
 - **GrammarAi — HOW:** valid structures and relationships for expressing queries, explanations, plans, and proposals.
 - **CommandAi — DO:** typed command proposals that a host validates and applies under its own authority rules.
@@ -142,7 +145,7 @@ The initial vertical slice should prove the whole causal loop without attempting
 
 1. A small original sanctuary/town with a discoverable entrance.
 2. A deterministic multi-room dungeon generated from a recorded origin, purpose, history, and seed.
-3. At least two inhabitant groups with distinct motivations and meaningful territory or orders.
+3. At least two SURPS-defined populations or roles situated in the environment, with Dungeon proving their spatial presence and environmental interactions.
 4. A controllable player with exploration, real-time combat, health, and a death/return loop.
 5. Original loot and persistent character progression.
 6. A complete descent, encounter, reward, and return cycle.
@@ -174,7 +177,7 @@ The first proof may use a simple 2D/isometric presentation. It must not block th
 
 ## Proof principle
 
-**The dungeon should make sense when the player is not looking.** Its inhabitants have reasons to be there, its spaces have histories, and its visible state is an affordable representation of a deeper world.
+**The underground environment should make sense when no observer is present.** Its spaces have histories, its environmental state has causes, and its visible state is an affordable representation of a deeper world. Inhabitants bring their ontology and behavior from SURPS.
 
 ## Host placement and environmental conditions
 
@@ -184,7 +187,7 @@ A dungeon may be registered beneath, within, or adjacent to a larger host world 
 
 These records are authored world inputs at this stage, not yet a live fluid or ecology solver. The next simulation layer must define which conditions evolve, what causes those changes, and which events or commands are permitted to alter them.
 
-The proof sample now generates two contrasting worlds from the same API: the city's connected underworks and the older catacombs beneath the First Lantern. Both retain host anchors, provenance, environmental conditions, topology, and purposeful inhabitant groups. Their differences are authored as causes and state, not as hard-coded `Sewer` or `Catacomb` generator modes.
+The proof sample now generates two contrasting environments from the same API: the city's connected underworks and the older catacombs beneath the First Lantern. Both retain host anchors, provenance, environmental conditions, and topology. The sample's current group descriptions are provisional legacy fixture data, not the target ontology or behavior model. In the target architecture, SURPS defines inhabitants and their behavior; Dungeon records their placement in and effects upon the underground environment.
 
 
 ## First causal simulation slice: hydraulics
