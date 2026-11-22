@@ -32,7 +32,13 @@ The first target should favor broad .NET compatibility and a small dependency su
 
 NuGet distributes reusable code. A MicroBundle composes capabilities and content into an installable experience.
 
-A future dungeon experience bundle may declare:
+The first domain entry point now exists as `TheSingularityWorkshop.FSM_Dungeon.MicroBundle`. It exposes the provider `fsm-dungeon.underground-environment` and has a stable identity shared with SURPS. Its package references the authoritative FSM_Dungeon library; it does not move environment ownership into the composition layer.
+
+SURPS composes this capability through `SurpsRulebookDungeonsAndUnderground`, which declares the Dungeon MicroBundle as a required child capability and presents it through the initial `ISurpsRulebook` marker. The SURPS wrapper does not copy Dungeon source or introduce a dependency from the Dungeon domain back to SURPS. The composition host resolves the child MicroBundle by its stable ID.
+
+The current bundle is an executable composition entry point, not yet a complete playable experience. It establishes identity, provider, and dependency direction. World definitions, assets, optional capabilities, and host-specific experience configuration can be added as those contracts mature.
+
+A dungeon experience bundle may declare:
 
 - the dungeon domain package/version;
 - world and generation definitions;
