@@ -141,7 +141,13 @@ The generator composes a valid world from those inputs. It may determine exact r
 
 The creator should be able to specify intent and available ingredients without hand-placing every room, monster, or chest. Hand-authored landmarks and explicit placements remain possible when a creator wants precise control.
 
-## 8. Proof sequence
+## 8. Observer knowledge and perception
+
+Authoritative geological history and an inhabitant's knowledge are separate state. A world may contain formation, exposure, discovery, and survey facts without every inhabitant knowing any of them. `GeologicalObserverKnowledge` is an immutable per-observer snapshot; `LearnEvent` returns a new snapshot after a host perception system has adjudicated that evidence was perceived. It does not itself perform line-of-sight, lighting, sensing, interpretation, or movement checks. The host must supply the observation sequence, confidence, and interpretation. Learning an event never changes `GeologicalWorld`, and one observer's knowledge is not shared with another.
+
+The current inhabitant model is still group-level. Individual actor identity, movement, perception, and persistent knowledge ownership remain a subsequent integration step; the geology knowledge API deliberately does not pretend that a whole population shares one scout's discoveries.
+
+## 9. Proof sequence
 
 Build this in layers rather than pretending the full simulation already exists:
 
