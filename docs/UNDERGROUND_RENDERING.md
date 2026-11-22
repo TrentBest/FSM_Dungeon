@@ -108,3 +108,16 @@ The camera represents an observer, not an omniscient window into the world. Movi
 - **Transition is temporal:** crossing a threshold should not instantly swap between two unrelated rendering presets. The observer carries an adaptation state that evolves with elapsed time and encountered luminance.
 
 This is an observer/perception contract for Renderer and Visualization to consume. FSM_Dungeon should provide relevant environmental and light facts, not implement camera exposure, eye physiology, tone mapping, or graphics APIs. The implementation should eventually support different observers with different adaptation states in the same unchanged world.
+
+
+## The transition from enclosed space to distant horizons
+
+The observer's perceptual workload changes continuously as the environment opens or closes around it. Leaving a confined underground passage can introduce long sightlines, atmospheric depth, distant silhouettes, and eventually a visible horizon. Entering the dungeon removes those far-field cues progressively as geometry encloses the observer.
+
+- **No binary camera mode:** do not switch instantly between a dungeon camera and an outdoor camera. The observer's useful distance range and perceptual priorities evolve with the surrounding geometry and visible environment.
+- **Near and far are both real:** close-range material detail remains important underground; as sightlines open, far-field structure and atmospheric depth become relevant without erasing near-field detail.
+- **Visibility remains geometric:** a distant horizon is not visible through solid rock. Openings, shafts, portals, and actual lines of sight determine which environmental features can contribute.
+- **Adaptation is observer state:** light adaptation, distance acuity, contrast sensitivity, and perceptual emphasis may change over time, but they do not alter the world's geometry or illumination.
+- **Domain/rendering boundary:** FSM_Dungeon supplies spatial extents, occlusion-relevant geometry, environmental conditions, and light facts. Renderer and Visualization determine observer-specific representation, fidelity, and visual response.
+
+The intended experience is a continuous change in what the observer can resolve as the world opens up—not a hard swap between unrelated rendering presets.
