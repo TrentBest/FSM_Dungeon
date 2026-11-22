@@ -161,6 +161,69 @@ public sealed class GeologicalWorldTests
         Assert.Single(world.Occurrences);
     }
 
+
+    [Fact]
+    public void Learning_event_returns_new_observer_snapshot_without_mutating_prior_knowledge_or_world()
+    {
+        var topology = new SpatialTopology(
+        [
+            new SpatialRegion("cavern", "Cavern", new(0, 0, 0), new(20, 10, 10), 0,
+                "Natural dissolution.")
+        ]);
+        var profile = new GeologicalProfile("profile", "cavern", "m", "datum",
+        [
+            new GeologicalLayer("host", "Host", new MaterialReference("materials", "rock/limestone"),
+                10, 0, "sedimentation", "older")
+        ]);
+        var occurrence = new MaterialOccurrence("vein", "Quartz Vein", "vein", "cavern",
+            new MaterialReference("materials", "mineral/quartz"),
+            new SpatialBounds3(new(2, 2, 2), new(8, 6, 6)), "Hydrothermal deposition.");
+        var discovery = new GeologicalEvent("discovered", "cavern", 90, "discovery",
+            "The exposed vein was found.", ["vein"]);
+        var world = new GeologicalWorld(topology, [profile], [occurrence], [discovery]);
+        var beforeObservation = new GeologicalObserverKnowledge(world, "scout");
+
+        var afterObservation = beforeObservation.LearnEvent(
+            "discovered", 1, 0.8, "A reflective vein is visible in the exposed wall.");
+
+        Assert.False(beforeObservation.KnowsEvent("discovered"));
+        Assert.True(afterObservation.KnowsEvent("discovered"));
+        Assert.True(afterObservation.KnowsOccurrence("vein"));
+        Assert.Equal("scout", afterObservation.ObserverId);
+        Assert.Equal(0.8, afterObservation.FindRecord("discovered")!.Confidence);
+        Assert.Equal(0, beforeObservation.Records.Count);
+        Assert.Single(world.Events);
+        Assert.Single(world.Occurrences);
+    }
+
+    [Fact]
+    public void Learning_event_rejects_unknown_duplicate_and_out_of_order_knowledge()
+    {
+        var topology = new SpatialTopology(
+        [
+            new SpatialRegion("cavern", "Cavern", new(0, 0, 0), new(10, 10, 10), 0,
+                "Natural dissolution.")
+        ]);
+        var profile = new GeologicalProfile("profile", "cavern", "m", "datum",
+        [
+            new GeologicalLayer("host", "Host", new MaterialReference("materials", "rock/limestone"),
+                10, 0, "sedimentation", "older")
+        ]);
+        var world = new GeologicalWorld(topology, [profile],
+            events:
+            [
+                new GeologicalEvent("first", "cavern", 1, "discovery", "First observation."),
+                new GeologicalEvent("second", "cavern", 2, "survey", "Second observation.")
+            ]);
+        var knowledge = new GeologicalObserverKnowledge(world, "scout")
+            .LearnEvent("first", 4);
+
+        Assert.Throws<ArgumentException>(() => knowledge.LearnEvent("missing", 5));
+        Assert.Throws<InvalidOperationException>(() => knowledge.LearnEvent("first", 5));
+        Assert.Throws<ArgumentOutOfRangeException>(() => knowledge.LearnEvent("second", 4));
+        Assert.Throws<ArgumentOutOfRangeException>(() => knowledge.LearnEvent("second", 5, 1.1));
+    }
+
     [Fact]
     public void Observer_knowledge_rejects_unknown_or_duplicate_events()
     {
