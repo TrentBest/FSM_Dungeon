@@ -32,6 +32,40 @@ public sealed class MaterialOccurrenceTests
     }
 
     [Fact]
+    public void Point_queries_return_only_containing_occurrences_in_stable_world_order()
+    {
+        var material = new MaterialReference("materials", "mineral/quartz");
+        var first = new MaterialOccurrence("first", "First", "vein", "cavern", material,
+            new(new(1, 1, 1), new(4, 4, 4)), "First fracture.");
+        var overlap = new MaterialOccurrence("overlap", "Overlap", "lens", "cavern", material,
+            new(new(2, 2, 2), new(5, 5, 5)), "Cross-cutting lens.");
+        var outside = new MaterialOccurrence("outside-point", "Other", "pocket", "cavern", material,
+            new(new(6, 6, 6), new(8, 8, 8)), "Separate pocket.");
+        var world = new GeologicalWorld(Topology(), [Profile()], [first, overlap, outside]);
+
+        var found = world.FindOccurrencesAt("cavern", new(3, 3, 3));
+
+        Assert.Equal(new[] { "first", "overlap" }, found.Select(item => item.Id));
+        Assert.Empty(world.FindOccurrencesAt("cavern", new(5.5, 5.5, 5.5)));
+        Assert.Throws<ArgumentOutOfRangeException>(() => world.FindOccurrencesAt("cavern", new(11, 1, 1)));
+        Assert.Throws<ArgumentOutOfRangeException>(() => world.FindOccurrencesAt("cavern", new(double.NaN, 1, 1)));
+        Assert.Throws<KeyNotFoundException>(() => world.FindOccurrencesAt("missing", new(1, 1, 1)));
+    }
+
+    [Fact]
+    public void Bounds_queries_find_intersections_and_touching_boundaries()
+    {
+        var material = new MaterialReference("materials", "mineral/quartz");
+        var occurrence = new MaterialOccurrence("vein", "Vein", "vein", "cavern", material,
+            new(new(1, 1, 1), new(3, 3, 3)), "Fracture filling.");
+        var world = new GeologicalWorld(Topology(), [Profile()], [occurrence]);
+
+        Assert.Single(world.FindOccurrencesIntersecting("cavern", new(new(3, 2, 2), new(4, 4, 4))));
+        Assert.Empty(world.FindOccurrencesIntersecting("cavern", new(new(4, 4, 4), new(5, 5, 5))));
+        Assert.Throws<ArgumentException>(() => world.FindOccurrencesIntersecting("cavern", new(new(9, 9, 9), new(11, 10, 10))));
+    }
+
+    [Fact]
     public void Rejects_occurrences_outside_their_region()
     {
         var occurrence = new MaterialOccurrence(
