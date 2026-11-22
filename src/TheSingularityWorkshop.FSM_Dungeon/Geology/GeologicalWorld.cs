@@ -87,6 +87,54 @@ public sealed class GeologicalWorld
             .ToArray());
     }
 
+    /// <summary>
+    /// Finds occurrences containing a point expressed in the named region's coordinate space.
+    /// The region must exist and the point must lie within its spatial extent.
+    /// </summary>
+    public IReadOnlyList<MaterialOccurrence> FindOccurrencesAt(string regionId, SpatialPoint3 point)
+    {
+        var region = GetRegion(regionId);
+        if (!point.IsFinite)
+            throw new ArgumentOutOfRangeException(nameof(point), "Query coordinates must be finite.");
+        var regionBounds = RegionBounds(region);
+        if (!regionBounds.Contains(point))
+            throw new ArgumentOutOfRangeException(nameof(point), "The query point lies outside the requested spatial region.");
+
+        return Array.AsReadOnly(Occurrences
+            .Where(occurrence => string.Equals(occurrence.RegionId, regionId, StringComparison.Ordinal)
+                && occurrence.Bounds.Contains(point))
+            .ToArray());
+    }
+
+    /// <summary>Finds occurrences whose bounds overlap or touch the query bounds within a region.</summary>
+    public IReadOnlyList<MaterialOccurrence> FindOccurrencesIntersecting(string regionId, SpatialBounds3 bounds)
+    {
+        var region = GetRegion(regionId);
+        ArgumentNullException.ThrowIfNull(bounds);
+        if (!bounds.IsContainedBy(region))
+            throw new ArgumentException("Query bounds must be contained by the requested spatial region.", nameof(bounds));
+
+        return Array.AsReadOnly(Occurrences
+            .Where(occurrence => string.Equals(occurrence.RegionId, regionId, StringComparison.Ordinal)
+                && occurrence.Bounds.Intersects(bounds))
+            .ToArray());
+    }
+
+    private SpatialRegion GetRegion(string regionId)
+    {
+        if (string.IsNullOrWhiteSpace(regionId))
+            throw new ArgumentException("A region identifier is required.", nameof(regionId));
+        return Topology.Regions.SingleOrDefault(region =>
+            string.Equals(region.Id, regionId, StringComparison.Ordinal))
+            ?? throw new KeyNotFoundException($"Unknown spatial region '{regionId}'.");
+    }
+
+    private static SpatialBounds3 RegionBounds(SpatialRegion region) => new(
+        region.Origin,
+        new SpatialPoint3(region.Origin.X + region.Extent.Width,
+            region.Origin.Y + region.Extent.Height,
+            region.Origin.Z + region.Extent.Depth));
+
     /// <summary>Returns occurrences of a material identity within a region.</summary>
     public IReadOnlyList<MaterialOccurrence> FindOccurrences(string regionId, MaterialReference material)
     {
