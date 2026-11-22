@@ -73,6 +73,11 @@ public sealed class GeologicalWorldTests
         var world = new GeologicalWorld(topology, [Profile("a"), Profile("b")]);
 
         Assert.Equal(2, world.Profiles.Count);
-        Assert.Throws<ArgumentException>(() => new GeologicalWorld(topology, [Profile("a"), Profile("b") with { }]));
+        var duplicateId = new GeologicalProfile("section-a", "b", "m", "datum",
+        [
+            new GeologicalLayer("bed", "Bed", new MaterialReference("materials", "rock/basalt"),
+                2, 0, "volcanic emplacement", "unknown")
+        ]);
+        Assert.Throws<ArgumentException>(() => new GeologicalWorld(topology, [Profile("a"), duplicateId]));
     }
 }
