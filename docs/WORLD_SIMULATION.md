@@ -2,7 +2,7 @@
 
 ## Design objective
 
-A dungeon is a continuous, persistent place—not a numbered sequence of floors. Its geometry, inhabitants, routes, resources, hazards, and history continue to exist when no player is observing them.
+A dungeon is a continuous, persistent underground environment—not a numbered sequence of floors. Its geometry, routes, materials, environmental state, resources, hazards, and history continue to exist when no player is observing them. Inhabitants also persist there, but their ontology and behavior are supplied by SURPS, not defined by FSM_Dungeon.
 
 The domain must support anything from a municipal sewer to an ancient burial complex, a dwarven city, a goblin warrens network, an orcish frontier, a biological nest, or an impossible ruin. These are not generator modes. They emerge from authored causes, available content, spatial structure, and simulation.
 
@@ -38,38 +38,32 @@ This avoids treating a blocked door, an impassable chasm, a hidden tunnel, and a
 
 Floors and named dungeon depths should be derived views over the spatial world. A host may stream or render one region at a time, but simulation and navigation must preserve continuity across those boundaries.
 
-## 2. Populations, not encounter placements
+## 2. Inhabitants are external entities, not Dungeon-owned behavior
 
-An inhabitant group is a population with identity, needs, capabilities, territory, relationships, resources, and intentions. It is not merely a list of monsters assigned to a room.
+**SingularityUniversalRolePlayingSystem (SURPS) owns the ontology and behavior of inhabitants.** It defines what an entity is and how it can behave: identity and classification, roles, capabilities, needs, motivations, goals, relationships, social organization, culture, decision-making, and behavioral rules. It should support people, creatures, groups, societies, solitary beings, colonies, machines, and other kinds of actors without Dungeon inventing a separate behavior system.
 
-A population can:
-- maintain a home settlement or stronghold;
-- send scouts and patrols beyond its defended territory;
-- forage, hunt, fish, farm fungi, mine, salvage, trade, raid, or collect tribute;
-- move food, equipment, prisoners, wounded members, messages, and treasure;
-- establish temporary camps, watch posts, outposts, and new settlements;
-- react to danger, scarcity, weather, flooding, blocked routes, rival groups, and player activity;
-- retreat, reinforce, negotiate, migrate, split, or collapse.
+FSM_Dungeon owns the environment those entities inhabit. It provides spatial regions, positions and extents, routes, environmental conditions, resources and materials in context, hazards, and the consequences that the underground environment imposes. It can record an external entity's presence at a location and the environmental effects of an action without defining the entity's ontology or choosing its goals.
 
-This creates a natural encounter gradient. A player may meet one scout, a foraging party, a patrol, a returning expedition, or a messenger far from the population's main settlement. Reaching its territory can reveal a much larger society. The early sighting is a clue about a living population, not a promise that the entire population is waiting in the next room.
+The integration boundary should be explicit:
 
-For example, an orc group might maintain a deep stronghold, patrol an upper route, forage near an underground lake, and send a scouting party through an abandoned mine. The player can encounter those parties before discovering the stronghold. The group should have reasons for each journey and should respond when a party fails to return.
+- SURPS describes the actor, its role, capabilities, motivations, relationships, and behavioral state.
+- FSM_Dungeon describes the underground environment and answers environment-specific queries such as where an actor is, what routes exist, and what environmental conditions or hazards apply.
+- Other capabilities may supply movement execution, sensing, communication, physics, combat resolution, or interaction mechanics.
+- A host or orchestration layer coordinates those capabilities and validates authoritative state transitions.
 
-A dwarven city should be modeled with the same underlying capabilities as any other settlement: districts, households or cohorts, civic functions, production, storage, trade, defense, transport, water, waste, and political or social relationships. Its scale and sophistication emerge from its authored content and simulation, not from a special hard-coded "dwarf dungeon" mode.
+This separation allows the same SURPS-defined entity to inhabit a dungeon, a city, an overworld, a spacecraft, or another environment without changing its fundamental ontology. Likewise, FSM_Dungeon can host inhabitants from different SURPS catalogues without hard-coding species or behavior.
 
-Goblins, orcs, trolls, spiders, undead, and other subterranean beings are likewise not restricted to monster-room placement. Their ecologies, social structures, intelligence, diets, mobility, and relationships can differ. Some may be civilizations, some loose bands, some solitary predators, some colonies, and some forces that do not behave like ordinary societies at all.
+A scout, patrol, expedition, settlement, or society is therefore not a Dungeon-specific AI archetype. It is a SURPS-defined entity or organization acting within a Dungeon environment. The environment can record their spatial presence, routes, encounters, and observable consequences; the behavior model determines why they undertake those actions.
 
-## 3. Simulation at multiple scales
+## 3. Environmental simulation at multiple scales
 
-The world should not require every inhabitant to run a detailed actor update every frame.
+FSM_Dungeon should not require every region or environmental process to run at maximum detail every frame. Use layered environmental fidelity:
+- **immediate** — detailed local environmental interactions and route consequences;
+- **local** — nearby environmental state and resource availability;
+- **regional** — coarse environmental processes and changes across connected regions;
+- **distant** — event-driven or summarized environmental state.
 
-Use layered fidelity:
-- **immediate** — detailed movement, combat, perception, and interaction near the observer;
-- **local** — group movement, patrols, encounters, and resource use in nearby regions;
-- **regional** — schedules, expeditions, migration, supply, and territory changes;
-- **distant** — event-driven or summarized population state, with enough continuity to produce plausible arrivals and consequences.
-
-A group travelling through unobserved space should still make progress, consume resources, encounter obstacles, and produce events. When the observer approaches, the detailed representation should be reconstructed from the authoritative group state rather than spawning a disconnected encounter.
+SURPS and other actor capabilities determine how inhabitants are simulated at corresponding scales. A group travelling through unobserved space is not a Dungeon-owned behavior loop; Dungeon supplies the environmental queries and consequences needed by the external simulation. When an observer approaches, detailed environmental representation should be reconstructed from authoritative state rather than inventing a disconnected scene.
 
 Simulation must be deterministic for a fixed initial definition, seed, command sequence, and time-step policy. Randomness is recorded or derived from stable identities and simulation state so that a world can be reproduced and investigated.
 
@@ -129,23 +123,23 @@ Record meaningful state changes as causal events with stable identities, time/ti
 
 ## 7. Generation and authoring contract
 
-A world definition should combine:
-1. an origin, purpose, and history;
+A Dungeon environment definition should combine:
+1. an underground origin, formation history, and purpose;
 2. spatial and environmental constraints or authored landmarks;
-3. creator-supplied content catalogues and selection rules;
-4. population definitions, goals, relationships, and initial knowledge;
-5. generation policies and a reproducible seed;
-6. optional host-world anchors and access rules.
+3. environmental materials, resources, hazards, and authored features;
+4. generation policies and a reproducible seed;
+5. optional host-world anchors and access rules;
+6. optional references to externally defined SURPS entities or populations and their initial spatial placements.
 
-The generator composes a valid world from those inputs. It may determine exact room placement, route geometry, population distribution, trap placement, and treasure location, but must preserve invariants and explain its decisions through provenance.
+SURPS owns the inhabitant definitions, ontology, roles, goals, relationships, and behavior policies. Dungeon may accept opaque external identities and placement instructions at an integration boundary, but must not become the canonical catalogue or behavior engine for those entities.
 
-The creator should be able to specify intent and available ingredients without hand-placing every room, monster, or chest. Hand-authored landmarks and explicit placements remain possible when a creator wants precise control.
+The Dungeon generator composes a valid environment from its own inputs. It may determine chamber placement, route geometry, geological or constructed features, and environmental resource locations, while preserving invariants and explaining decisions through provenance. External orchestration composes SURPS entities into that environment and resolves their behavior. Hand-authored environmental landmarks and explicit placements remain possible.
 
 ## 8. Observer knowledge and perception
 
 Authoritative geological history and an inhabitant's knowledge are separate state. A world may contain formation, exposure, discovery, and survey facts without every inhabitant knowing any of them. `GeologicalObserverKnowledge` is an immutable per-observer snapshot; `LearnEvent` returns a new snapshot after a host perception system has adjudicated that evidence was perceived. It does not itself perform line-of-sight, lighting, sensing, interpretation, or movement checks. The host must supply the observation sequence, confidence, and interpretation. Learning an event never changes `GeologicalWorld`, and one observer's knowledge is not shared with another.
 
-The current inhabitant placement model is still group-level, but the knowledge boundary now has a group-level snapshot and an explicit scout-report transfer. A scout's discoveries remain private; `GeologicalGroupKnowledge` changes only when a `ScoutGeologicalReport` is delivered after the host establishes that the scout physically returned to the addressed group. A scout killed, captured, delayed, or otherwise prevented from returning does not transmit its discoveries. The group can notice that an expected report is overdue (`ScoutReportingStatus`), but overdue means whereabouts unknown—not confirmed death, capture, or knowledge of what happened. The enemy does not receive the scout's knowledge either. It may form its own suspicion only from evidence available to it, such as a missing patrol member it expected to see or other observable events; no telepathy or implicit faction-wide mind sharing exists. Individual actor identity, movement, sensing, and the host's authoritative adjudication of death, return, and report delivery remain integration work.
+The current code still contains a provisional Dungeon-owned group placement model with motivation and activity strings. That is a boundary leak to be retired as the SURPS integration contract becomes concrete; it must not be mistaken for the target ontology. The knowledge boundary now has a group-level snapshot and an explicit scout-report transfer. A scout's discoveries remain private; `GeologicalGroupKnowledge` changes only when a `ScoutGeologicalReport` is delivered after the host establishes that the scout physically returned to the addressed group. A scout killed, captured, delayed, or otherwise prevented from returning does not transmit its discoveries. The group can notice that an expected report is overdue (`ScoutReportingStatus`), but overdue means whereabouts unknown—not confirmed death, capture, or knowledge of what happened. The enemy does not receive the scout's knowledge either. It may form its own suspicion only from evidence available to it, such as a missing patrol member it expected to see or other observable events; no telepathy or implicit faction-wide mind sharing exists. Individual actor identity, movement, sensing, and the host's authoritative adjudication of death, return, and report delivery remain integration work. In the target architecture, SURPS owns the actor and group identities/behavior; Dungeon only supplies underground location and environmental facts. The report-delivery mechanism belongs to the communication/orchestration capability, not to Dungeon's ontology.
 
 ## 9. Proof sequence
 
