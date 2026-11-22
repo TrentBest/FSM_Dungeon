@@ -13,7 +13,7 @@
 
 **An engine-independent domain and simulation for places that have a reason to exist.**
 
-FSM_Dungeon is the Workshop's reusable dungeon/world engine and the foundation for an original isometric action-RPG proof. The gameplay benchmark is the classic sanctuary → descent → exploration → danger → reward → return loop. The Workshop's defining difference is a living causal world: spaces have origins and histories; inhabitants have motivations, activities, territory, and relationships.
+FSM_Dungeon is the Workshop's reusable underground-environment domain and the foundation for an original isometric action-RPG proof. The gameplay benchmark is the classic sanctuary → descent → exploration → danger → reward → return loop. Its defining responsibility is a living causal environment: spaces have origins and histories; materials, routes, resources, and hazards have context and consequences. Inhabitants obtain their ontology and behavior from SingularityUniversalRolePlayingSystem (SURPS).
 
 ## 1. Purpose
 
@@ -25,7 +25,8 @@ The NuGet package is the reusable .NET library. It is not the whole game applica
 
 ## 2. Architecture
 
-- **Domain and simulation:** deterministic generation, spatial topology, provenance, inhabitants, activities, encounters, and world state.
+- **FSM_Dungeon:** deterministic underground-environment generation, spatial topology, geological and constructed provenance, environmental state, resources, and hazards.
+- **SURPS:** the external ontology and behavior system for inhabitants, including roles, capabilities, motivations, relationships, and decision-making.
 - **FSM_API:** the Workshop state-machine substrate; reuse it where state-machine behavior is useful rather than duplicating its runtime.
 - **AI understanding and authorship:** ProtocolAi supplies semantic identity, GrammarAi supplies structure, and CommandAi carries proposals for host-side validation and authorization.
 - **Renderer:** observer-aware selection of computational detail and update fidelity under an explicit budget.
@@ -37,7 +38,7 @@ See [the architecture document](docs/ARCHITECTURE.md) for ownership boundaries a
 
 ## 3. Boundaries
 
-FSM_Dungeon owns dungeon/world meaning and its simulation. It does not require Unity, a graphics API, a browser, WebApp, ServerApp, FSM_COS, or an AI model to run.
+FSM_Dungeon owns the underground environment and its environmental simulation—not the universal ontology or behavior of inhabitants. SURPS supplies those inhabitants and their behavior through an integration boundary. Dungeon does not require SURPS, Unity, a graphics API, a browser, WebApp, ServerApp, FSM_COS, or an AI model to run.
 
 Renderer and Visualization are downstream capabilities. Hosts adapt input, persistence, networking, and presentation. AI can inspect and propose changes, but model output never directly mutates authoritative world state.
 
@@ -61,7 +62,7 @@ The first deterministic domain slice now generates two contrasting places throug
 - structural validation and automated tests;
 - a console proof that serializes both generated worlds for the browser.
 
-The Pages inspector now has a world selector and displays chamber provenance, inhabitant motivations/activities, and environmental conditions from C#-generated data. A separate cavern proof now visualizes 3D region facts and lets the viewer destroy/restore a bridge to see traversal change without erasing spatial adjacency. Environmental condition records remain authored inputs; the hydraulic solver is a separate evolving state model in this first slice. It is a deliberately simple, first-order model—not a calibrated fluid-dynamics or flood-prediction system. Pages deployment still needs the `github-pages` environment to allow `development` (see [issue #3](https://github.com/TrentBest/FSM_Dungeon/issues/3)).
+The Pages inspector now has a world selector and displays chamber provenance, provisional legacy inhabitant group descriptions, and environmental conditions from C#-generated data. Those group motivation/activity fields are transitional fixture data; SURPS is the target owner of inhabitant ontology and behavior. A separate cavern proof now visualizes 3D region facts and lets the viewer destroy/restore a bridge to see traversal change without erasing spatial adjacency. Environmental condition records remain authored inputs; the hydraulic solver is a separate evolving state model in this first slice. It is a deliberately simple, first-order model—not a calibrated fluid-dynamics or flood-prediction system. Pages deployment still needs the `github-pages` environment to allow `development` (see [issue #3](https://github.com/TrentBest/FSM_Dungeon/issues/3)).
 
 ## 5. Project status
 
