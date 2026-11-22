@@ -10,6 +10,10 @@ The mountain existed before the fortress. Its geology, ridges, faults, water, ma
 
 The scenario should feel inhabited and purposeful. A hall exists because a society needed it; a passage follows a route because of geology, engineering, defense, trade, water, or historical accident. We should be able to inspect those reasons.
 
+## LOD and destination boundary
+
+The fortress is a higher-detail LOD 2 destination, not the baseline definition of dwarves. A world can record the existence of dwarves at LOD 0; a town-market scene can use the general Dwarves LOD 1 sourcebook without exposing the stronghold. Entering or meaningfully exploring the stronghold requires the SURPS Dwarven Strongholds LOD 2 sourcebook. A specific premade dwarven city is a further LOD 3+ settlement instance, composed with Singularity City for its civic geography and persistent place relationships.
+
 ## Domain boundaries
 
 - **Physics** owns the exterior terrain and the physical mountain volume, geological material fields, and any supported physical calculations.
