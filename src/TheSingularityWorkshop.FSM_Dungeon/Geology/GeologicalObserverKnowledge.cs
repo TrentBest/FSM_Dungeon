@@ -6,6 +6,7 @@ namespace TheSingularityWorkshop.FSM_Dungeon.Geology;
 /// </summary>
 public sealed class GeologicalObserverKnowledge
 {
+    private readonly GeologicalWorld _world;
     private readonly IReadOnlyDictionary<string, GeologicalEvent> _eventsById;
 
     public GeologicalObserverKnowledge(
@@ -13,7 +14,7 @@ public sealed class GeologicalObserverKnowledge
         string observerId,
         IEnumerable<GeologicalKnowledgeRecord>? records = null)
     {
-        ArgumentNullException.ThrowIfNull(world);
+        _world = world ?? throw new ArgumentNullException(nameof(world));
         if (string.IsNullOrWhiteSpace(observerId))
             throw new ArgumentException("An observer identifier is required.", nameof(observerId));
 
@@ -41,6 +42,32 @@ public sealed class GeologicalObserverKnowledge
 
     public string ObserverId { get; }
     public IReadOnlyList<GeologicalKnowledgeRecord> Records { get; }
+
+    /// <summary>
+    /// Returns a new knowledge snapshot after the host has adjudicated that this observer
+    /// perceived evidence for the specified world-history event.
+    /// This method records knowledge; it does not perform visibility, sensing, or discovery tests.
+    /// </summary>
+    public GeologicalObserverKnowledge LearnEvent(
+        string eventId,
+        long observedSequence,
+        double confidence = 1,
+        string? interpretation = null)
+    {
+        if (string.IsNullOrWhiteSpace(eventId))
+            throw new ArgumentException("An event identifier is required.", nameof(eventId));
+        if (!_world.Events.Any(item => string.Equals(item.Id, eventId, StringComparison.Ordinal)))
+            throw new ArgumentException($"Unknown geological event '{eventId}'.", nameof(eventId));
+        if (KnowsEvent(eventId))
+            throw new InvalidOperationException($"Observer '{ObserverId}' already knows event '{eventId}'.");
+        if (Records.Count > 0 && observedSequence <= Records[^1].ObservedSequence)
+            throw new ArgumentOutOfRangeException(nameof(observedSequence),
+                "A new knowledge sequence must follow the observer's existing knowledge timeline.");
+
+        var nextRecords = Records.Append(
+            new GeologicalKnowledgeRecord(eventId, observedSequence, confidence, interpretation));
+        return new GeologicalObserverKnowledge(_world, ObserverId, nextRecords);
+    }
 
     /// <summary>Returns whether this observer knows the specified history event.</summary>
     public bool KnowsEvent(string eventId) =>
