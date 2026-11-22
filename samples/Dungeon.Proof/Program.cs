@@ -149,6 +149,8 @@ await File.WriteAllTextAsync(Path.Combine(outputDirectory, "worlds.json"),
     JsonSerializer.Serialize(worlds, jsonOptions));
 await File.WriteAllTextAsync(Path.Combine(outputDirectory, "hydraulic.json"),
     JsonSerializer.Serialize(hydraulicSnapshots, jsonOptions));
+await File.WriteAllTextAsync(Path.Combine(outputDirectory, "spatial.json"),
+    JsonSerializer.Serialize(cavernProof, jsonOptions));
 
 foreach (var world in worlds)
 {
