@@ -16,5 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\\..\\src\\TheSingularityWorkshop.FSM_Dungeon\\TheSingularityWorkshop.FSM_Dungeon.csproj" />
+    <ProjectReference Include="..\\..\\src\\TheSingularityWorkshop.FSM_Dungeon.MicroBundle\\TheSingularityWorkshop.FSM_Dungeon.MicroBundle.csproj" />
   </ItemGroup>
 </Project>
