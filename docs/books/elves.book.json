@@ -7,7 +7,26 @@
   "version": "0.1.0",
   "familyId": "elves",
   "cover": "docs/assets/sourcebooks/elves-cover.svg",
-  "lodBadge": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/development/docs/assets/rulebook-lod-1.svg",
+  "lodBadge": {
+    "source": "docs/assets/sourcebooks/lod-1-place-framework.svg",
+    "label": "LOD 1 — Domain Detail"
+  },
   "publisher": "The Singularity Workshop",
-  "publisherMoniker": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg"
+  "publisherMoniker": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg",
+  "repository": "https://github.com/TrentBest/FSM_Dungeon",
+  "source": "docs/books/elves.md",
+  "domain": "Elven Peoples and Cultures",
+  "edition": "0.1.0",
+  "status": "draft",
+  "entryNamespace": "dungeon.peoples.elf",
+  "ownership": {
+    "peopleOntologyAndCapabilities": "SingularityUniversalRolePlayingSystem",
+    "habitatAndEnvironmentalContext": "FSM_Dungeon",
+    "campaignContinuity": "StoryBuilder"
+  },
+  "artwork": {
+    "cover": "docs/assets/sourcebooks/elves-cover.svg",
+    "lodBadge": "docs/assets/sourcebooks/lod-1-place-framework.svg",
+    "status": "authored"
+  }
 }
