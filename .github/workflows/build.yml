@@ -41,7 +41,9 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: |
+            8.0.x
+            10.0.x
       - name: Build and pack MicroBundleDomain development dependency
         run: |
           dotnet restore _dependencies/MicroBundleDomain/TheSingularityWorkshop.MicroBundleDomain.csproj
@@ -54,6 +56,8 @@ jobs:
         run: dotnet build FSM_Dungeon.sln --configuration Release --no-restore
       - name: Test
         run: dotnet test FSM_Dungeon.sln --configuration Release --no-build --logger "trx;LogFileName=dungeon-tests.trx"
+      - name: Execute deterministic scenario replay proof
+        run: dotnet run --project samples/Dungeon.Proof/Dungeon.Proof.csproj --configuration Release --no-build -- "$RUNNER_TEMP/dungeon-proof/dungeon.json"
       - name: Pack MicroBundle artifact (no publication)
         run: dotnet pack src/TheSingularityWorkshop.FSM_Dungeon.MicroBundle/TheSingularityWorkshop.FSM_Dungeon.MicroBundle.csproj --configuration Release --no-build --output ./artifacts
       - name: Upload MicroBundle artifact
