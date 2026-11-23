@@ -183,12 +183,12 @@
     {
       "id": "objective.recover-ledger",
       "description": "Recover the original survey ledger from the vault cache.",
-      "completionCondition": "cache.recovered"
+      "completionCondition": "cache.recovered:cache.survey-ledger"
     },
     {
       "id": "objective.secure-crossing",
       "description": "Make a safe route to the upper ledge available.",
-      "completionCondition": "connection.silt-to-ledge.traversable"
+      "completionCondition": "connection.traversable:connection.silt-to-ledge"
     }
   ],
   "cache": {
@@ -201,15 +201,15 @@
     {
       "id": "outcome.recovered-and-withdrawn",
       "when": [
-        "objective.recover-ledger.complete"
+        "objective.complete:objective.recover-ledger"
       ],
       "result": "The party withdraws with the ledger; the upper route remains unresolved."
     },
     {
       "id": "outcome.route-restored",
       "when": [
-        "objective.recover-ledger.complete",
-        "objective.secure-crossing.complete"
+        "objective.complete:objective.recover-ledger",
+        "objective.complete:objective.secure-crossing"
       ],
       "result": "The party recovers the ledger and establishes a second safe route."
     }
@@ -250,5 +250,5 @@
     ],
     "expectedStateDigest": "c684f0ad41d6d255f854187483472e38dc0fa5b29173987fc5ecbd3254e3a0bc"
   },
-  "notes": "Original data-driven scenario fixture. The sample host deserializes and replays its command log through the host-neutral execution kernel; objective/outcome resolution and a playable host remain pending."
+  "notes": "Original data-driven scenario fixture. The sample host deserializes and replays its command log through the host-neutral execution kernel, then evaluates objective predicates and selects a deterministic outcome. A playable host remains pending."
 }
