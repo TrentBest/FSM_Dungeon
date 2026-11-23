@@ -85,7 +85,7 @@ public sealed class DungeonScenarioStateTests
 
         Assert.True(opened.Topology.CanTraverse("silt-vault"));
         Assert.False(atSilt.Topology.CanTraverse("silt-vault"));
-        Assert.Equal(2, opened.Topology.Regions.Count);
+        Assert.Equal(3, opened.Topology.Regions.Count);
     }
 
     [Fact]
