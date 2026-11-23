@@ -132,6 +132,17 @@ def main() -> int:
             fail(path, "hiddenFeatureIds must reference known features")
 
         objective_ids = unique_ids(path, data["objectives"], "objectives")
+        cache_id = data.get("cache", {}).get("id")
+        if not cache_id or data["cache"].get("regionId") not in region_ids:
+            fail(path, "cache must have an identity and a valid region")
+        for objective in data["objectives"]:
+            condition = objective.get("completionCondition", "")
+            cache_condition = f"cache.recovered:{cache_id}"
+            if condition == cache_condition:
+                continue
+            if condition.startswith("connection.traversable:") and condition.split(":", 1)[1] in connection_ids:
+                continue
+            fail(path, f"objective {objective['id']} has an unsupported or unresolved completion condition")
         if not data["outcomes"]:
             fail(path, "at least one explicit outcome is required")
         outcome_ids = unique_ids(path, data["outcomes"], "outcomes")
@@ -139,7 +150,8 @@ def main() -> int:
             if not outcome.get("when") or not outcome.get("result"):
                 fail(path, f"outcome {outcome['id']} needs conditions and a result")
             for condition in outcome["when"]:
-                if not any(condition.startswith(f"{identity}.") for identity in objective_ids):
+                prefix = "objective.complete:"
+                if not condition.startswith(prefix) or condition[len(prefix):] not in objective_ids:
                     fail(path, f"outcome {outcome['id']} condition must reference a declared objective")
 
         replay = data["replay"]
