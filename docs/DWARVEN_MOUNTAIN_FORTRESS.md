@@ -10,6 +10,10 @@ The mountain existed before the fortress. Its geology, ridges, faults, water, ma
 
 The scenario should feel inhabited and purposeful. A hall exists because a society needed it; a passage follows a route because of geology, engineering, defense, trade, water, or historical accident. We should be able to inspect those reasons.
 
+## Sourcebook reference
+
+The environmental ownership and authoring contract for this scenario is defined by [Underground Environments: Formation, Space, and Consequence](books/underground-environments.md) (sourcebook ID: `fsm-dungeon.domain.underground-environments`, LOD 2, edition 0.1.0). This scenario applies that reusable domain contract; it does not replace it with fortress-specific rules.
+
 ## LOD and destination boundary
 
 The fortress is a higher-detail LOD 2 destination, not the baseline definition of dwarves. A world can record the existence of dwarves at LOD 0; a town-market scene can use the general Dwarves LOD 1 sourcebook without exposing the stronghold. Entering or meaningfully exploring the stronghold requires the SURPS Dwarven Strongholds LOD 2 sourcebook. A specific premade dwarven city is a further LOD 3+ settlement instance, composed with Singularity City for its civic geography and persistent place relationships.
