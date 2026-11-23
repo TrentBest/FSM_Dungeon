@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "repository": "TrentBest/FSM_Dungeon",
+  "domain": "Underground environments and original fantasy sourcebook library",
+  "participationStatus": "integrated-not-enrolled",
+  "contributionType": [
+    "domain-environment-provider",
+    "sourcebook-contributor",
+    "fantasy-library-authoring"
+  ],
+  "contributionSummary": "Owns underground environmental topology, voids, constructed spaces, environmental state, provenance, and dungeon-specific simulation. Maintains an original fantasy sourcebook library. Contributes domain knowledge and integration evidence to SURPS-owned Dungeons and Underground and Dwarven Strongholds books without absorbing SURPS ontology, inhabitant behavior, or campaign continuity.",
+  "cataloguePath": "docs/books/index.md",
+  "books": [],
+  "contributedBookIds": [
+    "surps.domain.dungeons-and-underground",
+    "surps.domain.dwarven-strongholds"
+  ],
+  "rulebookCoordination": {
+    "authorityRepository": "TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem",
+    "authorityBranch": "development",
+    "masterBacklogPath": ".surps/rulebook-backlog.json",
+    "masterMapPath": "docs/rulebook-backlog/index.md",
+    "participationContractPath": "docs/repository-participation.md",
+    "canonicalParticipationStandard": "https://github.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/blob/development/docs/repository-participation.md",
+    "coordinationIssue": "https://github.com/TrentBest/FSM_Dungeon/issues/4"
+  },
+  "admissionReadiness": {
+    "status": "blocked",
+    "blockers": [
+      "No Dungeon-owned book has yet been registered in the central SURPS registry.",
+      "The local Underground Environments descriptor predates the canonical .book.json descriptor convention.",
+      "Five additional catalogue works do not yet have canonical per-book descriptors and distinct cover assets.",
+      "Central ownership and contributor records must be reconciled before active admission."
+    ]
+  }
+}
