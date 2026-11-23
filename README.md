@@ -35,7 +35,7 @@ The NuGet package is the reusable .NET library. It is not the whole game applica
 - **MicroBundles:** compose the dungeon package and optional capabilities into an experience; NuGet remains the code-distribution model.
 - **Hosts:** GitHub Pages proves the domain; WebApp can provide browser interaction; ServerApp can later host authoritative persistent worlds.
 
-See [the architecture document](docs/ARCHITECTURE.md) for ownership boundaries and the staged plan, [Living Subterranean Worlds](docs/WORLD_SIMULATION.md) for the continuous-world, population, creator-catalogue, trap, and treasure direction, [Underground Worlds and Rendering](docs/UNDERGROUND_RENDERING.md) for subterranean lighting, shadows, and material detail, and the [Fantasy Library](docs/books/index.md) for original fantasy sourcebooks, peoples, bestiary entries, and StoryBuilder-ready campaign seeds.
+See [the architecture document](docs/ARCHITECTURE.md) for ownership boundaries and the staged plan, [Living Subterranean Worlds](docs/WORLD_SIMULATION.md) for the continuous-world, population, creator-catalogue, trap, and treasure direction, [Underground Worlds and Rendering](docs/UNDERGROUND_RENDERING.md) for subterranean lighting, shadows, and material detail, and the [Fantasy Library](docs/books/index.md) for original fantasy sourcebooks, peoples, bestiary entries, and StoryBuilder-ready campaign seeds. The [Underground Environments sourcebook](docs/books/underground-environments.md) defines the LOD 2 domain contract and has a [machine-readable descriptor](docs/books/underground-environments.json).
 
 ## 3. Boundaries
 
