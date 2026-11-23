@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "1.0",
+  "id": "fsm-dungeon.experience.lanternward-the-delve",
+  "title": "Lanternward: The Delve",
+  "status": "design",
+  "originality": {
+    "workshopOriginal": true,
+    "thirdPartyAssets": false,
+    "thirdPartyRuleText": false,
+    "affiliation": "none",
+    "policy": "All rules, names, maps, scenarios, characters, and assets are independently authored. Genre conventions may inform design but third-party expression is not copied."
+  },
+  "domain": {
+    "package": "TheSingularityWorkshop.FSM_Dungeon",
+    "capability": "fsm-dungeon.underground-environment",
+    "versionPolicy": "pinned"
+  },
+  "integrations": {
+    "actorOntology": {
+      "owner": "SURPS",
+      "required": true
+    },
+    "campaignContinuity": {
+      "owner": "StoryBuilder",
+      "optional": true
+    },
+    "physics": {
+      "owner": "Physics",
+      "optional": true
+    },
+    "presentation": {
+      "owner": "Renderer/Visualization",
+      "optional": true
+    }
+  },
+  "experience": {
+    "genre": "tabletop-inspired tactical dungeon adventure",
+    "players": "party exploration",
+    "resolution": "experience-owned turn adapter",
+    "informationModel": [
+      "authoritative-world",
+      "player-known",
+      "discovered",
+      "remembered",
+      "rumored"
+    ]
+  },
+  "content": {
+    "catalogue": "experience-owned-original-content",
+    "categories": [
+      "scenario",
+      "room-style",
+      "door-mechanism",
+      "trap-mechanism",
+      "hazard",
+      "treasure-cache",
+      "objective",
+      "original-character-reference"
+    ],
+    "noEngineSpecificContentEnums": true
+  },
+  "firstVerticalSlice": {
+    "site": "one-original-compact-underground-site",
+    "features": [
+      "party movement",
+      "hidden-information",
+      "door-or-lock-interaction",
+      "environmental-hazard",
+      "trap-mechanism",
+      "meaningful-cache",
+      "branching-objective"
+    ],
+    "deterministicReplayRequired": true
+  },
+  "ciAi": {
+    "eligibleFutureWorkload": true,
+    "requiresBuildAndTests": true,
+    "requiresContentProvenance": true,
+    "requiresHumanApprovalForProtectedActions": true
+  },
+  "notes": "Design manifest only; not yet a playable game."
+}
