@@ -1,6 +1,9 @@
 # The Living Bestiary
 
 **Library:** FSM_Dungeon Fantasy Library  
+**Sourcebook ID:** `fsm-dungeon.fantasy.bestiary`  
+**Edition:** 0.1.0  
+**Cover:** [Original sourcebook cover](../assets/sourcebooks/living-bestiary-cover.svg)  
 **LOD:** 1 — general creature and ecology framework  
 **Status:** authored framework with original illustrative entries
 
