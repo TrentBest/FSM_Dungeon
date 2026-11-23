@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 import sys
 from collections import deque
 from pathlib import Path
@@ -144,6 +145,8 @@ def main() -> int:
         replay = data["replay"]
         if replay.get("deterministic") is not True or not isinstance(replay.get("commandLog"), list):
             fail(path, "replay must declare deterministic execution and a command log")
+        if not isinstance(replay.get("expectedStateDigest"), str) or not re.fullmatch(r"[0-9a-f]{64}", replay["expectedStateDigest"]):
+            fail(path, "replay.expectedStateDigest must be a verified lowercase SHA-256 digest")
         previous = 0
         for command in replay["commandLog"]:
             sequence = command.get("sequence")
