@@ -1,0 +1,248 @@
+{
+  "schemaVersion": "1.0",
+  "id": "fsm-dungeon.scenario.lantern-vault",
+  "title": "The Lantern Vault",
+  "status": "playtest-fixture",
+  "originality": {
+    "workshopOriginal": true,
+    "thirdPartyAssets": false,
+    "thirdPartyRuleText": false,
+    "affiliation": "none"
+  },
+  "world": {
+    "id": "world.lantern-vault",
+    "seed": 48151623,
+    "coordinateSystem": "right-handed-world-units",
+    "authoritativeModel": "three-dimensional-spatial-topology"
+  },
+  "presentation": {
+    "projection": "orthogonal-grid",
+    "cellSize": 2,
+    "origin": {
+      "x": 0,
+      "y": 0
+    },
+    "note": "Grid coordinates are a player-facing projection only; they do not replace world geometry or topology."
+  },
+  "regions": [
+    {
+      "id": "region.entry-gallery",
+      "name": "Entry Gallery",
+      "origin": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "extent": {
+        "width": 8,
+        "height": 3,
+        "depth": 6
+      },
+      "floorElevation": 0,
+      "formationReason": "A worked access gallery cut into stable bedrock.",
+      "grid": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "region.silt-hall",
+      "name": "Silt Hall",
+      "origin": {
+        "x": 10,
+        "y": 0,
+        "z": 0
+      },
+      "extent": {
+        "width": 8,
+        "height": 3,
+        "depth": 6
+      },
+      "floorElevation": 0,
+      "formationReason": "A natural fracture widened by repeated water flow.",
+      "grid": {
+        "x": 1,
+        "y": 0
+      }
+    },
+    {
+      "id": "region.sealed-vault",
+      "name": "Sealed Vault",
+      "origin": {
+        "x": 20,
+        "y": 0,
+        "z": 0
+      },
+      "extent": {
+        "width": 8,
+        "height": 4,
+        "depth": 8
+      },
+      "floorElevation": 0,
+      "formationReason": "A constructed chamber founded on a dry bedrock shelf.",
+      "grid": {
+        "x": 2,
+        "y": 0
+      }
+    },
+    {
+      "id": "region.upper-ledge",
+      "name": "Upper Ledge",
+      "origin": {
+        "x": 10,
+        "y": 4,
+        "z": 8
+      },
+      "extent": {
+        "width": 6,
+        "height": 2,
+        "depth": 4
+      },
+      "floorElevation": 4,
+      "formationReason": "A raised natural shelf above the silt channel.",
+      "grid": {
+        "x": 1,
+        "y": 1
+      }
+    }
+  ],
+  "features": [
+    {
+      "id": "feature.iron-leaf-door",
+      "kind": "door",
+      "name": "Iron-leaf door",
+      "regionId": "region.sealed-vault",
+      "isOperational": true,
+      "formationReason": "Installed to secure the vault after its construction."
+    },
+    {
+      "id": "feature.rope-span",
+      "kind": "bridge",
+      "name": "Suspended rope span",
+      "regionId": "region.upper-ledge",
+      "isOperational": true,
+      "formationReason": "A later expedition installed a temporary crossing."
+    },
+    {
+      "id": "feature.pressure-slab",
+      "kind": "trap-mechanism",
+      "name": "Counterweighted floor slab",
+      "regionId": "region.silt-hall",
+      "isOperational": true,
+      "formationReason": "A defensive mechanism fitted into the worked floor."
+    }
+  ],
+  "connections": [
+    {
+      "id": "connection.entry-to-silt",
+      "fromRegionId": "region.entry-gallery",
+      "toRegionId": "region.silt-hall",
+      "traversalMode": "passage"
+    },
+    {
+      "id": "connection.silt-to-vault",
+      "fromRegionId": "region.silt-hall",
+      "toRegionId": "region.sealed-vault",
+      "traversalMode": "doorway",
+      "requiredFeatureId": "feature.iron-leaf-door"
+    },
+    {
+      "id": "connection.silt-to-ledge",
+      "fromRegionId": "region.silt-hall",
+      "toRegionId": "region.upper-ledge",
+      "traversalMode": "climb-and-bridge",
+      "requiredFeatureId": "feature.rope-span"
+    }
+  ],
+  "actorReferences": [
+    {
+      "id": "actor-reference.party",
+      "provider": "SURPS",
+      "externalIdentity": "surps.party.lanternward-test-party",
+      "initialRegionId": "region.entry-gallery"
+    },
+    {
+      "id": "actor-reference.sentinel",
+      "provider": "SURPS",
+      "externalIdentity": "surps.actor.original-vault-sentinel",
+      "initialRegionId": "region.sealed-vault"
+    }
+  ],
+  "information": {
+    "authoritativeWorldIsOmniscient": true,
+    "playerKnowledgeStartsWith": [
+      "region.entry-gallery"
+    ],
+    "hiddenFeatureIds": [
+      "feature.pressure-slab",
+      "feature.rope-span"
+    ],
+    "discoveryIsObserverScoped": true
+  },
+  "objectives": [
+    {
+      "id": "objective.recover-ledger",
+      "description": "Recover the original survey ledger from the vault cache.",
+      "completionCondition": "cache.recovered"
+    },
+    {
+      "id": "objective.secure-crossing",
+      "description": "Make a safe route to the upper ledge available.",
+      "completionCondition": "connection.silt-to-ledge.traversable"
+    }
+  ],
+  "cache": {
+    "id": "cache.survey-ledger",
+    "regionId": "region.sealed-vault",
+    "contentReference": "content.original-survey-ledger",
+    "placementReason": "Stored by the vault surveyors before the lower route flooded."
+  },
+  "outcomes": [
+    {
+      "id": "outcome.recovered-and-withdrawn",
+      "when": [
+        "objective.recover-ledger.complete"
+      ],
+      "result": "The party withdraws with the ledger; the upper route remains unresolved."
+    },
+    {
+      "id": "outcome.route-restored",
+      "when": [
+        "objective.recover-ledger.complete",
+        "objective.secure-crossing.complete"
+      ],
+      "result": "The party recovers the ledger and establishes a second safe route."
+    }
+  ],
+  "replay": {
+    "deterministic": true,
+    "commandLog": [
+      {
+        "sequence": 1,
+        "actorReferenceId": "actor-reference.party",
+        "command": "move",
+        "targetRegionId": "region.silt-hall"
+      },
+      {
+        "sequence": 2,
+        "actorReferenceId": "actor-reference.party",
+        "command": "inspect",
+        "targetId": "feature.pressure-slab"
+      },
+      {
+        "sequence": 3,
+        "actorReferenceId": "actor-reference.party",
+        "command": "interact",
+        "targetId": "feature.iron-leaf-door"
+      },
+      {
+        "sequence": 4,
+        "actorReferenceId": "actor-reference.party",
+        "command": "recover",
+        "targetId": "cache.survey-ledger"
+      }
+    ],
+    "expectedStateDigest": "PENDING-HOST-IMPLEMENTATION"
+  },
+  "notes": "Data-only original scenario fixture. It is not yet wired to a playable host or runtime command processor."
+}
