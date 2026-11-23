@@ -42,6 +42,7 @@ Higher LOD adds detail; it does not retroactively make every lower-LOD observer 
 
 ### Places and history
 - [Ruins and Lost Places](ruins-and-lost-places.md) — a causal framework for abandoned, repurposed, buried, and partially active sites.
+- [Underground Environments: Formation, Space, and Consequence](underground-environments.md) — the LOD 2 domain sourcebook for subterranean origin, 3D topology, substrate handoff, provenance, environmental state, hazards, and resources. [Machine-readable descriptor](underground-environments.json).
 
 ### Story seeds
 - [The Broken Star](../stories/the-broken-star.md) — an original, system-neutral fantasy campaign seed designed to be expanded in StoryBuilder.
