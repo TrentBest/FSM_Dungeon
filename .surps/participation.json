@@ -11,12 +11,72 @@
   "contributionSummary": "Owns underground environmental topology, voids, constructed spaces, environmental state, provenance, and dungeon-specific simulation. Maintains an original fantasy sourcebook library. Contributes domain knowledge and integration evidence to SURPS-owned Dungeons and Underground and Dwarven Strongholds books without absorbing SURPS ontology, inhabitant behavior, or campaign continuity.",
   "cataloguePath": "docs/books/index.md",
   "books": [
-    "fsm-dungeon.fantasy.fantasy-foundations",
-    "fsm-dungeon.fantasy.elves",
-    "fsm-dungeon.fantasy.bestiary",
-    "fsm-dungeon.fantasy.dragons-and-wyrms",
-    "fsm-dungeon.fantasy.ruins-and-lost-places",
-    "fsm-dungeon.domain.underground-environments"
+    {
+      "id": "fsm-dungeon.fantasy.fantasy-foundations",
+      "title": "Fantasy Foundations",
+      "category": "Setting",
+      "lod": 1,
+      "version": "0.1.0",
+      "status": "draft",
+      "bookPath": "docs/books/fantasy-foundations.md",
+      "descriptorPath": "docs/books/fantasy-foundations.book.json",
+      "coverPath": "docs/assets/sourcebooks/fantasy-foundations-cover.svg"
+    },
+    {
+      "id": "fsm-dungeon.fantasy.elves",
+      "title": "Elves: Peoples of the Long Memory",
+      "category": "Setting",
+      "lod": 1,
+      "version": "0.1.0",
+      "status": "draft",
+      "bookPath": "docs/books/elves.md",
+      "descriptorPath": "docs/books/elves.book.json",
+      "coverPath": "docs/assets/sourcebooks/elves-cover.svg"
+    },
+    {
+      "id": "fsm-dungeon.fantasy.bestiary",
+      "title": "The Living Bestiary",
+      "category": "Domain",
+      "lod": 1,
+      "version": "0.1.0",
+      "status": "draft",
+      "bookPath": "docs/books/bestiary.md",
+      "descriptorPath": "docs/books/living-bestiary.book.json",
+      "coverPath": "docs/assets/sourcebooks/living-bestiary-cover.svg"
+    },
+    {
+      "id": "fsm-dungeon.fantasy.dragons-and-wyrms",
+      "title": "Dragons and Wyrms: Ecology of the Elder Sky",
+      "category": "Domain",
+      "lod": 1,
+      "version": "0.1.0",
+      "status": "draft",
+      "bookPath": "docs/books/dragons-and-wyrms.md",
+      "descriptorPath": "docs/books/dragons-and-wyrms.book.json",
+      "coverPath": "docs/assets/sourcebooks/dragons-and-wyrms-cover.svg"
+    },
+    {
+      "id": "fsm-dungeon.fantasy.ruins-and-lost-places",
+      "title": "Ruins and Lost Places: Reading the Layers of a World",
+      "category": "Domain",
+      "lod": 1,
+      "version": "0.1.0",
+      "status": "draft",
+      "bookPath": "docs/books/ruins-and-lost-places.md",
+      "descriptorPath": "docs/books/ruins-and-lost-places.book.json",
+      "coverPath": "docs/assets/sourcebooks/ruins-and-lost-places-cover.svg"
+    },
+    {
+      "id": "fsm-dungeon.domain.underground-environments",
+      "title": "Underground Environments: Formation, Space, and Consequence",
+      "category": "Domain",
+      "lod": 2,
+      "version": "0.1.0",
+      "status": "draft",
+      "bookPath": "docs/books/underground-environments.md",
+      "descriptorPath": "docs/books/underground-environments.book.json",
+      "coverPath": "docs/assets/sourcebooks/underground-environments-cover.svg"
+    }
   ],
   "contributedBookIds": [
     "surps.domain.dungeons-and-underground",
@@ -29,7 +89,11 @@
     "masterMapPath": "docs/rulebook-backlog/index.md",
     "participationContractPath": "docs/repository-participation.md",
     "canonicalParticipationStandard": "https://github.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/blob/development/docs/repository-participation.md",
-    "coordinationIssue": "https://github.com/TrentBest/FSM_Dungeon/issues/4"
+    "coordinationIssue": "https://github.com/TrentBest/FSM_Dungeon/issues/4",
+    "ownershipClaimTemplate": "https://github.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/blob/development/.github/ISSUE_TEMPLATE/rulebook-owner-sign-in.yml",
+    "repositoryEnrollmentTemplate": "https://github.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/blob/development/.github/ISSUE_TEMPLATE/surps-repository-participation.yml",
+    "canonicalParticipationStandardPath": "https://github.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/blob/development/docs/repository-participation.md",
+    "policy": "SURPS is the canonical cross-repository registry. FSM_Dungeon retains ownership of its sourcebook knowledge, underground environmental topology, constructed-space history, and domain-specific environmental state. SURPS composes shared ontology and roleplaying semantics without duplicating Dungeon implementation or creating a forced runtime dependency."
   },
   "admissionReadiness": {
     "status": "blocked",
