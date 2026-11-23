@@ -52,6 +52,18 @@ Higher LOD adds detail; it does not retroactively make every lower-LOD observer 
 - [The Broken Star](../stories/the-broken-star.md) — an original, system-neutral fantasy campaign seed designed to be expanded in StoryBuilder.
 - [The Pass That Went Quiet](../stories/the-pass-that-went-quiet.md) — a playable opening adventure packet with branching scenes, quests, clues, and optional modules.
 
+## Validation
+
+The canonical declaration is `.surps/participation.json`. Its six book entries bind each stable ID to one Markdown source, one `.book.json` descriptor, and one distinct cover. Descriptors also reference the shared LOD badge asset appropriate to their declared level.
+
+Run the local consistency gate before proposing catalogue changes:
+
+```bash
+python scripts/validate_surps_participation.py
+```
+
+The [SURPS Sourcebook Validation workflow](../.github/workflows/surps-sourcebook-validation.yml) runs this check for relevant changes targeting `development`. A passing local check verifies file and metadata consistency only; it does not accept ownership claims or enroll FSM_Dungeon.
+
 ## Authoring rules
 
 1. Prefer original setting expression. Familiar fantasy archetypes are starting points, not permission to copy another publisher's distinctive expression.
