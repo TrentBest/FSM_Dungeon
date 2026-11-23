@@ -167,6 +167,21 @@ public sealed class DungeonScenarioEvaluatorTests
     }
 
     [Fact]
+    public void Malformed_later_outcome_predicate_is_rejected_even_when_an_earlier_predicate_is_false()
+    {
+        var outcomes = new[]
+        {
+            new DungeonScenarioOutcomeDefinition(
+                "malformed",
+                ["objective.complete:recover", "objective.complete:missing"],
+                "Must not be silently skipped.")
+        };
+
+        Assert.Throws<ArgumentException>(() =>
+            DungeonScenarioEvaluator.Evaluate(CreateState(), Objectives(), outcomes));
+    }
+
+    [Fact]
     public void Empty_objective_set_does_not_claim_all_objectives_complete()
     {
         var evaluation = DungeonScenarioEvaluator.Evaluate(CreateState(), []);
