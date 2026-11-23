@@ -38,6 +38,10 @@ Higher LOD adds detail; it does not retroactively make every lower-LOD observer 
 
 ### Bestiary
 - [The Living Bestiary](bestiary.md) — an ecological and narrative framework for creatures, populations, habitats, lairs, signs, encounters, and coexistence.
+- [Dragons and Wyrms: Ecology of the Elder Sky](dragons-and-wyrms.md) — draconic lineages, habitats, life histories, intelligence, hoards, and relationships without assuming one universal dragon.
+
+### Places and history
+- [Ruins and Lost Places](ruins-and-lost-places.md) — a causal framework for abandoned, repurposed, buried, and partially active sites.
 
 ### Story seeds
 - [The Broken Star](../stories/the-broken-star.md) — an original, system-neutral fantasy campaign seed designed to be expanded in StoryBuilder.
