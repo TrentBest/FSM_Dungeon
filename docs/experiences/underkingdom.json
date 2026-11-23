@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "1.0",
+  "id": "fsm-dungeon.experience.underkingdom",
+  "title": "Underkingdom",
+  "status": "future-design",
+  "originality": {
+    "workshopOriginal": true,
+    "thirdPartyAssets": false,
+    "thirdPartyRuleText": false,
+    "affiliation": "none",
+    "policy": "Independent setting, mechanics, terminology, progression, interface, characters, and assets; no third-party expression copied."
+  },
+  "domain": {
+    "package": "TheSingularityWorkshop.FSM_Dungeon",
+    "capability": "fsm-dungeon.underground-environment",
+    "versionPolicy": "pinned"
+  },
+  "integrations": {
+    "actorOntology": {
+      "owner": "SURPS",
+      "required": true
+    },
+    "campaignContinuity": {
+      "owner": "StoryBuilder",
+      "optional": true
+    },
+    "physics": {
+      "owner": "Physics",
+      "optional": true
+    },
+    "presentation": {
+      "owner": "Renderer/Visualization",
+      "optional": true
+    }
+  },
+  "experience": {
+    "genre": "asymmetric underground settlement-management simulation",
+    "playerRole": "keeper-steward",
+    "simulation": "experience-owned management tick",
+    "informationModel": [
+      "authoritative-world",
+      "observed",
+      "reported",
+      "inferred"
+    ]
+  },
+  "content": {
+    "catalogue": "experience-owned-original-content",
+    "categories": [
+      "room-function",
+      "construction-plan",
+      "infrastructure",
+      "resource-policy",
+      "settlement-scenario",
+      "threat-definition",
+      "objective"
+    ],
+    "noEngineSpecificContentEnums": true
+  },
+  "firstVerticalSlice": {
+    "site": "one-bounded-underground-region",
+    "features": [
+      "excavation",
+      "construction",
+      "resource-ledger",
+      "population-references",
+      "environmental-failure",
+      "simulation-tick",
+      "command-log"
+    ],
+    "deterministicReplayRequired": true
+  },
+  "ciAi": {
+    "eligibleFutureWorkload": true,
+    "requiresBuildAndTests": true,
+    "requiresContentProvenance": true,
+    "requiresHumanApprovalForProtectedActions": true
+  },
+  "notes": "Future project brief only; not scheduled as an active implementation or playable game."
+}
