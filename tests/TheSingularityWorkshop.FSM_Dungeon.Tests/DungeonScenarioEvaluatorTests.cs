@@ -85,8 +85,8 @@ public sealed class DungeonScenarioEvaluatorTests
     {
         var outcomes = new[]
         {
-            new DungeonScenarioOutcomeDefinition("both", ["objective.recover.complete", "objective.open-route.complete"], "Both goals."),
-            new DungeonScenarioOutcomeDefinition("recovered", ["objective.recover.complete"], "Ledger recovered.")
+            new DungeonScenarioOutcomeDefinition("both", ["objective.complete:recover", "objective.complete:open-route"], "Both goals."),
+            new DungeonScenarioOutcomeDefinition("recovered", ["objective.complete:recover"], "Ledger recovered.")
         };
         var evaluation = DungeonScenarioEvaluator.Evaluate(CompleteRecovery(), Objectives(), outcomes);
 
@@ -101,8 +101,8 @@ public sealed class DungeonScenarioEvaluatorTests
             new DungeonScenarioCommand(1, "party", DungeonScenarioCommandKind.Interact, "gate"));
         var outcomes = new[]
         {
-            new DungeonScenarioOutcomeDefinition("both", ["objective.recover.complete", "objective.open-route.complete"], "Both goals."),
-            new DungeonScenarioOutcomeDefinition("route", ["objective.open-route.complete"], "Route restored.")
+            new DungeonScenarioOutcomeDefinition("both", ["objective.complete:recover", "objective.complete:open-route"], "Both goals."),
+            new DungeonScenarioOutcomeDefinition("route", ["objective.complete:open-route"], "Route restored.")
         };
         var evaluation = DungeonScenarioEvaluator.Evaluate(state, Objectives(), outcomes);
 
@@ -114,7 +114,7 @@ public sealed class DungeonScenarioEvaluatorTests
     {
         var evaluation = DungeonScenarioEvaluator.Evaluate(CreateState(), Objectives(),
         [
-            new DungeonScenarioOutcomeDefinition("recovered", ["objective.recover.complete"], "Recovered.")
+            new DungeonScenarioOutcomeDefinition("recovered", ["objective.complete:recover"], "Recovered.")
         ]);
 
         Assert.Null(evaluation.SelectedOutcome);
@@ -125,8 +125,8 @@ public sealed class DungeonScenarioEvaluatorTests
     {
         var outcomes = new[]
         {
-            new DungeonScenarioOutcomeDefinition("first", ["objective.recover.complete"], "First."),
-            new DungeonScenarioOutcomeDefinition("second", ["objective.recover.complete"], "Second.")
+            new DungeonScenarioOutcomeDefinition("first", ["objective.complete:recover"], "First."),
+            new DungeonScenarioOutcomeDefinition("second", ["objective.complete:recover"], "Second.")
         };
         var evaluation = DungeonScenarioEvaluator.Evaluate(CompleteRecovery(), Objectives(), outcomes);
 
