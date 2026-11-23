@@ -1,11 +1,14 @@
-# Underground Environments: Formation, Space, and Consequence
+# Singularity Universal Roleplaying System - Domain - LOD 2 - Underground Environments: Formation, Space, and Consequence
 
 **Library:** FSM_Dungeon Domain Sourcebooks  
+**Canonical title:** Singularity Universal Roleplaying System - Domain - LOD 2 - Underground Environments: Formation, Space, and Consequence  
 **Sourcebook ID:** `fsm-dungeon.domain.underground-environments`  
 **Entry namespace:** `dungeon.environment.*`  
 **Domain:** Underground environments  
 **LOD:** 2 — domain detail  
 **Edition:** 0.1.0  
+**Cover:** [Original sourcebook cover](../assets/sourcebooks/underground-environments-cover.svg)  
+**LOD badge:** ![LOD 2 — Domain Detail](../assets/sourcebooks/lod-2-domain-detail.svg)  
 **Status:** authored domain sourcebook; implementation contracts are normative only where explicitly marked  
 **Owner:** FSM_Dungeon
 
