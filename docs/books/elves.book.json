@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "fsm-dungeon.fantasy.elves",
+  "category": "Setting",
+  "lod": 1,
+  "title": "Elves: Peoples of the Long Memory",
+  "version": "0.1.0",
+  "familyId": "elves",
+  "cover": "docs/assets/sourcebooks/elves-cover.svg",
+  "lodBadge": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/development/docs/assets/rulebook-lod-1.svg",
+  "publisher": "The Singularity Workshop",
+  "publisherMoniker": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg"
+}
