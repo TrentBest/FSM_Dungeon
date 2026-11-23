@@ -1,7 +1,9 @@
 # Dragons and Wyrms: Ecology of the Elder Sky
 
 **Library:** FSM_Dungeon Fantasy Library  
-**Provisional sourcebook ID:** `fsm-dungeon.fantasy.dragons-and-wyrms`  
+**Sourcebook ID:** `fsm-dungeon.fantasy.dragons-and-wyrms`  
+**Edition:** 0.1.0  
+**Cover:** [Original sourcebook cover](../assets/sourcebooks/dragons-and-wyrms-cover.svg)  
 **Entry IDs:** `creature.drake`, `creature.wyrm`, `creature.elder-wyrm`  
 **LOD:** 1 — general natural-history framework  
 **Edition:** 0.1.0  
