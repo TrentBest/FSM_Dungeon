@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "fsm-dungeon.domain.underground-environments",
+  "category": "Domain",
+  "lod": 2,
+  "title": "Underground Environments: Formation, Space, and Consequence",
+  "version": "0.1.0",
+  "cover": "docs/assets/sourcebooks/underground-environments-cover.svg",
+  "lodBadge": "docs/assets/sourcebooks/lod-2-domain-detail.svg",
+  "publisher": "The Singularity Workshop",
+  "publisherMoniker": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg",
+  "source": "docs/books/underground-environments.md",
+  "domain": "Underground Environments",
+  "status": "draft",
+  "language": "en",
+  "entryNamespace": "dungeon.environment",
+  "ownership": {
+    "environment": "FSM_Dungeon",
+    "solidSubstrateAndPhysics": "TheSingularityWorkshop.Physics",
+    "inhabitantsAndBehavior": "SingularityUniversalRoleplayingSystem",
+    "campaignContinuity": "StoryBuilder",
+    "presentation": [
+      "TheSingularityWorkshop.Renderer",
+      "TheSingularityWorkshop.Visualize"
+    ]
+  },
+  "scope": {
+    "includes": [
+      "Natural and biological underground formation",
+      "Excavated and constructed subterranean spaces",
+      "Continuous three-dimensional topology",
+      "Environmental state and provenance",
+      "Resources, hazards, and substrate handoff"
+    ],
+    "excludes": [
+      "Authoritative solid terrain and general physical calculations",
+      "Universal inhabitant ontology and behavior",
+      "Campaign continuity and canon decisions",
+      "Rendering and presentation engines"
+    ]
+  },
+  "references": {
+    "catalogue": "docs/books/index.md",
+    "architecture": "docs/ARCHITECTURE.md",
+    "worldSimulation": "docs/WORLD_SIMULATION.md",
+    "relatedScenario": "docs/DWARVEN_MOUNTAIN_FORTRESS.md"
+  }
+}
