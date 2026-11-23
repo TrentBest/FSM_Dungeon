@@ -10,7 +10,9 @@
   ],
   "contributionSummary": "Owns underground environmental topology, voids, constructed spaces, environmental state, provenance, and dungeon-specific simulation. Maintains an original fantasy sourcebook library. Contributes domain knowledge and integration evidence to SURPS-owned Dungeons and Underground and Dwarven Strongholds books without absorbing SURPS ontology, inhabitant behavior, or campaign continuity.",
   "cataloguePath": "docs/books/index.md",
-  "books": [],
+  "books": [
+    "fsm-dungeon.domain.underground-environments"
+  ],
   "contributedBookIds": [
     "surps.domain.dungeons-and-underground",
     "surps.domain.dwarven-strongholds"
@@ -27,10 +29,17 @@
   "admissionReadiness": {
     "status": "blocked",
     "blockers": [
-      "No Dungeon-owned book has yet been registered in the central SURPS registry.",
-      "The local Underground Environments descriptor predates the canonical .book.json descriptor convention.",
       "Five additional catalogue works do not yet have canonical per-book descriptors and distinct cover assets.",
-      "Central ownership and contributor records must be reconciled before active admission."
+      "The pending Underground Environments ownership claim and remaining contributor records require independent SURPS review before active admission."
     ]
-  }
+  },
+  "bookOwnershipClaims": [
+    {
+      "id": "fsm-dungeon.domain.underground-environments",
+      "claimStatus": "pending",
+      "agent": "ChatGPT GitHub agent",
+      "agentRepository": "TrentBest/FSM_Dungeon",
+      "note": "Pending independent SURPS review; this agent does not approve its own ownership claim."
+    }
+  ]
 }
