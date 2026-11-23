@@ -294,6 +294,18 @@ using (var scenarioDocument = JsonDocument.Parse(await File.ReadAllTextAsync(sce
         && !string.Equals(expectedDigest, stateDigest, StringComparison.Ordinal))
         throw new InvalidOperationException($"Lantern Vault replay digest mismatch. Expected {expectedDigest}; actual {stateDigest}.");
 
+    var objectiveDefinitions = scenario.GetProperty("objectives").EnumerateArray().Select(objective =>
+        new DungeonScenarioObjectiveDefinition(
+            objective.GetProperty("id").GetString()!,
+            objective.GetProperty("description").GetString()!,
+            objective.GetProperty("completionCondition").GetString()!)).ToArray();
+    var outcomeDefinitions = scenario.GetProperty("outcomes").EnumerateArray().Select(outcome =>
+        new DungeonScenarioOutcomeDefinition(
+            outcome.GetProperty("id").GetString()!,
+            Array.AsReadOnly(outcome.GetProperty("when").EnumerateArray().Select(condition => condition.GetString()!).ToArray()),
+            outcome.GetProperty("result").GetString()!)).ToArray();
+    var evaluation = DungeonScenarioEvaluator.Evaluate(scenarioState, objectiveDefinitions, outcomeDefinitions);
+
     var replayProof = new
     {
         scenarioId = scenario.GetProperty("id").GetString(),
@@ -308,10 +320,14 @@ using (var scenarioDocument = JsonDocument.Parse(await File.ReadAllTextAsync(sce
         }).ToArray(),
         recoveredCacheIds = scenarioState.RecoveredCacheIds.Order(StringComparer.Ordinal).ToArray(),
         traversableConnections = scenarioConnections.Where(connection => scenarioState.Topology.CanTraverse(connection.Id)).Select(connection => connection.Id).ToArray(),
+        objectives = evaluation.Objectives,
+        allObjectivesComplete = evaluation.AllObjectivesComplete,
+        selectedOutcome = evaluation.SelectedOutcome,
         stateDigest
     };
     await File.WriteAllTextAsync(Path.Combine(outputDirectory, "scenario-replay.json"),
         JsonSerializer.Serialize(replayProof, jsonOptions));
+    Console.WriteLine($"Lantern Vault objectives: {evaluation.Objectives.Count(item => item.IsComplete)}/{evaluation.Objectives.Count} complete; outcome: {evaluation.SelectedOutcome?.Id ?? "none"}");
     Console.WriteLine($"Lantern Vault replay: {scenarioState.CommandLog.Count} commands; state digest: {stateDigest}");
 }
 
