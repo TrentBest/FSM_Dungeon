@@ -106,7 +106,7 @@ A treasure object or cache can have:
 - condition, quantity, and provenance;
 - consequences when removed, traded, consumed, or destroyed.
 
-HeroQuest-like traps, secret doors, treasure chests, keys, pressure plates, falling blocks, darts, pits, and hidden passages are useful concept references for interactions—not a fixed template library or a limit on the system. Each should be expressible as an original content definition and composed into a world for a reason.
+Classic tabletop dungeon-adventure conventions—secret doors, treasure caches, keys, pressure plates, falling blocks, darts, pits, and hidden passages—are broad interaction concepts, not a fixed template library or a limit on the system. Implementations must use independently authored rules, names, layouts, scenarios, and assets. Each should be expressible as an original content definition and composed into a world for a reason.
 
 ## 6. Causal explanation and events
 
