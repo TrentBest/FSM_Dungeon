@@ -1,6 +1,9 @@
 # Elves: Peoples of the Long Memory
 
 **Library:** FSM_Dungeon Fantasy Library  
+**Sourcebook ID:** `fsm-dungeon.fantasy.elves`  
+**Edition:** 0.1.0  
+**Cover:** [Original sourcebook cover](../assets/sourcebooks/elves-cover.svg)  
 **LOD:** 1 — people and cultural framework  
 **Status:** original setting proposal; not universal fantasy canon
 
