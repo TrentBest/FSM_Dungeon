@@ -6,6 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="Scenarios\\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\\..\\src\\TheSingularityWorkshop.FSM_Dungeon\\TheSingularityWorkshop.FSM_Dungeon.csproj" />
   </ItemGroup>
 </Project>
