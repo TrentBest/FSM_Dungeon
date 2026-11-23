@@ -53,12 +53,19 @@ The existing Physics height field is a valid first exterior-surface source, but 
 | The Stonewright Quarter | Masonry, carving, structural components, repair and construction | Which materials and tools are available, and where did they come from? |
 | The Delving Works | Active and abandoned mines, shafts, spoil routes, ore seams | What is being extracted, what is depleted, and what hazards follow? |
 | The Underways | Main circulation, lifts, stairs, bridges, gates, freight routes | Which routes are open and traversable by this actor? |
+| The Refuge Network | Civil refuge chambers, protected stores, emergency exits, service connections, and hardened civic spaces | Which shelters remain accessible, supplied, ventilated, and connected when ordinary routes fail? |
 | The Deep Reservoir | Cisterns, channels, aquifer access, drainage and water control | What are the water sources, capacities, outlets and downstream consequences? |
 | The Root Halls | Older natural caverns incorporated into the fortress | Which features predate dwarven construction? |
 | The Ancestor Vaults | Memorial and burial architecture, records and protected chambers | What is preserved, who has access, and what is known? |
 | The Lower Dark | Sealed, abandoned, dangerous or unexplored depths | What evidence exists, and what remains unknown? |
 
 District names are working names. They should become stable identities only when the scenario catalogue is formalized.
+
+## Bunkers and civil shelters
+
+The fortress includes a connected refuge network rather than one generic 'bunker room'. Dungeon owns each facility's spatial composition, constructed history, entrances, barriers, service topology, occupancy facts, and recorded condition. Physics owns structural and environmental calculations. raWWar owns military fortification doctrine and operational use; SURPS owns the people and organizations. Civil refuge facilities remain useful to the wider settlement and are not automatically military assets.
+
+The reusable facility contract is defined in [Underground Fortifications, Bunkers, and Civil Shelters](FORTIFICATIONS_AND_SHELTERS.md). It distinguishes authored design assumptions, observed condition, modeled physical results, and unknowns. No shelter is presumed safe or survivable from its name or visual appearance.
 
 ## Construction is history, not decoration
 
