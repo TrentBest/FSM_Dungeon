@@ -58,7 +58,7 @@ def main() -> int:
             fail(path, f"duplicate sourcebook id: {source_id}")
         seen_ids.add(source_id)
 
-        if not isinstance(data["lod"], int) or data["lod"] < 0:
+        if type(data["lod"]) is not int or data["lod"] < 0:
             fail(path, "lod must be a non-negative integer")
         if not isinstance(data["edition"], str) or not data["edition"].strip():
             fail(path, "edition must be a non-empty string")
@@ -69,6 +69,13 @@ def main() -> int:
         source_path = (ROOT / source).resolve()
         if ROOT not in source_path.parents or not source_path.is_file():
             fail(path, f"source file does not exist inside repository: {source}")
+        source_heading = next(
+            (line[2:].strip() for line in source_path.read_text(encoding="utf-8").splitlines()
+             if line.startswith("# ")),
+            None,
+        )
+        if source_heading != data["title"]:
+            fail(path, "descriptor title must match the sourcebook's canonical H1 title")
 
         for field in ("publisher", "repository", "title", "domain", "entryNamespace"):
             if not isinstance(data[field], str) or not data[field].strip():
@@ -77,6 +84,9 @@ def main() -> int:
         artwork = data["artwork"]
         if not isinstance(artwork, dict) or "cover" not in artwork or "status" not in artwork:
             fail(path, "artwork must explicitly declare cover and status")
+
+        if artwork.get("status") != "authored":
+            fail(path, "artwork.status must be authored when cover and badge assets are required")
 
         for artwork_field in ("cover", "lodBadge"):
             artwork_path = artwork.get(artwork_field)
