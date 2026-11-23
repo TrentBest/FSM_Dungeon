@@ -56,7 +56,7 @@ All names, rules text, board layouts, scenarios, characters, art, icons, audio, 
 
 ### First vertical slice
 
-The first data fixture is [The Lantern Vault](../samples/Dungeon.Proof/Scenarios/lantern-vault.json). It uses stable three-dimensional region identities, explicit feature-gated connections, SURPS-owned external actor references, observer-scoped discovery, two objective outcomes, and a replay command log. Its grid is only a presentation projection; the 3D world remains authoritative. The fixture is data-only until a host command processor is implemented.
+The first data fixture is [The Lantern Vault](../samples/Dungeon.Proof/Scenarios/lantern-vault.json). It uses stable three-dimensional region identities, explicit feature-gated connections, SURPS-owned external actor references, observer-scoped discovery, two objective outcomes, and a replay command log. Its grid is only a presentation projection; the 3D world remains authoritative. The first host-neutral command processor now exists as `DungeonScenarioState`: it validates movement against traversable spatial connections, scopes inspection knowledge per actor reference, opens adjacent crossing features, records cache recovery, and produces deterministic state digests. The JSON-to-runtime adapter and playable host remain pending.
 
 1. One original compact site with a small number of chambers and explicit passage connections.
 2. Original party definitions supplied through SURPS references.
