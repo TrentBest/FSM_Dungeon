@@ -250,5 +250,5 @@
     ],
     "expectedStateDigest": "PENDING-HOST-IMPLEMENTATION"
   },
-  "notes": "Data-only original scenario fixture. It is not yet wired to a playable host or runtime command processor."
+  "notes": "Original data-driven scenario fixture. The host-neutral execution kernel is implemented; JSON deserialization, objective/outcome resolution, and a playable host remain pending."
 }
