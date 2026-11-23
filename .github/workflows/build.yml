@@ -7,6 +7,7 @@ on:
       - "src/**"
       - "tests/**"
       - "samples/**"
+      - "scripts/validate-scenarios.py"
       - "docs/books/**"
       - "docs/experiences/**"
       - "scripts/validate-sourcebooks.py"
@@ -35,6 +36,8 @@ jobs:
         run: python3 scripts/validate-sourcebooks.py
       - name: Validate reusable game experience manifests
         run: python3 scripts/validate-experiences.py
+      - name: Validate data-driven scenario fixtures
+        run: python3 scripts/validate-scenarios.py
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
