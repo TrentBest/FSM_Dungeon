@@ -7,7 +7,27 @@
   "version": "0.1.0",
   "familyId": "ruins-and-lost-places",
   "cover": "docs/assets/sourcebooks/ruins-and-lost-places-cover.svg",
-  "lodBadge": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/development/docs/assets/rulebook-lod-1.svg",
+  "lodBadge": {
+    "source": "docs/assets/sourcebooks/lod-1-place-framework.svg",
+    "label": "LOD 1 — Domain Detail"
+  },
   "publisher": "The Singularity Workshop",
-  "publisherMoniker": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg"
+  "publisherMoniker": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg",
+  "repository": "https://github.com/TrentBest/FSM_Dungeon",
+  "source": "docs/books/ruins-and-lost-places.md",
+  "domain": "Ruins and Lost Places",
+  "edition": "0.1.0",
+  "status": "draft",
+  "entryNamespace": "dungeon.place.ruin",
+  "ownership": {
+    "spatialTopologyAndEnvironmentalStructure": "FSM_Dungeon",
+    "physicalSubstrateAndCalculations": "TheSingularityWorkshop.Physics",
+    "inhabitantsAndOntology": "SingularityUniversalRoleplayingSystem",
+    "campaignContinuity": "StoryBuilder"
+  },
+  "artwork": {
+    "cover": "docs/assets/sourcebooks/ruins-and-lost-places-cover.svg",
+    "lodBadge": "docs/assets/sourcebooks/lod-1-place-framework.svg",
+    "status": "authored"
+  }
 }
