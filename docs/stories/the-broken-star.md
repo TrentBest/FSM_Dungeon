@@ -69,6 +69,10 @@ None of these outcomes is mandatory. Player choices may create a different adven
 - **The Price of the Pass:** resolve competing claims over access, safety, trade, and resource extraction.
 - **The Last Light:** decide the fate of the fragments after enough evidence has accumulated.
 
+## Opening adventure packet
+
+The companion [The Pass That Went Quiet](./the-pass-that-went-quiet.md) packet expands the opening into a playable set of scenes, two quests, clue handling, optional dragon/elf/ruin modules, and consequence pressures. It remains a preparation asset; the campaign's actual sequence and outcomes belong to StoryBuilder.
+
 ## StoryBuilder data model mapping
 
 When authored in StoryBuilder, use the existing story domain for characters, places, scenes, story events, timeline records, claims, sources, observer knowledge, manuscripts, and publication editions. The campaign-builder target should add typed campaign references for:
