@@ -222,3 +222,96 @@ foreach (var world in worlds)
 Console.WriteLine($"Geology proof: {geology.Topology.Regions.Count} regions; {geology.Profiles.Count} profiles; {geology.Occurrences.Count} material occurrences");
 Console.WriteLine($"Hydraulic proof: {hydraulicSnapshots.Length} ticks; final stored water: {hydraulicSnapshots[^1].Chambers.Sum(chamber => chamber.WaterVolumeCubicMeters):F3} m3; overflow: {hydraulicSnapshots[^1].CumulativeOverflowVolumeCubicMeters:F3} m3");
 Console.WriteLine($"Wrote proof data to: {outputDirectory}");
+
+// Replay the original Lantern Vault fixture through the host-neutral domain state.
+// The JSON file is copied beside the executable by the project file; the grid projection is never used here.
+var scenarioPath = Path.Combine(AppContext.BaseDirectory, "Scenarios", "lantern-vault.json");
+using (var scenarioDocument = JsonDocument.Parse(await File.ReadAllTextAsync(scenarioPath)))
+{
+    var scenario = scenarioDocument.RootElement;
+    var scenarioRegions = scenario.GetProperty("regions").EnumerateArray().Select(region =>
+    {
+        var origin = region.GetProperty("origin");
+        var extent = region.GetProperty("extent");
+        return new SpatialRegion(
+            region.GetProperty("id").GetString()!,
+            region.GetProperty("name").GetString()!,
+            new SpatialPoint3(origin.GetProperty("x").GetDouble(), origin.GetProperty("y").GetDouble(), origin.GetProperty("z").GetDouble()),
+            new SpatialExtent3(extent.GetProperty("width").GetDouble(), extent.GetProperty("height").GetDouble(), extent.GetProperty("depth").GetDouble()),
+            region.GetProperty("floorElevation").GetDouble(),
+            region.GetProperty("formationReason").GetString()!);
+    }).ToArray();
+    var scenarioFeatures = scenario.GetProperty("features").EnumerateArray().Select(feature =>
+        new SpatialFeature(
+            feature.GetProperty("id").GetString()!,
+            feature.GetProperty("kind").GetString()!,
+            feature.GetProperty("name").GetString()!,
+            feature.GetProperty("regionId").ValueKind == JsonValueKind.Null ? null : feature.GetProperty("regionId").GetString(),
+            feature.GetProperty("isOperational").GetBoolean(),
+            feature.GetProperty("formationReason").GetString()!)).ToArray();
+    var scenarioConnections = scenario.GetProperty("connections").EnumerateArray().Select(connection =>
+        new SpatialConnection(
+            connection.GetProperty("id").GetString()!,
+            connection.GetProperty("fromRegionId").GetString()!,
+            connection.GetProperty("toRegionId").GetString()!,
+            connection.GetProperty("traversalMode").GetString()!,
+            connection.TryGetProperty("requiredFeatureId", out var requiredFeature) ? requiredFeature.GetString() : null)).ToArray();
+    var scenarioActors = scenario.GetProperty("actorReferences").EnumerateArray().Select(actor =>
+        new DungeonScenarioActorReference(
+            actor.GetProperty("id").GetString()!,
+            actor.GetProperty("externalIdentity").GetString()!,
+            actor.GetProperty("initialRegionId").GetString()!)).ToArray();
+    var cacheElement = scenario.GetProperty("cache");
+    var scenarioCaches = new[]
+    {
+        new DungeonScenarioCache(
+            cacheElement.GetProperty("id").GetString()!,
+            cacheElement.GetProperty("regionId").GetString()!,
+            cacheElement.GetProperty("contentReference").GetString()!,
+            cacheElement.GetProperty("placementReason").GetString()!)
+    };
+
+    var scenarioState = new DungeonScenarioState(
+        new SpatialTopology(scenarioRegions, scenarioFeatures, scenarioConnections),
+        scenarioActors,
+        scenarioCaches);
+    var replayCommands = scenario.GetProperty("replay").GetProperty("commandLog");
+    foreach (var command in replayCommands.EnumerateArray())
+    {
+        var targetId = command.TryGetProperty("targetRegionId", out var targetRegion)
+            ? targetRegion.GetString()!
+            : command.GetProperty("targetId").GetString()!;
+        scenarioState = scenarioState.Apply(new DungeonScenarioCommand(
+            command.GetProperty("sequence").GetInt64(),
+            command.GetProperty("actorReferenceId").GetString()!,
+            Enum.Parse<DungeonScenarioCommandKind>(command.GetProperty("command").GetString()!, true),
+            targetId));
+    }
+
+    var stateDigest = scenarioState.ComputeStateDigest();
+    var expectedDigest = scenario.GetProperty("replay").GetProperty("expectedStateDigest").GetString()!;
+    if (!expectedDigest.StartsWith("PENDING", StringComparison.Ordinal)
+        && !string.Equals(expectedDigest, stateDigest, StringComparison.Ordinal))
+        throw new InvalidOperationException($"Lantern Vault replay digest mismatch. Expected {expectedDigest}; actual {stateDigest}.");
+
+    var replayProof = new
+    {
+        scenarioId = scenario.GetProperty("id").GetString(),
+        title = scenario.GetProperty("title").GetString(),
+        commandCount = scenarioState.CommandLog.Count,
+        actors = scenarioActors.Select(actor => new
+        {
+            actorReferenceId = actor.Id,
+            regionId = scenarioState.GetActorRegion(actor.Id),
+            knownRegions = scenarioRegions.Where(region => scenarioState.KnowsRegion(actor.Id, region.Id)).Select(region => region.Id).ToArray(),
+            knownFeatures = scenarioFeatures.Where(feature => scenarioState.KnowsFeature(actor.Id, feature.Id)).Select(feature => feature.Id).ToArray()
+        }).ToArray(),
+        recoveredCacheIds = scenarioState.RecoveredCacheIds.Order(StringComparer.Ordinal).ToArray(),
+        traversableConnections = scenarioConnections.Where(connection => scenarioState.Topology.CanTraverse(connection.Id)).Select(connection => connection.Id).ToArray(),
+        stateDigest
+    };
+    await File.WriteAllTextAsync(Path.Combine(outputDirectory, "scenario-replay.json"),
+        JsonSerializer.Serialize(replayProof, jsonOptions));
+    Console.WriteLine($"Lantern Vault replay: {scenarioState.CommandLog.Count} commands; state digest: {stateDigest}");
+}
+
