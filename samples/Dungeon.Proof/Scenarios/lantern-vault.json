@@ -112,7 +112,7 @@
       "kind": "door",
       "name": "Iron-leaf door",
       "regionId": "region.sealed-vault",
-      "isOperational": true,
+      "isOperational": false,
       "formationReason": "Installed to secure the vault after its construction."
     },
     {
@@ -237,6 +237,12 @@
       },
       {
         "sequence": 4,
+        "actorReferenceId": "actor-reference.party",
+        "command": "move",
+        "targetRegionId": "region.sealed-vault"
+      },
+      {
+        "sequence": 5,
         "actorReferenceId": "actor-reference.party",
         "command": "recover",
         "targetId": "cache.survey-ledger"
