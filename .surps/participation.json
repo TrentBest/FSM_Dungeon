@@ -32,14 +32,5 @@
       "Five additional catalogue works do not yet have canonical per-book descriptors and distinct cover assets.",
       "The pending Underground Environments ownership claim and remaining contributor records require independent SURPS review before active admission."
     ]
-  },
-  "bookOwnershipClaims": [
-    {
-      "id": "fsm-dungeon.domain.underground-environments",
-      "claimStatus": "pending",
-      "agent": "ChatGPT GitHub agent",
-      "agentRepository": "TrentBest/FSM_Dungeon",
-      "note": "Pending independent SURPS review; this agent does not approve its own ownership claim."
-    }
-  ]
+  }
 }
