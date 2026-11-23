@@ -110,7 +110,7 @@ The first scenario execution surface is `DungeonScenarioState`. It is an immutab
 - Commands use contiguous, one-based sequence numbers. Each successful command returns a new state; rejected commands leave the prior snapshot unchanged.
 - `ComputeStateDigest` hashes a canonical ordering of topology, actor placement, observer knowledge, recovered caches, and the command log to support deterministic replay comparisons.
 
-This is a deliberately bounded execution kernel, not a complete game rules engine. It does not yet resolve the fixture's objective/outcome language, implement combat or trap effects, simulate actor decisions, or deserialize arbitrary scenario JSON into runtime objects. Those belong in later, separately validated layers. The grid in a scenario remains a presentation projection only.
+This is a deliberately bounded execution kernel, not a complete game rules engine. `DungeonScenarioEvaluator` evaluates explicit cache-recovery and connection-traversability predicates without mutating the world snapshot. Outcome candidates require all declared objective predicates; the most specific matching candidate wins, with declaration order as a deterministic tie-breaker. The sample host deserializes the fixture, replays commands, evaluates objectives, selects the outcome, and emits a machine-readable proof. Combat, trap effects, actor decision-making, and a general-purpose scenario schema remain separate future layers. The grid in a scenario remains a presentation projection only.
 
 
 ## AI: understanding and authoring through contracts
