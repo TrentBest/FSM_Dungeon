@@ -99,8 +99,10 @@ def main() -> int:
                 fail(path, f"artwork.{artwork_field} must use a supported image format")
 
         badge = data.get("lodBadge")
-        if not isinstance(badge, dict) or badge.get("source") != artwork.get("lodBadge"):
-            fail(path, "lodBadge.source must match the descriptor artwork")
+        if not isinstance(badge, dict) or badge.get("asset") != artwork.get("lodBadge"):
+            fail(path, "lodBadge.asset must match the committed descriptor artwork")
+        if not isinstance(badge.get("source"), str) or not badge["source"].startswith("https://"):
+            fail(path, "lodBadge.source must reference the canonical external LOD artwork")
         if badge.get("label") != f"LOD {data['lod']} — Domain Detail":
             fail(path, "lodBadge.label must match the descriptor LOD and domain-detail label")
 
