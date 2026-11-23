@@ -98,6 +98,21 @@ Environmental simulation should support multiple levels of fidelity:
 
 Actor cognition, roles, social organization, intentions, decision-making, and behavioral fidelity are SURPS responsibilities. Movement execution, perception, communication, and physical interaction may be supplied by other capabilities. FSM_Dungeon exposes the environmental facts and validated effects those systems need; it does not silently implement their behavior. Environmental simulation policy and rendering policy are related but not identical.
 
+### Host-neutral scenario execution
+
+The first scenario execution surface is `DungeonScenarioState`. It is an immutable snapshot layered over the existing `SpatialTopology`; it does not replace or reinterpret the authoritative 3D geometry.
+
+- External actors enter through opaque `DungeonScenarioActorReference` records. The domain stores identity references and spatial placement only; SURPS remains the owner of actor ontology and behavior.
+- `Move` requires a direct spatial connection and a currently traversable crossing feature. A closed door or unavailable bridge blocks movement without deleting adjacency or regions.
+- `Inspect` records feature knowledge for the acting observer only. One actor's discoveries do not automatically become another actor's knowledge.
+- `Interact` can make a local feature or a feature on an adjacent crossing operational, allowing a host to express opening a door without changing spatial geometry.
+- `Recover` records a cache recovery only when the actor occupies the cache's authoritative region.
+- Commands use contiguous, one-based sequence numbers. Each successful command returns a new state; rejected commands leave the prior snapshot unchanged.
+- `ComputeStateDigest` hashes a canonical ordering of topology, actor placement, observer knowledge, recovered caches, and the command log to support deterministic replay comparisons.
+
+This is a deliberately bounded execution kernel, not a complete game rules engine. It does not yet resolve the fixture's objective/outcome language, implement combat or trap effects, simulate actor decisions, or deserialize arbitrary scenario JSON into runtime objects. Those belong in later, separately validated layers. The grid in a scenario remains a presentation projection only.
+
+
 ## AI: understanding and authoring through contracts
 
 AI is an adapter and participant, not the owner of world truth.
