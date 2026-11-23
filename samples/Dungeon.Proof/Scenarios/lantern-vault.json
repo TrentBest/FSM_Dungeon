@@ -248,7 +248,7 @@
         "targetId": "cache.survey-ledger"
       }
     ],
-    "expectedStateDigest": "PENDING-HOST-IMPLEMENTATION"
+    "expectedStateDigest": "c684f0ad41d6d255f854187483472e38dc0fa5b29173987fc5ecbd3254e3a0bc"
   },
   "notes": "Original data-driven scenario fixture. The sample host deserializes and replays its command log through the host-neutral execution kernel; objective/outcome resolution and a playable host remain pending."
 }
