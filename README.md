@@ -59,6 +59,9 @@ The first deterministic domain slice now generates two contrasting places throug
 - a six-tick sewer hydraulic proof serialized as `hydraulic.json` alongside the generated worlds;
 - engine-independent 3D spatial regions, chasm/bridge/ladder features, and immutable traversal-state snapshots;
 - host-neutral scenario command execution for movement, inspection, feature interaction, cache recovery, observer-scoped knowledge, and deterministic state digests;
+- deterministic objective evaluation for recovered caches and traversable routes, plus most-specific outcome selection with stable declaration-order tie-breaking;
+- an executable Lantern Vault proof that replays five commands, completes both objectives, selects `outcome.route-restored`, and emits a pinned SHA-256 state digest;
+- Pages presentation of per-objective completion, the selected outcome, and the replay digest;
 - an original Lantern Vault scenario fixture whose closed-door interaction and movement sequence is now spatially executable;
 - an interactive Pages cavern proof where destroying the bridge closes only that crossing while the ledges, chasm, and vertical ladder route remain;
 - chamber formation, history, and purpose provenance;
@@ -73,7 +76,7 @@ The [Dwarven Mountain Fortress scenario](docs/DWARVEN_MOUNTAIN_FORTRESS.md) is t
 
 ## 5. Project status
 
-**Status: Domain foundation and first host-neutral scenario execution slice implemented; first playable loop not yet complete.** The current generator and scenario state prove deterministic structure, validated commands, and causal metadata, not yet autonomous inhabitant simulation, combat, loot, or high-definition rendering.
+**Status: Domain foundation and deterministic scenario execution/objective-resolution slice implemented; first playable loop not yet complete.** The current generator and scenario state prove deterministic structure, validated commands, and causal metadata, not yet autonomous inhabitant simulation, combat, loot, or high-definition rendering.
 
 - [GitHub Pages proof](https://trentbest.github.io/FSM_Dungeon/) — deployment is pending the environment rule noted above.
 - [Architecture and integration plan](docs/ARCHITECTURE.md)
