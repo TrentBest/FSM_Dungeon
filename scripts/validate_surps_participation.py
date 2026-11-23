@@ -130,11 +130,11 @@ def main() -> int:
             "TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/"
             f"development/docs/assets/rulebook-lod-{entry.get('lod')}.svg"
         )
-        if not isinstance(badge, str) or badge != expected_badge:
-            fail(errors, f"{entry['descriptorPath']}: lodBadge must use the canonical SURPS LOD {entry.get('lod')} asset URL")
         artwork = descriptor.get("artwork")
-        if isinstance(artwork, dict) and artwork.get("lodBadge") not in (None, badge):
-            fail(errors, f"{entry['descriptorPath']}: artwork.lodBadge differs from canonical lodBadge")
+        if not isinstance(badge, dict) or badge.get("source") != expected_badge:
+            fail(errors, f"{entry['descriptorPath']}: lodBadge.source must use the canonical SURPS LOD {entry.get('lod')} asset URL")
+        if isinstance(artwork, dict) and artwork.get("lodBadge") != badge.get("asset"):
+            fail(errors, f"{entry['descriptorPath']}: artwork.lodBadge must match the committed lodBadge.asset")
 
         for path, field in ((cover_path, "cover"),):
             if path is not None and path.suffix.lower() != ".svg":
