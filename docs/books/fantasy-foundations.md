@@ -1,6 +1,9 @@
 # Fantasy Foundations
 
 **Library:** FSM_Dungeon Fantasy Library  
+**Sourcebook ID:** `fsm-dungeon.fantasy.fantasy-foundations`  
+**Edition:** 0.1.0  
+**Cover:** [Original sourcebook cover](../assets/sourcebooks/fantasy-foundations-cover.svg)  
 **LOD:** 1 — general framework  
 **Status:** authored foundation; deliberately system-neutral
 
