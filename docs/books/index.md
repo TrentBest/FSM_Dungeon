@@ -48,10 +48,6 @@ Higher LOD adds detail; it does not retroactively make every lower-LOD observer 
 - [Ruins and Lost Places](ruins-and-lost-places.md) — a causal framework for abandoned, repurposed, buried, and partially active sites. [Descriptor](ruins-and-lost-places.book.json) · [Original cover](../assets/sourcebooks/ruins-and-lost-places-cover.svg).
 - [Underground Environments: Formation, Space, and Consequence](underground-environments.md) — the LOD 2 domain sourcebook for subterranean origin, 3D topology, substrate handoff, provenance, environmental state, hazards, and resources. [Canonical machine-readable descriptor](underground-environments.book.json) · [Original cover](../assets/sourcebooks/underground-environments-cover.svg) · [LOD 2 badge](../assets/sourcebooks/lod-2-domain-detail.svg).
 
-
-
-The canonical descriptor is `underground-environments.book.json`. The former `underground-environments.json` descriptor has been superseded; the central SURPS registry records this book as Dungeon-owned with an ownership claim pending independent review. This does not enroll the repository or make the claim accepted.
-
 ### Story seeds
 - [The Broken Star](../stories/the-broken-star.md) — an original, system-neutral fantasy campaign seed designed to be expanded in StoryBuilder.
 - [The Pass That Went Quiet](../stories/the-pass-that-went-quiet.md) — a playable opening adventure packet with branching scenes, quests, clues, and optional modules.
