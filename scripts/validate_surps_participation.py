@@ -125,17 +125,16 @@ def main() -> int:
             fail(errors, f"{entry['descriptorPath']}: cover must match coverPath")
 
         badge = descriptor.get("lodBadge")
-        if not isinstance(badge, dict):
-            fail(errors, f"{entry['descriptorPath']}: lodBadge must declare source and label")
-        else:
-            badge_path = safe_file(badge.get("source"), f"{entry['descriptorPath']}.lodBadge.source", errors)
-            if not isinstance(badge.get("label"), str) or not badge["label"].strip():
-                fail(errors, f"{entry['descriptorPath']}: lodBadge.label must be non-empty")
-            artwork = descriptor.get("artwork")
-            if isinstance(artwork, dict) and artwork.get("lodBadge") != badge.get("source"):
-                fail(errors, f"{entry['descriptorPath']}: artwork.lodBadge differs from lodBadge.source")
-            if badge_path is not None and badge_path.suffix.lower() != ".svg":
-                fail(errors, f"{entry['descriptorPath']}: LOD badge must be an SVG asset")
+        expected_badge = (
+            "https://raw.githubusercontent.com/TrentBest/"
+            "TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/"
+            f"development/docs/assets/rulebook-lod-{entry.get('lod')}.svg"
+        )
+        if not isinstance(badge, str) or badge != expected_badge:
+            fail(errors, f"{entry['descriptorPath']}: lodBadge must use the canonical SURPS LOD {entry.get('lod')} asset URL")
+        artwork = descriptor.get("artwork")
+        if isinstance(artwork, dict) and artwork.get("lodBadge") not in (None, badge):
+            fail(errors, f"{entry['descriptorPath']}: artwork.lodBadge differs from canonical lodBadge")
 
         for path, field in ((cover_path, "cover"),):
             if path is not None and path.suffix.lower() != ".svg":
