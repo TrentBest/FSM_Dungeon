@@ -250,5 +250,5 @@
     ],
     "expectedStateDigest": "PENDING-HOST-IMPLEMENTATION"
   },
-  "notes": "Original data-driven scenario fixture. The host-neutral execution kernel is implemented; JSON deserialization, objective/outcome resolution, and a playable host remain pending."
+  "notes": "Original data-driven scenario fixture. The sample host deserializes and replays its command log through the host-neutral execution kernel; objective/outcome resolution and a playable host remain pending."
 }
