@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" role="img" aria-labelledby="title desc">
+  <title id="title">Underground Environments: Formation, Space, and Consequence</title>
+  <desc id="desc">An original cutaway illustration of a mountain revealing natural caverns, a watercourse, worked galleries, and a deep vertical fissure.</desc>
+  <defs>
+    <linearGradient id="bg" x2="0" y2="1"><stop stop-color="#17232b"/><stop offset="1" stop-color="#080e13"/></linearGradient>
+    <linearGradient id="rock" x2="1" y2="1"><stop stop-color="#9b8061"/><stop offset=".48" stop-color="#514a43"/><stop offset="1" stop-color="#242d31"/></linearGradient>
+    <linearGradient id="water" x2="0" y2="1"><stop stop-color="#7bb8c4"/><stop offset="1" stop-color="#245d71"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="18"/></filter>
+  </defs>
+  <rect width="1200" height="1600" fill="url(#bg)"/>
+  <path d="M0 575 170 390 300 450 485 180 630 360 790 235 990 420 1200 330V1600H0Z" fill="url(#rock)" stroke="#c2a17a" stroke-width="8"/>
+  <path d="M0 575 170 390 300 450 485 180 630 360 790 235 990 420 1200 330" fill="none" stroke="#d6b58c" stroke-width="12"/>
+  <path d="M90 620 Q220 540 330 650 Q410 770 520 685 Q620 590 720 700 Q830 805 940 690 Q1060 600 1150 710" fill="none" stroke="#111a20" stroke-width="120" stroke-linecap="round"/>
+  <path d="M95 620 Q220 540 330 650 Q410 770 520 685 Q620 590 720 700 Q830 805 940 690 Q1060 600 1150 710" fill="none" stroke="#b18b5f" stroke-width="5" stroke-dasharray="14 18"/>
+  <path d="M520 690 565 1080 630 1250 680 1080 720 700" fill="#080d12" stroke="#d0a879" stroke-width="9"/>
+  <path d="M0 1080 Q170 990 320 1080 T640 1080 T960 1080 T1200 1060" fill="none" stroke="url(#water)" stroke-width="24"/>
+  <path d="M165 1130 Q300 1050 430 1130 T690 1130" fill="none" stroke="#6eaab8" stroke-width="10"/>
+  <g fill="#d4a66d" opacity=".8"><circle cx="360" cy="650" r="12"/><circle cx="380" cy="665" r="8"/><circle cx="840" cy="705" r="11"/><circle cx="860" cy="720" r="7"/></g>
+  <g stroke="#d9b88e" stroke-width="8" fill="none"><path d="M250 900h220v100H250zM275 900v-65h170v65M760 900h240v115H760zM790 900v-65h180v65"/></g>
+  <g fill="#e7c38f" opacity=".22" filter="url(#glow)"><circle cx="355" cy="875" r="70"/><circle cx="880" cy="875" r="70"/></g>
+  <g fill="#f0d4aa"><circle cx="355" cy="875" r="13"/><circle cx="880" cy="875" r="13"/></g>
+  <path d="M90 1320H1110" stroke="#b18b5f" stroke-width="3" opacity=".8"/>
+  <text x="90" y="1390" fill="#e6c69a" font-family="Georgia,serif" font-size="28" letter-spacing="8">THE SINGULARITY WORKSHOP</text>
+  <text x="90" y="1465" fill="#f2eee6" font-family="Georgia,serif" font-size="56">UNDERGROUND ENVIRONMENTS</text>
+  <text x="90" y="1525" fill="#b9c2c5" font-family="Georgia,serif" font-size="28">Formation · Space · Consequence</text>
+</svg>
