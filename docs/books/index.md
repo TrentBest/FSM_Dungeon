@@ -6,6 +6,10 @@ FSM_Dungeon is the Workshop home for fantasy-world content that benefits from a 
 
 The library is designed to compose with SURPS and StoryBuilder rather than duplicate either.
 
+## SURPS participation
+
+**Repository status:** integrated, not enrolled. The local declaration is [`.surps/participation.json`](../../.surps/participation.json). FSM_Dungeon contributes underground-environment knowledge to SURPS-owned [Dungeons and Underground](https://github.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/blob/development/docs/books/dungeons-and-underground.md) and [Dwarven Strongholds](https://github.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/blob/development/docs/books/dwarven-mountain-fortress.md); it does not own SURPS ontology, inhabitant behavior, or campaign continuity. This library is not yet an enrolled set of SURPS-registered Dungeon-owned books. Canonical enrollment and book identity follow the [SURPS repository participation standard](https://github.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/blob/development/docs/repository-participation.md) and [central rulebook map](https://github.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/blob/development/docs/rulebook-backlog/index.md). Do not treat local titles or provisional IDs as accepted central registrations.
+
 ## How the library composes
 
 | Layer | What it contributes | Owner |
