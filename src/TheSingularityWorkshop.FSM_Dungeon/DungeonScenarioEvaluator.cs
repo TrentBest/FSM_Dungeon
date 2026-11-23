@@ -73,17 +73,24 @@ public static class DungeonScenarioEvaluator
 
         var completed = results.Where(item => item.IsComplete)
             .Select(item => item.ObjectiveId).ToHashSet(StringComparer.Ordinal);
-        var matchingOutcomes = outcomeList
-            .Select((outcome, index) => new
-            {
-                Outcome = outcome,
-                Index = index,
-                Conditions = outcome.When ?? throw new ArgumentException(
-                    $"Outcome '{outcome.Id}' must provide a condition list.", nameof(outcomes))
-            })
-            .Where(item => !string.IsNullOrWhiteSpace(item.Outcome.Result)
-                && item.Conditions.Count > 0
-                && item.Conditions.All(condition => EvaluateOutcomeCondition(condition, completed, objectiveIds)))
+        // Validate every candidate before matching any candidate. A false early predicate must
+        // never hide a malformed later predicate through LINQ's short-circuiting All().
+        var validatedOutcomes = outcomeList.Select((outcome, index) =>
+        {
+            if (string.IsNullOrWhiteSpace(outcome.Result))
+                throw new ArgumentException($"Outcome '{outcome.Id}' requires a result description.", nameof(outcomes));
+            var conditions = outcome.When ?? throw new ArgumentException(
+                $"Outcome '{outcome.Id}' must provide a condition list.", nameof(outcomes));
+            if (conditions.Count == 0)
+                throw new ArgumentException($"Outcome '{outcome.Id}' must provide at least one condition.", nameof(outcomes));
+            foreach (var condition in conditions)
+                _ = EvaluateOutcomeCondition(condition, completed, objectiveIds);
+            return new { Outcome = outcome, Index = index, Conditions = conditions };
+        }).ToArray();
+
+        var matchingOutcomes = validatedOutcomes
+            .Where(item => item.Conditions.All(condition =>
+                EvaluateOutcomeCondition(condition, completed, objectiveIds)))
             .OrderByDescending(item => item.Conditions.Count)
             .ThenBy(item => item.Index)
             .ToArray();
