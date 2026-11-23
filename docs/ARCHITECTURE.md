@@ -2,7 +2,7 @@
 
 ## Purpose
 
-FSM_Dungeon is an engine-independent, deterministic world and dungeon simulation library. It is also the foundation for an original isometric action-RPG proof inspired by the *kind* of experience established by the original Diablo: sanctuary, descent, exploration, real-time danger, rewards, growth, and return.
+FSM_Dungeon is an engine-independent, deterministic world and dungeon simulation library. It is a shared domain consumed by independently authored experiences with different rules and presentation models; no single game's genre, progression, or interaction loop defines the library.
 
 This is a systems and gameplay benchmark, not a content remake. All code, worldbuilding, characters, maps, art, audio, names, and writing created for the Workshop must be original.
 
@@ -149,20 +149,18 @@ Browser, desktop, VR, or other display
 
 A low-cost representation might show room outlines, labels, faction presence, and routes. A higher-cost representation can add geometry, materials, lighting, animation, and effects. The world remains the same; only the observer's representation budget changes.
 
-## First playable proof
+## First proof sequence
 
-The initial vertical slice should prove the whole causal loop without attempting the entire game:
+The first proof is a data-driven environment consumed by more than one experience, not a single game's combat or progression loop:
 
-1. A small original sanctuary/town with a discoverable entrance.
-2. A deterministic multi-room dungeon generated from a recorded origin, purpose, history, and seed.
-3. At least two SURPS-defined populations or roles situated in the environment, with Dungeon proving their spatial presence and environmental interactions.
-4. A controllable player with exploration, real-time combat, health, and a death/return loop.
-5. Original loot and persistent character progression.
-6. A complete descent, encounter, reward, and return cycle.
-7. Tests for determinism, connectivity, provenance, inhabitant purpose, command validation, and simulation invariants.
-8. A Pages proof that can inspect the generated world and explain why its parts exist.
+1. A compact original site represented by authoritative three-dimensional regions, features, and connections.
+2. A presentation projection (such as a tabletop grid) that references stable world identities without replacing world geometry.
+3. Observer-scoped discovery distinct from authoritative world truth.
+4. External SURPS actor references placed in valid regions without importing actor ontology into Dungeon.
+5. A scenario fixture with explicit objectives, meaningful alternative outcomes, and a deterministic command log.
+6. A second consumer that can reuse the same environment contracts for construction and settlement simulation.
 
-The first proof may use a simple 2D/isometric presentation. It must not block the domain on the eventual high-definition renderer.
+The first authored fixture is [The Lantern Vault](../samples/Dungeon.Proof/Scenarios/lantern-vault.json). It is data-only and does not claim to be a playable host implementation.
 
 ## Delivery sequence
 
@@ -177,7 +175,7 @@ The first proof may use a simple 2D/isometric presentation. It must not block th
 
 ## Non-goals and guardrails
 
-- No copied Diablo code, art, audio, maps, dialogue, characters, or other protected expression.
+- No copied third-party code, art, audio, maps, dialogue, characters, or other protected expression.
 - No mandatory game engine or graphics API in the domain package.
 - No mandatory WebApp or ServerApp dependency.
 - No model output directly applying privileged commands.
