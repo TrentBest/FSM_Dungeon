@@ -35,17 +35,17 @@ Higher LOD adds detail; it does not retroactively make every lower-LOD observer 
 ## Books
 
 ### Foundations
-- [Fantasy Foundations](fantasy-foundations.md) — a system-neutral framework for building coherent fantasy worlds, their peoples, environments, magic, histories, and conflicts.
+- [Fantasy Foundations](fantasy-foundations.md) — a system-neutral framework for building coherent fantasy worlds, their peoples, environments, magic, histories, and conflicts. [Descriptor](fantasy-foundations.book.json) · [Original cover](../assets/sourcebooks/fantasy-foundations-cover.svg).
 
 ### Peoples
-- [Elves: Peoples of the Long Memory](elves.md) — an original people sourcebook covering variation, communities, history, relationships, and a campaign-ready storyline seed.
+- [Elves: Peoples of the Long Memory](elves.md) — an original people sourcebook covering variation, communities, history, relationships, and a campaign-ready storyline seed. [Descriptor](elves.book.json) · [Original cover](../assets/sourcebooks/elves-cover.svg).
 
 ### Bestiary
-- [The Living Bestiary](bestiary.md) — an ecological and narrative framework for creatures, populations, habitats, lairs, signs, encounters, and coexistence.
-- [Dragons and Wyrms: Ecology of the Elder Sky](dragons-and-wyrms.md) — draconic lineages, habitats, life histories, intelligence, hoards, and relationships without assuming one universal dragon.
+- [The Living Bestiary](bestiary.md) — an ecological and narrative framework for creatures, populations, habitats, lairs, signs, encounters, and coexistence. [Descriptor](living-bestiary.book.json) · [Original cover](../assets/sourcebooks/living-bestiary-cover.svg).
+- [Dragons and Wyrms: Ecology of the Elder Sky](dragons-and-wyrms.md) — draconic lineages, habitats, life histories, intelligence, hoards, and relationships without assuming one universal dragon. [Descriptor](dragons-and-wyrms.book.json) · [Original cover](../assets/sourcebooks/dragons-and-wyrms-cover.svg).
 
 ### Places and history
-- [Ruins and Lost Places](ruins-and-lost-places.md) — a causal framework for abandoned, repurposed, buried, and partially active sites.
+- [Ruins and Lost Places](ruins-and-lost-places.md) — a causal framework for abandoned, repurposed, buried, and partially active sites. [Descriptor](ruins-and-lost-places.book.json) · [Original cover](../assets/sourcebooks/ruins-and-lost-places-cover.svg).
 - [Underground Environments: Formation, Space, and Consequence](underground-environments.md) — the LOD 2 domain sourcebook for subterranean origin, 3D topology, substrate handoff, provenance, environmental state, hazards, and resources. [Canonical machine-readable descriptor](underground-environments.book.json) · [Original cover](../assets/sourcebooks/underground-environments-cover.svg) · [LOD 2 badge](../assets/sourcebooks/lod-2-domain-detail.svg).
 
 
