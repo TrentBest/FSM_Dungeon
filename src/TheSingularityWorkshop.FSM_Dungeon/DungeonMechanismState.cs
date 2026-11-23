@@ -125,7 +125,7 @@ public sealed class DungeonMechanismState
                 index + 1,
                 effect)).ToArray();
 
-        var counts = new Dictionary<string, int>(_activationCounts, StringComparer.Ordinal)
+        var counts = _activationCounts.ToDictionary(item => item.Key, item => item.Value, StringComparer.Ordinal)
         {
             [mechanism.Id] = activation
         };
