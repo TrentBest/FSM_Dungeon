@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": "1.0.0",
+  "id": "fsm-dungeon.domain.underground-environments",
+  "title": "Underground Environments: Formation, Space, and Consequence",
+  "publisher": "The Singularity Workshop",
+  "repository": "https://github.com/TrentBest/FSM_Dungeon",
+  "source": "docs/books/underground-environments.md",
+  "domain": "underground-environments",
+  "lod": 2,
+  "edition": "0.1.0",
+  "status": "authored",
+  "language": "en",
+  "entryNamespace": "dungeon.environment",
+  "ownership": {
+    "environment": "FSM_Dungeon",
+    "solidSubstrateAndPhysics": "TheSingularityWorkshop.Physics",
+    "inhabitantsAndBehavior": "SingularityUniversalRolePlayingSystem",
+    "campaignContinuity": "StoryBuilder",
+    "presentation": [
+      "TheSingularityWorkshop.Renderer",
+      "TheSingularityWorkshop.Visualize"
+    ]
+  },
+  "covers": {
+    "naturalCaves": true,
+    "excavations": true,
+    "constructedUndergroundSpaces": true,
+    "threeDimensionalTopology": true,
+    "environmentalState": true,
+    "provenance": true,
+    "resourcesAndHazards": true,
+    "substrateHandoff": true
+  },
+  "artwork": {
+    "cover": null,
+    "status": "not-yet-authored"
+  },
+  "relatedScenarios": [
+    {
+      "id": "fsm-dungeon.scenario.dwarven-mountain-fortress",
+      "title": "The Dwarven Mountain Fortress",
+      "uri": "https://github.com/TrentBest/FSM_Dungeon/blob/development/docs/DWARVEN_MOUNTAIN_FORTRESS.md",
+      "status": "authored-schematic-target"
+    }
+  ],
+  "references": {
+    "catalogue": "docs/books/index.md",
+    "architecture": "docs/ARCHITECTURE.md",
+    "worldSimulation": "docs/WORLD_SIMULATION.md"
+  }
+}
