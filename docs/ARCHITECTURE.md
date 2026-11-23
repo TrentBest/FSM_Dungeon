@@ -254,3 +254,12 @@ The new engine-independent spatial primitives represent a region with a 3D origi
 
 The console proof serializes a cavern with two separated natural ledges, a deep fissure, a suspended bridge, and an upper gallery reached by ladder. GitHub Pages presents the before/after states interactively. This is an initial standalone spatial-topology slice: the legacy generated chamber/passage graph has not yet been replaced or automatically projected into these 3D regions. Integration with world generation and richer geometry is a subsequent step.
 
+
+
+## Deterministic mechanism activation and effect requests
+
+The first mechanism execution slice is represented by `DungeonMechanismState`. A mechanism definition binds a stable mechanism identity to an existing spatial feature and region, plus a stable trigger identity and an ordered list of effect descriptors. Trigger acceptance requires a known trigger, a known actor region, and the actor to occupy the mechanism's declared region. One-shot mechanisms reject repeat activation; repeatable mechanisms append a new activation with monotonically increasing event sequence numbers.
+
+Each emitted event preserves the trigger, opaque external actor reference, region, activation number, effect position, and declared effect descriptor. The event stream and activation counts contribute to a canonical SHA-256 digest. Replaying the same definition and trigger sequence therefore produces the same digest, while a different actor cause changes the recorded state.
+
+Effect descriptors are requests, not direct mutations. A host may route an environmental condition request to an environmental simulation, a physical consequence request to Physics, or an actor consequence request to the relevant SURPS/host adapter. FSM_Dungeon does not calculate blast pressure, structural loading, injury, health, or actor behavior. The immutable mechanism snapshot is deliberately separate from `DungeonScenarioState` at this stage; a later integration must define one authoritative combined event journal before claiming a unified scenario digest.
