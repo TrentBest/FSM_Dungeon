@@ -7,7 +7,10 @@
   "version": "0.1.0",
   "familyId": "dragons-and-wyrms",
   "cover": "docs/assets/sourcebooks/dragons-and-wyrms-cover.svg",
-  "lodBadge": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/development/docs/assets/rulebook-lod-1.svg",
+  "lodBadge": {
+    "source": "docs/assets/sourcebooks/lod-1-place-framework.svg",
+    "label": "LOD 1 — Domain Detail"
+  },
   "publisher": "The Singularity Workshop",
   "publisherMoniker": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg",
   "repository": "https://github.com/TrentBest/FSM_Dungeon",
@@ -23,7 +26,7 @@
   },
   "artwork": {
     "cover": "docs/assets/sourcebooks/dragons-and-wyrms-cover.svg",
-    "lodBadge": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/development/docs/assets/rulebook-lod-1.svg",
+    "lodBadge": "docs/assets/sourcebooks/lod-1-place-framework.svg",
     "status": "authored"
   }
 }
