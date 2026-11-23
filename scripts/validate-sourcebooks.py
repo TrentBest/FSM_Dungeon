@@ -44,6 +44,9 @@ def main() -> int:
         except (OSError, json.JSONDecodeError) as exc:
             fail(path, f"invalid JSON: {exc}")
 
+        if not isinstance(data, dict):
+            fail(path, "descriptor root must be a JSON object")
+
         missing = sorted(REQUIRED - data.keys())
         if missing:
             fail(path, f"missing required fields: {', '.join(missing)}")
@@ -74,6 +77,22 @@ def main() -> int:
         artwork = data["artwork"]
         if not isinstance(artwork, dict) or "cover" not in artwork or "status" not in artwork:
             fail(path, "artwork must explicitly declare cover and status")
+
+        for artwork_field in ("cover", "lodBadge"):
+            artwork_path = artwork.get(artwork_field)
+            if not isinstance(artwork_path, str) or not artwork_path.strip():
+                fail(path, f"artwork.{artwork_field} must reference a committed asset")
+            resolved_artwork = (ROOT / artwork_path).resolve()
+            if ROOT not in resolved_artwork.parents or not resolved_artwork.is_file():
+                fail(path, f"artwork.{artwork_field} does not exist inside repository: {artwork_path}")
+            if resolved_artwork.suffix.lower() not in {".svg", ".png", ".jpg", ".jpeg", ".webp"}:
+                fail(path, f"artwork.{artwork_field} must use a supported image format")
+
+        badge = data.get("lodBadge")
+        if not isinstance(badge, dict) or badge.get("source") != artwork.get("lodBadge"):
+            fail(path, "lodBadge.source must match the descriptor artwork")
+        if badge.get("label") != f"LOD {data['lod']} — Domain Detail":
+            fail(path, "lodBadge.label must match the descriptor LOD and domain-detail label")
 
         print(f"OK: {source_id} (LOD {data['lod']}, edition {data['edition']})")
 
