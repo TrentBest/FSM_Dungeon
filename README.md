@@ -21,7 +21,7 @@ A dungeon is not a random collection of rooms and monsters. It is a place shaped
 
 The domain should be able to explain why a chamber exists, why a passage connects it, why a group occupies it, what that group is doing, and how the place changes over time. Natural caves, excavations, constructed facilities, biological structures, machine-bored passages, ruins, and unknown origins are extensible examples—not a closed list.
 
-The NuGet package is the reusable .NET library. It is not the whole game application.
+The NuGet package is the reusable .NET library. It is not the whole game application. The same domain is intended to support several original game experiences; see [Reusable Game Experiences](docs/GAME_EXPERIENCES.md), including the tabletop-inspired **Lanternward: The Delve** and future management project **Underkingdom**.
 
 ## 2. Architecture
 
@@ -45,7 +45,7 @@ Renderer and Visualization are downstream capabilities. Hosts adapt input, persi
 
 NuGet and MicroBundles are complementary: NuGet distributes the reusable library; a MicroBundle composes it with content and optional Workshop capabilities into an experience.
 
-The Diablo reference is a gameplay/systems benchmark only. All Workshop code, characters, worldbuilding, maps, writing, art, and audio are original.
+The Diablo reference is a gameplay/systems benchmark only. The separate [game experience briefs](docs/GAME_EXPERIENCES.md) establish additional reuseability targets. All Workshop code, characters, worldbuilding, maps, writing, art, and audio are original; third-party protected expression and assets are not copied.
 
 ## 4. Development
 
