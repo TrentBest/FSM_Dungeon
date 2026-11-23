@@ -6,7 +6,10 @@
   "title": "Underground Environments: Formation, Space, and Consequence",
   "version": "0.1.0",
   "cover": "docs/assets/sourcebooks/underground-environments-cover.svg",
-  "lodBadge": "docs/assets/sourcebooks/lod-2-domain-detail.svg",
+  "lodBadge": {
+    "source": "docs/assets/sourcebooks/lod-2-domain-detail.svg",
+    "label": "LOD 2 — Domain Detail"
+  },
   "publisher": "The Singularity Workshop",
   "publisherMoniker": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg",
   "source": "docs/books/underground-environments.md",
@@ -44,5 +47,12 @@
     "architecture": "docs/ARCHITECTURE.md",
     "worldSimulation": "docs/WORLD_SIMULATION.md",
     "relatedScenario": "docs/DWARVEN_MOUNTAIN_FORTRESS.md"
+  },
+  "repository": "https://github.com/TrentBest/FSM_Dungeon",
+  "edition": "0.1.0",
+  "artwork": {
+    "cover": "docs/assets/sourcebooks/underground-environments-cover.svg",
+    "lodBadge": "docs/assets/sourcebooks/lod-2-domain-detail.svg",
+    "status": "authored"
   }
 }
