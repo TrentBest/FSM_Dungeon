@@ -45,6 +45,7 @@ Higher LOD adds detail; it does not retroactively make every lower-LOD observer 
 
 ### Story seeds
 - [The Broken Star](../stories/the-broken-star.md) — an original, system-neutral fantasy campaign seed designed to be expanded in StoryBuilder.
+- [The Pass That Went Quiet](../stories/the-pass-that-went-quiet.md) — a playable opening adventure packet with branching scenes, quests, clues, and optional modules.
 
 ## Authoring rules
 
