@@ -13,7 +13,7 @@
 
 **An engine-independent domain and simulation for places that have a reason to exist.**
 
-FSM_Dungeon is the Workshop's reusable underground-environment domain and the foundation for an original isometric action-RPG proof. The gameplay benchmark is the classic sanctuary → descent → exploration → danger → reward → return loop. Its defining responsibility is a living causal environment: spaces have origins and histories; materials, routes, resources, and hazards have context and consequences. Inhabitants obtain their ontology and behavior from SingularityUniversalRolePlayingSystem (SURPS).
+FSM_Dungeon is the Workshop's reusable underground-environment domain, shared by independently authored experiences. It does not prescribe a genre, camera, turn structure, progression loop, or player role. Its responsibility is a living causal environment: spaces have origins and histories; materials, routes, resources, and hazards have context and consequences. Inhabitants obtain their ontology and behavior from SingularityUniversalRolePlayingSystem (SURPS).
 
 ## 1. Purpose
 
@@ -45,7 +45,7 @@ Renderer and Visualization are downstream capabilities. Hosts adapt input, persi
 
 NuGet and MicroBundles are complementary: NuGet distributes the reusable library; a MicroBundle composes it with content and optional Workshop capabilities into an experience.
 
-The Diablo reference is a gameplay/systems benchmark only. The separate [game experience briefs](docs/GAME_EXPERIENCES.md) establish additional reuseability targets. All Workshop code, characters, worldbuilding, maps, writing, art, and audio are original; third-party protected expression and assets are not copied.
+The separate [game experience briefs](docs/GAME_EXPERIENCES.md) establish independent reuseability targets. All Workshop code, characters, worldbuilding, maps, writing, art, and audio are original; third-party protected expression and assets are not copied.
 
 ## 4. Development
 
@@ -58,6 +58,8 @@ The first deterministic domain slice now generates two contrasting places throug
 - a first deterministic hydraulic solver: head-driven transfers, passage capacity, blockage, inflow, and explicit overflow accounting;
 - a six-tick sewer hydraulic proof serialized as `hydraulic.json` alongside the generated worlds;
 - engine-independent 3D spatial regions, chasm/bridge/ladder features, and immutable traversal-state snapshots;
+- host-neutral scenario command execution for movement, inspection, feature interaction, cache recovery, observer-scoped knowledge, and deterministic state digests;
+- an original Lantern Vault scenario fixture whose closed-door interaction and movement sequence is now spatially executable;
 - an interactive Pages cavern proof where destroying the bridge closes only that crossing while the ledges, chasm, and vertical ladder route remain;
 - chamber formation, history, and purpose provenance;
 - structural validation and automated tests;
@@ -71,7 +73,7 @@ The [Dwarven Mountain Fortress scenario](docs/DWARVEN_MOUNTAIN_FORTRESS.md) is t
 
 ## 5. Project status
 
-**Status: Initial domain foundation implemented; first playable loop not yet complete.** The current generator proves deterministic structure and causal metadata, not yet autonomous inhabitant simulation, combat, loot, or high-definition rendering.
+**Status: Domain foundation and first host-neutral scenario execution slice implemented; first playable loop not yet complete.** The current generator and scenario state prove deterministic structure, validated commands, and causal metadata, not yet autonomous inhabitant simulation, combat, loot, or high-definition rendering.
 
 - [GitHub Pages proof](https://trentbest.github.io/FSM_Dungeon/) — deployment is pending the environment rule noted above.
 - [Architecture and integration plan](docs/ARCHITECTURE.md)
