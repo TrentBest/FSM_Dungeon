@@ -102,6 +102,13 @@
   </section>
 
   <section class="panel">
+    <h2>Lantern Vault objective replay</h2>
+    <p id="scenario-status">Loading deterministic scenario evaluation…</p>
+    <div id="scenario-details" class="world"></div>
+    <p>The evaluator derives objective completion from authoritative cache and connection state. It selects the most specific matching outcome; the command log and digest make the result reproducible.</p>
+  </section>
+
+  <section class="panel">
     <h2>Inspect a generated dungeon</h2>
     <p id="dungeon-status">Generating worlds from the C# domain model…</p>
     <label for="world-select">Choose a place to inspect</label>
@@ -197,6 +204,8 @@
   const hydraulicDetails = document.getElementById("hydraulic-details");
   const geologyStatus = document.getElementById("geology-status");
   const geologyDetails = document.getElementById("geology-details");
+  const scenarioStatus = document.getElementById("scenario-status");
+  const scenarioDetails = document.getElementById("scenario-details");
   const ns = "http://www.w3.org/2000/svg";
 
   function element(tag, attributes, parent) {
@@ -368,20 +377,23 @@
   }
 
   try {
-    const [worldResponse, hydraulicResponse, spatialResponse, geologyResponse] = await Promise.all([
+    const [worldResponse, hydraulicResponse, spatialResponse, geologyResponse, scenarioResponse] = await Promise.all([
       fetch("data/worlds.json", { cache: "no-store" }),
       fetch("data/hydraulic.json", { cache: "no-store" }),
       fetch("data/spatial.json", { cache: "no-store" }),
-      fetch("data/geology.json", { cache: "no-store" })
+      fetch("data/geology.json", { cache: "no-store" }),
+      fetch("data/scenario-replay.json", { cache: "no-store" })
     ]);
     if (!worldResponse.ok) throw new Error("Generated world data is not available yet.");
     if (!hydraulicResponse.ok) throw new Error("Hydraulic simulation data is not available yet.");
     if (!spatialResponse.ok) throw new Error("Spatial topology data is not available yet.");
     if (!geologyResponse.ok) throw new Error("Geological occurrence data is not available yet.");
+    if (!scenarioResponse.ok) throw new Error("Scenario replay proof is not available yet.");
     const worlds = await worldResponse.json();
     const hydraulicSnapshots = await hydraulicResponse.json();
     const spatialProof = await spatialResponse.json();
     const geologyWorld = await geologyResponse.json();
+    const scenarioProof = await scenarioResponse.json();
     if (!Array.isArray(worlds) || worlds.length === 0) throw new Error("No generated worlds were found.");
     worlds.forEach((world, index) => {
       const option = document.createElement("option");
@@ -392,6 +404,32 @@
     selector.addEventListener("change", () => render(worlds[Number(selector.value)]));
     render(worlds[0]);
     renderGeology(geologyWorld);
+    scenarioDetails.replaceChildren();
+    scenarioStatus.textContent = scenarioProof.commandCount + " commands replayed · " +
+      scenarioProof.objectives.filter(item => item.isComplete).length + "/" + scenarioProof.objectives.length +
+      " objectives complete · " + (scenarioProof.allObjectivesComplete ? "all objectives complete" : "objectives remain");
+    scenarioProof.objectives.forEach(objective => {
+      const item = document.createElement("article");
+      const title = document.createElement("strong");
+      title.textContent = (objective.isComplete ? "✓ " : "○ ") + objective.objectiveId;
+      const detail = document.createElement("span");
+      detail.textContent = objective.completionCondition;
+      item.append(title, detail);
+      scenarioDetails.appendChild(item);
+    });
+    if (scenarioProof.selectedOutcome) {
+      const item = document.createElement("article");
+      const title = document.createElement("strong");
+      title.textContent = "Selected outcome · " + scenarioProof.selectedOutcome.id;
+      const detail = document.createElement("span");
+      detail.textContent = scenarioProof.selectedOutcome.result;
+      item.append(title, detail);
+      scenarioDetails.appendChild(item);
+    }
+    const digest = document.createElement("p");
+    digest.className = "world-meta";
+    digest.textContent = "State digest · " + scenarioProof.stateDigest;
+    scenarioDetails.appendChild(digest);
     let spatialIndex = 0;
     renderSpatial(spatialProof, spatialIndex);
     bridgeToggle.addEventListener("click", () => {
