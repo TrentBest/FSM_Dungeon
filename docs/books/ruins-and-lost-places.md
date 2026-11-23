@@ -1,7 +1,9 @@
 # Ruins and Lost Places: Reading the Layers of a World
 
 **Library:** FSM_Dungeon Fantasy Library  
-**Provisional sourcebook ID:** `fsm-dungeon.fantasy.ruins-and-lost-places`  
+**Sourcebook ID:** `fsm-dungeon.fantasy.ruins-and-lost-places`  
+**Edition:** 0.1.0  
+**Cover:** [Original sourcebook cover](../assets/sourcebooks/ruins-and-lost-places-cover.svg)  
 **Entry IDs:** `place.ruin`, `place.buried-settlement`, `place.sealed-complex`  
 **LOD:** 1 — reusable place-authoring framework  
 **Edition:** 0.1.0  
