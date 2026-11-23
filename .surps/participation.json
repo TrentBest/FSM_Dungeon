@@ -11,6 +11,11 @@
   "contributionSummary": "Owns underground environmental topology, voids, constructed spaces, environmental state, provenance, and dungeon-specific simulation. Maintains an original fantasy sourcebook library. Contributes domain knowledge and integration evidence to SURPS-owned Dungeons and Underground and Dwarven Strongholds books without absorbing SURPS ontology, inhabitant behavior, or campaign continuity.",
   "cataloguePath": "docs/books/index.md",
   "books": [
+    "fsm-dungeon.fantasy.fantasy-foundations",
+    "fsm-dungeon.fantasy.elves",
+    "fsm-dungeon.fantasy.bestiary",
+    "fsm-dungeon.fantasy.dragons-and-wyrms",
+    "fsm-dungeon.fantasy.ruins-and-lost-places",
     "fsm-dungeon.domain.underground-environments"
   ],
   "contributedBookIds": [
@@ -29,8 +34,8 @@
   "admissionReadiness": {
     "status": "blocked",
     "blockers": [
-      "Five additional catalogue works do not yet have canonical per-book descriptors and distinct cover assets.",
-      "The pending Underground Environments ownership claim and remaining contributor records require independent SURPS review before active admission."
+      "All six declared Dungeon-owned books have canonical descriptors and distinct covers, but their ownership claims remain pending independent SURPS review.",
+      "The SURPS reviewer must reconcile contributor and ownership records, then verify the final development-branch manifest and catalogue snapshot before active admission."
     ]
   }
 }
