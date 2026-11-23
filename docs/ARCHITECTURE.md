@@ -63,6 +63,10 @@ The same domain should be usable from several hosts:
 
 Hosts adapt input, persistence, networking, and presentation. They do not own dungeon rules.
 
+### Multiple games, one environment domain
+
+FSM_Dungeon must not become coupled to one game's turn loop, room catalogue, economy, camera, progression, or player role. [Reusable Game Experiences](GAME_EXPERIENCES.md) defines two independent consumers: **Lanternward: The Delve**, an original tabletop-inspired tactical adventure, and **Underkingdom**, a future asymmetric underground-management simulation. Both reference the same stable environment capability while keeping their own rules, content manifests, UI, and progression outside the domain assembly. Their manifests are validated as content contracts, not compiled into the engine.
+
 ## Core model: causes before templates
 
 A generated place should retain enough provenance to answer:
