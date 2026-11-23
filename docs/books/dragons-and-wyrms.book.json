@@ -8,7 +8,8 @@
   "familyId": "dragons-and-wyrms",
   "cover": "docs/assets/sourcebooks/dragons-and-wyrms-cover.svg",
   "lodBadge": {
-    "source": "docs/assets/sourcebooks/lod-1-place-framework.svg",
+    "source": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/development/docs/assets/rulebook-lod-1.svg",
+    "asset": "docs/assets/sourcebooks/lod-1-place-framework.svg",
     "label": "LOD 1 — Domain Detail"
   },
   "publisher": "The Singularity Workshop",
