@@ -62,7 +62,7 @@ Run the local consistency gate before proposing catalogue changes:
 python scripts/validate_surps_participation.py
 ```
 
-The [SURPS Sourcebook Validation workflow](../.github/workflows/surps-sourcebook-validation.yml) runs this check for relevant changes targeting `development`. A passing local check verifies file and metadata consistency only; it does not accept ownership claims or enroll FSM_Dungeon.
+The [SURPS Sourcebook Validation workflow](../../.github/workflows/surps-sourcebook-validation.yml) runs this check for relevant changes targeting `development`. A passing local check verifies file and metadata consistency only; it does not accept ownership claims or enroll FSM_Dungeon.
 
 ## Authoring rules
 
