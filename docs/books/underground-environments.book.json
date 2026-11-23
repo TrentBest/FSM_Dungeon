@@ -7,7 +7,10 @@
   "version": "0.1.0",
   "familyId": "underground-environments",
   "cover": "docs/assets/sourcebooks/underground-environments-cover.svg",
-  "lodBadge": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/development/docs/assets/rulebook-lod-2.svg",
+  "lodBadge": {
+    "source": "docs/assets/sourcebooks/lod-2-domain-detail.svg",
+    "label": "LOD 2 — Domain Detail"
+  },
   "publisher": "The Singularity Workshop",
   "publisherMoniker": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.Visualize/development/docs/assets/moniker.svg",
   "repository": "https://github.com/TrentBest/FSM_Dungeon",
@@ -28,7 +31,7 @@
   },
   "artwork": {
     "cover": "docs/assets/sourcebooks/underground-environments-cover.svg",
-    "lodBadge": "https://raw.githubusercontent.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/development/docs/assets/rulebook-lod-2.svg",
+    "lodBadge": "docs/assets/sourcebooks/lod-2-domain-detail.svg",
     "status": "authored"
   }
 }
