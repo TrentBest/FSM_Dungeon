@@ -11,6 +11,7 @@
     <Company>The Singularity Workshop</Company>
     <Description>MicroBundle entry point for the FSM_Dungeon underground-environment capability.</Description>
     <PackageTags>MicroBundle;Dungeon;Underground;Environment;TheSingularityWorkshop</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/TrentBest/FSM_Dungeon</PackageProjectUrl>
     <RepositoryUrl>https://github.com/TrentBest/FSM_Dungeon</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -18,6 +19,7 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
     <ProjectReference Include="../TheSingularityWorkshop.FSM_Dungeon/TheSingularityWorkshop.FSM_Dungeon.csproj" />
     <PackageReference Include="TheSingularityWorkshop.MicroBundleDomain" Version="1.0.1" />
   </ItemGroup>
