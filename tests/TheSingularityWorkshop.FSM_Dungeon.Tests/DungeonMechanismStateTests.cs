@@ -6,7 +6,8 @@ namespace TheSingularityWorkshop.FSM_Dungeon.Tests;
 public sealed class DungeonMechanismStateTests
 {
     private static SpatialTopology CreateTopology() => new(
-        [new SpatialRegion("gallery", "Pressure Gallery", new(0, 0, 0), new(8, 3, 6), 0, "Excavated gallery.")],
+        [new SpatialRegion("gallery", "Pressure Gallery", new(0, 0, 0), new(8, 3, 6), 0, "Excavated gallery."),
+            new SpatialRegion("elsewhere", "Adjacent Gallery", new(10, 0, 0), new(8, 3, 6), 0, "A separate gallery used to prove location mismatch.")],
         [new SpatialFeature("pressure-slab", "mechanism", "Pressure Slab", "gallery", true, "Installed by the original builders.")]);
 
     private static DungeonMechanismState CreateState(bool oneShot = true) => new(
