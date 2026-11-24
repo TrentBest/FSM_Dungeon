@@ -76,8 +76,9 @@
     .path-card p{margin:0 0 12px}
     .path-card a{font-weight:700}
     .evidence-note{border-left:3px solid var(--mint);padding:12px 15px;background:#0b1924;color:var(--muted);border-radius:8px;margin-top:16px}
-    .reveal{opacity:0;transform:translateY(22px);filter:blur(2px);transition:opacity .65s ease,transform .75s cubic-bezier(.2,.75,.2,1),filter .65s ease}
-    .reveal.is-visible{opacity:1;transform:none;filter:none}
+    .reveal{opacity:1;transform:none;filter:none}
+    body.motion-ready .reveal{opacity:0;transform:translateY(22px);filter:blur(2px);transition:opacity .65s ease,transform .75s cubic-bezier(.2,.75,.2,1),filter .65s ease}
+    body.motion-ready .reveal.is-visible{opacity:1;transform:none;filter:none}
     .panel .world article,.panel .path-card{min-height:140px}
     footer{color:var(--muted)}
     @media(max-width:760px){.path-grid{grid-template-columns:1fr}.site-nav{gap:8px 14px}}
@@ -513,6 +514,7 @@
   // Progressive scene reveal; all content remains visible without JavaScript or motion support.
   const revealNodes = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.body.classList.add("motion-ready");
     const revealObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
