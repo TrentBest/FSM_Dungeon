@@ -8,9 +8,9 @@ The library is designed to compose with SURPS and StoryBuilder rather than dupli
 
 ## SURPS living rulebook and behavior-adapter standard
 
-This repository adopts the shared SURPS [Living Rulebook and Experience Standard](https://github.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/blob/development/docs/living-rulebook-standard.md) and [Behavior Model and Adapters](https://github.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/blob/development/docs/behavior-and-adapters.md). FSM_Dungeon owns underground topology, environment, traversal, and hazards. SURPS supplies shared roleplaying composition; it does not replace Dungeon's environment model.
+This repository is adopting the shared SURPS [Living Rulebook and Experience Standard](https://github.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/blob/development/docs/living-rulebook-standard.md) and [Behavior Model and Adapters](https://github.com/TrentBest/TheSingularityWorkshop.SingularityUniversalRoleplayingSystem/blob/development/docs/behavior-and-adapters.md). FSM_Dungeon owns underground topology, environment, traversal, and hazards. SURPS supplies shared roleplaying composition; it does not replace Dungeon's environment model.
 
-The standard requires a big-picture-first guide, concise Player path, deep Game Master/Workshop path, living pictures for major concepts, worked demonstrations for mechanics, and honest status labels. The tabletop adapter is derived from underlying behavior during workshop calibration; the digital adapter uses compiled behavior with live state. Neither is a separate source of truth. Adoption work: [repository issue](https://github.com/TrentBest/FSM_Dungeon/issues/8).
+The standard is the target for new work; full conformance remains in progress until the linked issue is accepted. It requires a big-picture-first guide, concise Player path, deep Game Master/Workshop path, living pictures for major concepts, worked demonstrations for mechanics, and honest status labels. The tabletop adapter is derived from underlying behavior during workshop calibration; the digital adapter uses compiled behavior with live state. Neither is a separate source of truth. Adoption work: [repository issue](https://github.com/TrentBest/FSM_Dungeon/issues/8).
 
 ## SURPS participation
 
