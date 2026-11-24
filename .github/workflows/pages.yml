@@ -34,6 +34,20 @@ jobs:
       - name: Generate the deterministic dungeon from the C# domain
         run: dotnet run --project samples/Dungeon.Proof/Dungeon.Proof.csproj --configuration Release -- docs/data/dungeon.json
 
+      - name: Verify generated proof data and exploration surfaces
+        run: |
+          test -s docs/data/dungeon.json
+          test -s docs/data/worlds.json
+          test -s docs/data/spatial.json
+          test -s docs/data/hydraulic.json
+          test -s docs/data/geology.json
+          test -s docs/data/scenario-replay.json
+          test -s docs/index.html
+          test -s docs/capability-atlas.html
+          grep -F 'Lantern Vault objective replay' docs/index.html
+          grep -F 'FSM_Dungeon capability atlas' docs/capability-atlas.html
+          touch docs/.nojekyll
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
