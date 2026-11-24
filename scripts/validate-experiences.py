@@ -104,6 +104,36 @@ def main() -> int:
                 fail(path, f"quest document is missing: {quest_doc.relative_to(ROOT)}")
             if quest_id not in quest_doc.read_text(encoding="utf-8"):
                 fail(path, f"quest document does not declare {quest_id}")
+            quest_manifest_path = ROOT / "docs" / "quests" / (quest_id.rsplit(".", 1)[-1] + ".json")
+            if not quest_manifest_path.is_file():
+                fail(path, f"structured quest manifest is missing: {quest_manifest_path.relative_to(ROOT)}")
+            try:
+                quest_manifest = json.loads(quest_manifest_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as exc:
+                fail(path, f"invalid structured quest manifest: {exc}")
+            if not isinstance(quest_manifest, dict) or quest_manifest.get("id") != quest_id:
+                fail(path, f"structured quest manifest must declare {quest_id}")
+            if quest_manifest.get("experience") != identity:
+                fail(path, "structured quest must reference its owning experience")
+            scenario = quest_manifest.get("scenario")
+            if not isinstance(scenario, dict) or scenario.get("deterministicReplayRequired") is not True:
+                fail(path, "quest must require deterministic scenario replay")
+            fixture = scenario.get("fixture")
+            if not isinstance(fixture, str) or not (ROOT / fixture).is_file():
+                fail(path, "quest scenario fixture must resolve to an existing repository file")
+            objectives = quest_manifest.get("objectives")
+            if not isinstance(objectives, list) or not objectives:
+                fail(path, "quest must declare at least one objective")
+            objective_ids = [item.get("id") for item in objectives if isinstance(item, dict)]
+            if len(objective_ids) != len(objectives) or any(not isinstance(item, str) or not item.strip() for item in objective_ids):
+                fail(path, "every quest objective must have a non-empty ID")
+            if len(set(objective_ids)) != len(objective_ids):
+                fail(path, "quest objective IDs must be unique")
+            character_contract = quest_manifest.get("playerCharacter")
+            if not isinstance(character_contract, dict) or character_contract.get("owner") != "SURPS" or character_contract.get("entryPoint") != "Surps.Create.PlayerCharacter()":
+                fail(path, "quest player character contract must remain SURPS-owned")
+            if quest_manifest.get("persistence", {}).get("documentsRemainDistinct") is not True:
+                fail(path, "character, quest progress, and world state documents must remain distinct")
 
         slice_spec = data["firstVerticalSlice"]
         if not isinstance(slice_spec, dict) or not slice_spec.get("features"):
