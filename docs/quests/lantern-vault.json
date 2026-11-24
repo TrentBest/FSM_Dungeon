@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0",
+  "id": "fsm-dungeon.quest.lantern-vault",
+  "title": "The Lantern Vault",
+  "status": "authored-proof",
+  "experience": "fsm-dungeon.experience.lanternward-the-delve",
+  "scenario": {
+    "id": "fsm-dungeon.scenario.lantern-vault",
+    "fixture": "samples/Dungeon.Proof/Scenarios/lantern-vault.json",
+    "deterministicReplayRequired": true
+  },
+  "playerCharacter": {
+    "owner": "SURPS",
+    "entryPoint": "Surps.Create.PlayerCharacter()",
+    "reusePolicy": "deserialize-existing-character-before-offering-new-intake"
+  },
+  "objectives": [
+    {
+      "id": "quest-objective.recover-ledger",
+      "scenarioObjective": "objective.recover-ledger",
+      "description": "Recover the original survey ledger from the sealed vault.",
+      "status": "scenario-backed"
+    },
+    {
+      "id": "quest-objective.secure-crossing",
+      "scenarioObjective": "objective.secure-crossing",
+      "description": "Restore a safe route to the upper ledge.",
+      "status": "scenario-backed"
+    },
+    {
+      "id": "quest-objective.return-with-evidence",
+      "description": "Return to the entry gallery with the ledger and preserve the expedition record.",
+      "status": "experience-host-pending"
+    }
+  ],
+  "persistence": {
+    "characterDocumentOwner": "SURPS",
+    "questProgressOwner": "Lanternward",
+    "worldStateOwner": "FSM_Dungeon",
+    "documentsRemainDistinct": true
+  },
+  "notes": "The quest descriptor binds authored quest intent to an existing deterministic scenario fixture. It does not claim that the complete playable host, SURPS character flow, or return-and-evidence objective is implemented."
+}
