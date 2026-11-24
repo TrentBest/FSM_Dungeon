@@ -31,6 +31,21 @@
     "presentation": {
       "owner": "Renderer/Visualization",
       "optional": true
+    },
+    "playerCharacter": {
+      "owner": "SURPS",
+      "entryPoint": "Surps.Create.PlayerCharacter()",
+      "presentationOwner": "GUI",
+      "persistence": {
+        "format": "SURPS-owned-character-document",
+        "operations": [
+          "serialize",
+          "deserialize"
+        ],
+        "scope": "player-profile-and-experience-save"
+      },
+      "experienceConfiguration": "composition.settings.characterCreation",
+      "required": true
     }
   },
   "experience": {
@@ -78,5 +93,28 @@
     "requiresContentProvenance": true,
     "requiresHumanApprovalForProtectedActions": true
   },
-  "notes": "Design manifest only; not yet a playable game."
+  "notes": "Design manifest; the quest fixture is a SURPS-enabled composition target. Character creation is a SURPS-owned API/UI/persistence capability and is not implemented by FSM_Dungeon.",
+  "composition": {
+    "loading": "registered-book-and-experience-contributions",
+    "settings": {
+      "characterCreation": {
+        "enabled": true,
+        "profile": "lanternward.adventurer",
+        "allowedOrigins": [
+          "experience",
+          "registered-books"
+        ],
+        "requireExplicitPlayerConfirmation": true
+      }
+    },
+    "data": {
+      "registeredBooks": [
+        "fsm-dungeon.book.underground-environments",
+        "surps.book.dungeons-and-underground",
+        "surps.book.nonplayer-characters"
+      ],
+      "quest": "fsm-dungeon.quest.lantern-vault"
+    },
+    "precedence": "explicit-experience-settings-override-book-defaults; conflicts-must-be-reported"
+  }
 }
