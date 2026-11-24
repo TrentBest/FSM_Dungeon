@@ -56,7 +56,7 @@ All names, rules text, board layouts, scenarios, characters, art, icons, audio, 
 
 ### First vertical slice
 
-The first data fixture is [The Lantern Vault](../samples/Dungeon.Proof/Scenarios/lantern-vault.json). It uses stable three-dimensional region identities, explicit feature-gated connections, SURPS-owned external actor references, observer-scoped discovery, two objective outcomes, and a replay command log. Its grid is only a presentation projection; the 3D world remains authoritative. The first host-neutral command processor now exists as `DungeonScenarioState`: it validates movement against traversable spatial connections, scopes inspection knowledge per actor reference, opens adjacent crossing features, records cache recovery, and produces deterministic state digests. `DungeonScenarioEvaluator` evaluates cache and route objectives from authoritative state and selects the most specific matching outcome deterministically. The sample host deserializes the fixture, replays its command log, evaluates objectives/outcomes, and emits a machine-readable proof with a state digest. A playable interactive host remains pending.
+The first data fixture is [The Lantern Vault](../samples/Dungeon.Proof/Scenarios/lantern-vault.json), with its first SURPS integration quest documented in [Quest: The Lantern Vault](quests/lantern-vault.md). It uses stable three-dimensional region identities, explicit feature-gated connections, SURPS-owned external actor references, observer-scoped discovery, two objective outcomes, and a replay command log. Its grid is only a presentation projection; the 3D world remains authoritative. The first host-neutral command processor now exists as `DungeonScenarioState`: it validates movement against traversable spatial connections, scopes inspection knowledge per actor reference, opens adjacent crossing features, records cache recovery, and produces deterministic state digests. `DungeonScenarioEvaluator` evaluates cache and route objectives from authoritative state and selects the most specific matching outcome deterministically. The sample host deserializes the fixture, replays its command log, evaluates objectives/outcomes, and emits a machine-readable proof with a state digest. A playable interactive host remains pending.
 
 1. One original compact site with a small number of chambers and explicit passage connections.
 2. Original party definitions supplied through SURPS references.
@@ -67,6 +67,12 @@ The first data fixture is [The Lantern Vault](../samples/Dungeon.Proof/Scenarios
 7. A replay fixture proving the same seed and command sequence reproduce the same world-state result.
 
 Do not build a clone of another game's board, rules, scenarios, or character roster.
+
+## SURPS character and book composition
+
+Lanternward declares the SURPS-owned `Surps.Create.PlayerCharacter()` entry point as its intended onboarding call. The GUI, character schema, validation, serialization, and deserialization belong to SURPS; the experience supplies only its premise and declarative settings. A character document should be reusable across compatible experiences rather than recreated for every quest. Registered books and experiences contribute settings/data during composition, with explicit experience settings taking precedence over book defaults and conflicts reported to the host. The current MicroBundle load context is validation-only and has no settings/data contribution API; the manifest and quest therefore define the desired contract without claiming that the loader already implements it.
+
+The separate [Orcs vs Goblins](quests/orcs-vs-goblins.md) premise is a second prospective SURPS composition fixture: a mountain settlement shared and contested by two populations, each with its own building, resource, relationship, and conflict dynamics. It is intentionally a different experience premise, not a new Dungeon character system.
 
 ## Experience B — Underkingdom
 
