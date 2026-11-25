@@ -76,7 +76,7 @@ The [Dwarven Mountain Fortress scenario](docs/DWARVEN_MOUNTAIN_FORTRESS.md) is t
 
 ## 5. Project status
 
-**Status: Domain foundation and deterministic scenario execution/objective-resolution slice implemented; first playable loop not yet complete.** The current generator and scenario state prove deterministic structure, validated commands, and causal metadata, not yet autonomous inhabitant simulation, combat, loot, or high-definition rendering.
+**Status: Domain foundation, deterministic scenario execution, and an interactive developer playtest harness implemented; the player-facing experience is still in progress.** The host proves a live command loop against the same immutable authoritative state used by replay. It is intentionally not presented as the final GUI, SURPS character flow, encounter system, or campaign save.
 
 - [GitHub Pages explorer](https://trentbest.github.io/FSM_Dungeon/) — includes the generated world inspector, Lantern Vault replay, cavern topology, geology, hydraulics, and [interactive capability atlas](https://trentbest.github.io/FSM_Dungeon/capability-atlas.html). Deployment is pending the environment rule noted below.
 - [Architecture and integration plan](docs/ARCHITECTURE.md)
