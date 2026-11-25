@@ -59,7 +59,7 @@ jobs:
       - name: Execute deterministic scenario replay proof
         run: dotnet run --project samples/Dungeon.Proof/Dungeon.Proof.csproj --configuration Release --no-build -- "$RUNNER_TEMP/dungeon-proof/dungeon.json"
       - name: Execute interactive host smoke test
-        run: printf '%s\\n' look status quit | dotnet run --project samples/Dungeon.Play/Dungeon.Play.csproj --configuration Release --no-build
+        run: printf '%s\n' look status quit | dotnet run --project samples/Dungeon.Play/Dungeon.Play.csproj --configuration Release --no-build
       - name: Pack MicroBundle artifact (no publication)
         run: dotnet pack src/TheSingularityWorkshop.FSM_Dungeon.MicroBundle/TheSingularityWorkshop.FSM_Dungeon.MicroBundle.csproj --configuration Release --no-build --output ./artifacts
       - name: Upload MicroBundle artifact
