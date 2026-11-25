@@ -6,9 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="..\\Dungeon.Proof\\Scenarios\\*.json" Link="Scenarios\\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../Dungeon.Proof/Scenarios/*.json" Link="Scenarios/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\\..\\src\\TheSingularityWorkshop.FSM_Dungeon\\TheSingularityWorkshop.FSM_Dungeon.csproj" />
+    <ProjectReference Include="../../src/TheSingularityWorkshop.FSM_Dungeon/TheSingularityWorkshop.FSM_Dungeon.csproj" />
   </ItemGroup>
 </Project>
