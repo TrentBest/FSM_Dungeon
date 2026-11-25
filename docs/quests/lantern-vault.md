@@ -2,7 +2,7 @@
 
 **Experience:** Lanternward: The Delve  
 **Quest ID:** `fsm-dungeon.quest.lantern-vault`  
-**Status:** first SURPS integration quest — authored proof, not yet a playable release  
+**Status:** first SURPS integration quest — interactive developer playtest harness available; not yet a player-facing release  
 **Scenario fixture:** [lantern-vault.json](../../samples/Dungeon.Proof/Scenarios/lantern-vault.json)
 
 ## Premise
@@ -40,7 +40,7 @@ The composition host resolves the registered contributions before invoking chara
 2. **Recover the Lantern Seal.** Locate and recover the meaningful cache from the sealed vault.
 3. **Return with evidence.** Preserve the party's discovery and action history so the outcome can be replayed and reviewed.
 
-The existing deterministic fixture proves the route/cache objective pattern and replay mechanics. The full quest still needs a SURPS character document, encounter and obstacle resolution, a player-facing GUI, and an integrated campaign save.
+The deterministic fixture proves the route/cache objective pattern and replay mechanics. A separate `Dungeon.Play` console host now loads this same fixture and accepts live `move`, `inspect`, `interact`, and `recover` commands against the immutable scenario state. It rejects invalid commands without advancing the command log and displays objective completion, selected outcome, and a final state digest. This is a developer playtest harness: it deliberately exposes fixture targets and is not the player-facing discovery interface. The full quest still needs a SURPS character document, encounter and obstacle resolution, a player-facing GUI, observer-appropriate discovery, and an integrated campaign save.\n\nRun it from the repository root:\n\n```bash\ndotnet run --project samples/Dungeon.Play/Dungeon.Play.csproj\n```\n\nUse `look`, `status`, `move <region name>`, `inspect <feature name>`, `interact <feature name>`, and `recover cache.survey-ledger`. The initial party can enter Silt Hall, open the Iron-leaf door from the adjacent crossing, enter the Sealed Vault, and recover the ledger. It can also activate the rope span from the adjacent Silt Hall crossing to establish the upper route.
 
 ## First encounter design
 
