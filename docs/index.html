@@ -224,6 +224,19 @@
     </ol>
   </section>
 
+  <section class="panel reveal" id="interface-architecture">
+    <div class="eyebrow">The player-facing layer</div>
+    <h2>One experience. Many ways to interact.</h2>
+    <p>The dungeon is the world model, not the interface. GUI describes the semantic experience around it: world viewport, minimap, character status, inventory, objectives, dialogue, contextual inspection, and diagnostics. The same intent can be adapted for browser, desktop, or immersive hosts.</p>
+    <div class="world">
+      <article><strong>GUI · meaning and interaction</strong><span>Defines accessible interface regions and the semantic actions a player can take. It does not own dungeon rules or the 3D scene.</span><p><a href="https://github.com/TrentBest/TheSingularityWorkshop.GUI/tree/development">Explore GUI →</a></p></article>
+      <article><strong>Renderer · observer and budget</strong><span>Selects what detail and computation are appropriate for this observer and current budget.</span><p><a href="https://github.com/TrentBest/TheSingularityWorkshop.Renderer/tree/development">Explore Renderer →</a></p></article>
+      <article><strong>Visualize · spatial manifestation</strong><span>Produces the visual scene and spatial output selected for presentation; the host supplies it to GUI's viewport.</span><p><a href="https://github.com/TrentBest/TheSingularityWorkshop.Visualize/tree/development">Explore Visualize →</a></p></article>
+    </div>
+    <p class="evidence-note">The hosted viewport seam is implemented and documented in GUI.Blazor. This Dungeon Pages inspector is still a separate static proof surface; it is not yet a GUI.Blazor host or a playable game client.</p>
+    <p><a href="./GUI_INTEGRATION.md">Read the Dungeon GUI integration plan →</a> · <a href="https://github.com/TrentBest/TheSingularityWorkshop.GUI/blob/development/docs/integrations/VISUALIZE_HOSTED_VIEWPORT.md">Inspect the hosted viewport contract →</a></p>
+  </section>
+
   <section class="panel reveal">
     <h2>Built with Workshop boundaries</h2>
     <p><strong>ProtocolAi</strong> gives domain meaning deterministic identities. <strong>GrammarAi</strong> describes valid structures. <strong>CommandAi</strong> will carry proposals through host validation. <strong>Renderer</strong> selects computational detail for an observer and budget. <strong>Visualization</strong> turns selected representations into richer visuals. WebApp and ServerApp can host the same domain without owning it.</p>
