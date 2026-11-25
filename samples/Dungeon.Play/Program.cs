@@ -180,7 +180,9 @@ void ShowLocation()
         var destinationId = connection.FromRegionId == currentId ? connection.ToRegionId : connection.FromRegionId;
         var destination = regions.Single(region => region.Id == destinationId);
         var crossingState = state.Topology.CanTraverse(connection.Id) ? "open" : "blocked";
-        var requiredFeature = connection.RequiredFeatureId is null ? string.Empty : features.Single(feature => feature.Id == connection.RequiredFeatureId).Name;\n        var featureHint = string.IsNullOrEmpty(requiredFeature) ? string.Empty : $"; feature: {requiredFeature} ({connection.RequiredFeatureId})";\n        Console.WriteLine($"  {destination.Name}: {crossingState} via {connection.TraversalMode} ({connection.Id}){featureHint}");
+        var requiredFeature = connection.RequiredFeatureId is null ? string.Empty : features.Single(feature => feature.Id == connection.RequiredFeatureId).Name;
+        var featureHint = string.IsNullOrEmpty(requiredFeature) ? string.Empty : $"; feature: {requiredFeature} ({connection.RequiredFeatureId})";
+        Console.WriteLine($"  {destination.Name}: {crossingState} via {connection.TraversalMode} ({connection.Id}){featureHint}");
     }
 }
 
