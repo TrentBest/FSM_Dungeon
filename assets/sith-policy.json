@@ -11,7 +11,7 @@
   ],
   "branch_count": 2,
   "status": "COMPLIANT",
-  "evaluated_at": "2026-11-26T13:54:40Z",
-  "workflow_run": "https://github.com/TrentBest/FSM_Dungeon/actions/runs/45833698490",
-  "triggering_commit": "c87cd291e61026c72821bba5da61b27d3b5482cc"
+  "evaluated_at": "2026-11-27T13:53:15Z",
+  "workflow_run": "https://github.com/TrentBest/FSM_Dungeon/actions/runs/46010946036",
+  "triggering_commit": "a83905dbce799d14147be44217860253eec27ed4"
 }
